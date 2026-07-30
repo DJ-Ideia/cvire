@@ -1,8 +1,9 @@
-import React from 'react';
-import { Plus, Sparkles, Search, Globe } from 'lucide-react';
+import React, { useRef } from 'react';
+import { Plus, Sparkles, Search, Globe, Download, Upload } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useCVStore } from '../../store/useCVStore';
 import { CvireLogo } from '../common/CvireLogo';
+import { exportAllResumesJSON, importResumesJSON } from '../../services/backupService';
 
 interface DashboardHeaderProps {
   searchQuery: string;
@@ -17,14 +18,40 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
 }) => {
   const { t, i18n } = useTranslation();
   const { createProfile } = useCVStore();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const toggleLanguage = () => {
     const nextLang = i18n.language === 'en-US' ? 'pt-BR' : 'en-US';
     i18n.changeLanguage(nextLang);
   };
 
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const count = await importResumesJSON(file);
+      alert(`Success! ${count} resume(s) imported into cvire.`);
+    } catch (err: any) {
+      alert(`Import Failed: ${err.message || 'Invalid JSON file format'}`);
+    } finally {
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
   return (
     <header className="bg-[#131b2e] border-b border-[#222f47] px-6 py-5 sticky top-0 z-30 shadow-md">
+      {/* Hidden file input for JSON import */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileUpload}
+        accept=".json"
+        className="hidden"
+      />
+
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
         {/* Title Brand with Logo */}
         <div>
@@ -45,7 +72,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <button
             onClick={toggleLanguage}
             className="p-2.5 rounded-xl bg-[#0d1322] border border-[#222f47] hover:border-slate-500 text-slate-300 transition-all flex items-center gap-2 text-xs font-medium cursor-pointer"
@@ -55,12 +82,32 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
             <span>{i18n.language === 'en-US' ? 'EN' : 'PT'}</span>
           </button>
 
+          {/* Export JSON Backup */}
+          <button
+            onClick={() => exportAllResumesJSON()}
+            className="px-3 py-2.5 rounded-xl bg-[#0d1322] border border-[#222f47] hover:border-emerald-500 text-slate-300 transition-all flex items-center gap-1.5 text-xs font-medium cursor-pointer"
+            title={t('dashboard.exportJson')}
+          >
+            <Download className="w-4 h-4 text-emerald-400" />
+            <span className="hidden lg:inline">{t('dashboard.exportJson')}</span>
+          </button>
+
+          {/* Import JSON Backup */}
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            className="px-3 py-2.5 rounded-xl bg-[#0d1322] border border-[#222f47] hover:border-amber-500 text-slate-300 transition-all flex items-center gap-1.5 text-xs font-medium cursor-pointer"
+            title={t('dashboard.importJson')}
+          >
+            <Upload className="w-4 h-4 text-amber-400" />
+            <span className="hidden lg:inline">{t('dashboard.importJson')}</span>
+          </button>
+
           <button
             onClick={onOpenDemoModal}
-            className="px-4 py-2.5 rounded-xl bg-[#0d1322] border border-[#222f47] hover:border-indigo-500 text-slate-200 transition-all flex items-center gap-2 text-xs font-semibold cursor-pointer"
+            className="px-3.5 py-2.5 rounded-xl bg-[#0d1322] border border-[#222f47] hover:border-indigo-500 text-slate-200 transition-all flex items-center gap-2 text-xs font-semibold cursor-pointer"
           >
             <Sparkles className="w-4 h-4 text-indigo-400" />
-            <span>{t('dashboard.demoProfiles')}</span>
+            <span className="hidden sm:inline">{t('dashboard.demoProfiles')}</span>
           </button>
 
           <button
