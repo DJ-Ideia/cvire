@@ -3,9 +3,10 @@ import React from 'react';
 interface CvireLogoProps {
   className?: string;
   size?: number;
+  showProBadge?: boolean;
 }
 
-export const CvireLogo: React.FC<CvireLogoProps> = ({ className = '', size = 32 }) => {
+export const CvireLogo: React.FC<CvireLogoProps> = ({ className = '', size = 32, showProBadge = true }) => {
   return (
     <div className={`flex items-center gap-2.5 ${className}`}>
       <div
@@ -29,11 +30,15 @@ export const CvireLogo: React.FC<CvireLogoProps> = ({ className = '', size = 32 
         </svg>
       </div>
 
-      <div className="flex flex-col">
+      <div className="flex items-center gap-2">
         <span className="text-xl font-extrabold tracking-tight text-white font-sans flex items-center gap-1">
           cvire
-          <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse inline-block" />
         </span>
+        {showProBadge && (
+          <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-400 border border-blue-500/30 shadow-sm">
+            PRO
+          </span>
+        )}
       </div>
     </div>
   );
