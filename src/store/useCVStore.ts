@@ -21,7 +21,7 @@ interface CVStoreState {
   toggleArchive: (id: string) => Promise<void>;
   importProfiles: (profiles: CVProfile[]) => Promise<void>;
 
-  // Active Profile Updates (Auto-persisted to Dexie)
+  updateProfileTitle: (title: string) => void;
   updatePersonal: (personal: Partial<PersonalInfo>) => void;
   updateSummary: (summary: string) => void;
   updateTheme: (theme: Partial<ThemeSettings>) => void;
@@ -137,6 +137,23 @@ export const useCVStore = create<CVStoreState>((set, get) => ({
     await db.profiles.bulkPut(incoming);
     const all = await db.profiles.toArray();
     set({ profiles: all, activeProfileId: all[0]?.id || null, activeProfile: all[0] || null });
+  },
+
+  updateProfileTitle: (title: string) => {
+    const active = get().activeProfile;
+    if (!active) return;
+
+    const updated: CVProfile = {
+      ...active,
+      title,
+      updatedAt: Date.now(),
+    };
+
+    db.profiles.put(updated);
+    set({
+      activeProfile: updated,
+      profiles: get().profiles.map((p) => (p.id === active.id ? updated : p)),
+    });
   },
 
   // Active Profile Mutation Helper

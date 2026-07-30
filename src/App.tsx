@@ -17,10 +17,10 @@ import { VersionHistoryDrawer } from './components/dashboard/VersionHistoryDrawe
 import { CompareModal } from './components/dashboard/CompareModal';
 import { AnalyticsModal } from './components/dashboard/AnalyticsModal';
 import { exportResumeToPDF } from './services/exportService';
-import { ArrowLeft, LayoutTemplate, Palette, History, GitCompare, BarChart3 } from 'lucide-react';
+import { ArrowLeft, LayoutTemplate, Palette, History, GitCompare, BarChart3, Pencil } from 'lucide-react';
 
 export const App: React.FC = () => {
-  const { initStore, activeProfile, selectProfile, isLoading } = useCVStore();
+  const { initStore, activeProfile, selectProfile, updateProfileTitle, isLoading } = useCVStore();
   const { viewMode, openModal } = useUIStore();
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -81,9 +81,16 @@ export const App: React.FC = () => {
               <span>Dashboard</span>
             </button>
 
-            <div className="text-center min-w-[120px]">
-              <h2 className="text-xs sm:text-sm font-bold text-slate-100 truncate max-w-[200px] sm:max-w-none">{activeProfile?.title}</h2>
-              <p className="text-[10px] text-slate-400">Auto-saved</p>
+            <div className="flex items-center gap-1.5 bg-[#0d1322] px-3 py-1 rounded-xl border border-[#222f47] focus-within:border-blue-500 transition-all">
+              <Pencil className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+              <input
+                type="text"
+                value={activeProfile?.title || ''}
+                onChange={(e) => updateProfileTitle(e.target.value)}
+                placeholder="Resume Title..."
+                className="bg-transparent text-xs sm:text-sm font-bold text-slate-100 outline-none w-36 sm:w-52"
+              />
+              <span className="text-[10px] text-slate-500 shrink-0">Saved</span>
             </div>
 
             <div className="flex items-center gap-2 overflow-x-auto max-w-full pb-1 md:pb-0">
