@@ -73,7 +73,14 @@
     "tagsPlaceholder": "ex: Python, BigQuery, ETL, GCP",
     "skillModeLabel": "Formato de Exibição das Habilidades",
     "skillFormatTags": "Tags em Linha (Vírgula)",
-    "skillFormatBullets": "Lista de Bullets (Um abaixo do outro)"
+    "skillFormatBullets": "Lista de Bullets (Um abaixo do outro)",
+    "certName": "Nome da Certificação",
+    "certProvider": "Instituição Emissora / Provedor",
+    "certDate": "Data / Ano de Emissão",
+    "linkUrl": "Link de Verificação / Repositório",
+    "projName": "Nome do Projeto",
+    "projRole": "Função / Resumo de Tecnologias",
+    "selectSectionType": "Selecione o Tipo de Seção para Adicionar"
   },
   "preview": {
     "editMode": "Apenas Edição",

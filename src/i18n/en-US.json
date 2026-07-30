@@ -73,7 +73,14 @@
     "tagsPlaceholder": "e.g. Python, BigQuery, ETL, GCP",
     "skillModeLabel": "Skills Display Format",
     "skillFormatTags": "Inline Tags (Line)",
-    "skillFormatBullets": "Bullet Points (List)"
+    "skillFormatBullets": "Bullet Points (List)",
+    "certName": "Certification Name",
+    "certProvider": "Issuing Organization / Provider",
+    "certDate": "Issue Date / Year",
+    "linkUrl": "Link URL / Credential Link",
+    "projName": "Project Name",
+    "projRole": "Role / Short Stack Summary",
+    "selectSectionType": "Select Section Type to Add"
   },
   "preview": {
     "editMode": "Edit Only",
