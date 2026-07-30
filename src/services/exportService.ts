@@ -1,7 +1,7 @@
 import html2canvas from 'html2canvas-pro';
 import jsPDF from 'jspdf';
-import { injectSearchableTextLayer } from './pdfTextLayer';
 
+// List of CSS color properties to inline as computed rgb() values
 const COLOR_PROPERTIES = [
   'color',
   'background-color',
@@ -16,6 +16,11 @@ const COLOR_PROPERTIES = [
   'stroke',
 ];
 
+/**
+ * Walk the target DOM element and inline computed CSS colors as rgb(...) or rgba(...).
+ * The browser's native window.getComputedStyle() automatically resolves oklch() / hsl()
+ * into standard rgb() format.
+ */
 function inlineComputedColors(rootElement: HTMLElement): void {
   const walk = (el: HTMLElement) => {
     try {
@@ -27,7 +32,7 @@ function inlineComputedColors(rootElement: HTMLElement): void {
         }
       });
     } catch {
-      // ignore
+      // Ignore non-styleable DOM nodes
     }
 
     Array.from(el.children).forEach((child) => {
@@ -40,6 +45,9 @@ function inlineComputedColors(rootElement: HTMLElement): void {
   walk(rootElement);
 }
 
+/**
+ * Find the optimal vertical cut Y coordinate so page breaks don't slice through text lines or headings.
+ */
 function findCleanPageCut(
   clone: HTMLElement,
   yOffsetPx: number,
@@ -81,8 +89,157 @@ function findCleanPageCut(
   return Math.max(100, bestCutPx - yOffsetPx);
 }
 
+interface TextLineFragment {
+  text: string;
+  xMm: number;
+  yMm: number;
+  fontSizePt: number;
+  columnIndex: number; // 0 for Header/Summary/FullWidth, 1 for Main Left Column, 2 for Sidebar Right Column
+}
+
+/**
+ * Extract character-level DOM Range lines for the CURRENT page slice.
+ * Sorts column-by-column (Header -> Main Column -> Sidebar) for 100% ATS column reading order.
+ */
+function injectPageTextLayer(
+  pdf: jsPDF,
+  clone: HTMLElement,
+  canvasWidthPx: number,
+  canvasHeightPx: number,
+  pageSliceTopPx: number,
+  pageSliceHeightPx: number,
+  pdfWidthMm: number,
+  topMarginMm: number
+): void {
+  const paperRect = clone.getBoundingClientRect();
+  if (!paperRect.width || !paperRect.height) return;
+
+  const scale = canvasHeightPx / clone.offsetHeight;
+  const mmPerCanvasPx = pdfWidthMm / canvasWidthPx;
+
+  const lineFragments: TextLineFragment[] = [];
+
+  // Recursive DOM Text Node Collector
+  const walkTextNodes = (node: Node) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const fullText = node.textContent;
+      if (fullText && fullText.trim().length > 0 && node.parentElement) {
+        try {
+          const parent = node.parentElement;
+          const computed = window.getComputedStyle(parent);
+          const fontSizePx = parseFloat(computed.fontSize) || 12;
+          const fontSizePt = Math.max(6, Math.min(24, fontSizePx * 0.75));
+
+          // Group character bounding rects into exact visual lines
+          const lineMap = new Map<number, { text: string; leftPx: number; topPx: number }>();
+
+          for (let i = 0; i < fullText.length; i++) {
+            const char = fullText[i];
+            const range = document.createRange();
+            range.setStart(node, i);
+            range.setEnd(node, i + 1);
+            const rects = Array.from(range.getClientRects());
+
+            if (rects.length > 0) {
+              const rect = rects[0];
+              if (rect.width > 0 && rect.height > 0) {
+                const domTopPx = (rect.top - paperRect.top) * scale;
+                const domLeftPx = (rect.left - paperRect.left) * scale;
+
+                // Bucket characters into line rows by ~4px threshold
+                const lineBucketKey = Math.round(domTopPx / 5) * 5;
+
+                if (!lineMap.has(lineBucketKey)) {
+                  lineMap.set(lineBucketKey, { text: char, leftPx: domLeftPx, topPx: domTopPx });
+                } else {
+                  const lineObj = lineMap.get(lineBucketKey)!;
+                  lineObj.text += char;
+                }
+              }
+            }
+          }
+
+          // Convert line buckets into PDF text fragments
+          lineMap.forEach((lineObj) => {
+            const domTopPx = lineObj.topPx;
+            const domLeftPx = lineObj.leftPx;
+            const textStr = lineObj.text.trim();
+
+            if (textStr.length > 0 && domTopPx >= pageSliceTopPx - 4 && domTopPx < pageSliceTopPx + pageSliceHeightPx - 4) {
+              const relativeYCanvasPx = domTopPx - pageSliceTopPx;
+              const xMm = Math.max(2, domLeftPx * mmPerCanvasPx);
+              const yMm = Math.max(2, relativeYCanvasPx * mmPerCanvasPx + topMarginMm + (fontSizePt * 0.28));
+
+              // Determine column index:
+              // - Header/Summary (yMm < 55 or full width): columnIndex 0
+              // - Left Main Column (xMm < 140): columnIndex 1
+              // - Right Sidebar Column (xMm >= 140): columnIndex 2
+              let columnIndex = 0;
+              if (yMm >= 50) {
+                columnIndex = xMm < 135 ? 1 : 2;
+              }
+
+              lineFragments.push({
+                text: textStr,
+                xMm,
+                yMm,
+                fontSizePt,
+                columnIndex,
+              });
+            }
+          });
+        } catch {
+          // Ignore range errors
+        }
+      }
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
+      const el = node as HTMLElement;
+      if (
+        el.tagName !== 'SCRIPT' &&
+        el.tagName !== 'STYLE' &&
+        !el.classList.contains('page-break-line') &&
+        !el.classList.contains('page-break-label')
+      ) {
+        Array.from(node.childNodes).forEach(walkTextNodes);
+      }
+    }
+  };
+
+  walkTextNodes(clone);
+
+  // Column-Aware Sorting:
+  // 1. Group by Column Index (0: Header -> 1: Main Left -> 2: Sidebar Right)
+  // 2. Sort top-to-bottom within each column
+  lineFragments.sort((a, b) => {
+    if (a.columnIndex !== b.columnIndex) {
+      return a.columnIndex - b.columnIndex;
+    }
+    const lineDiff = Math.abs(a.yMm - b.yMm);
+    if (lineDiff > 2.5) {
+      return a.yMm - b.yMm;
+    }
+    return a.xMm - b.xMm;
+  });
+
+  // Inject transparent vector text stream into PDF
+  try {
+    pdf.setTextColor(255, 255, 255);
+  } catch {
+    // Ignore
+  }
+
+  lineFragments.forEach((frag) => {
+    try {
+      pdf.setFontSize(frag.fontSizePt);
+      pdf.text(frag.text, frag.xMm, frag.yMm, { renderingMode: 'invisible' as any });
+    } catch {
+      // Ignore individual character rendering glitches
+    }
+  });
+}
+
 export async function exportResumeToPDF(filename = 'resume.pdf'): Promise<void> {
-  const startedAt = performance.now();
+  console.log('[PDF_EXPORT_LOG] 1. Starting exportResumeToPDF with vector text layer engine...');
   const paperElement = document.querySelector('.a4-paper') as HTMLElement;
   if (!paperElement) {
     alert('Resume canvas not found.');
@@ -91,6 +248,7 @@ export async function exportResumeToPDF(filename = 'resume.pdf'): Promise<void> 
 
   const cleanFilename = filename.endsWith('.pdf') ? filename : `${filename}.pdf`;
 
+  // Create an off-screen container for rendering
   const container = document.createElement('div');
   container.id = 'cvire-export-pdf-container';
   container.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;overflow:hidden;z-index:-9999;';
@@ -101,48 +259,48 @@ export async function exportResumeToPDF(filename = 'resume.pdf'): Promise<void> 
   clone.style.boxShadow = 'none';
   clone.style.width = '794px';
 
+  // Remove red page-break warning overlays from PDF output
   clone.querySelectorAll('.page-break-line, .page-break-label').forEach((el) => el.remove());
 
+  console.log('[PDF_EXPORT_LOG] 2. Inlining computed colors...');
   inlineComputedColors(clone);
 
   container.appendChild(clone);
   document.body.appendChild(container);
 
   try {
+    console.log('[PDF_EXPORT_LOG] 3. Calling html2canvas-pro...');
     const canvas = await html2canvas(clone, {
       scale: 2,
       useCORS: true,
       backgroundColor: '#ffffff',
       logging: false,
     });
+    console.log(`[PDF_EXPORT_LOG] 4. html2canvas-pro finished! Canvas size: ${canvas.width}x${canvas.height}`);
 
-    const pdfWidth = 210;
-    const pdfHeight = 297;
-    const topMarginMm = 10;
-    const bottomMarginMm = 10;
-    const printableHeightMm = pdfHeight - topMarginMm - bottomMarginMm;
+    const pdfWidth = 210; // A4 width in mm
+    const pdfHeight = 297; // A4 height in mm
+    const topMarginMm = 10; // Top margin in mm
+    const bottomMarginMm = 10; // Bottom margin in mm
+    const printableHeightMm = pdfHeight - topMarginMm - bottomMarginMm; // 277 mm printable height
 
     const pdf = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
     const totalHeightMm = pdfWidth * (canvas.height / canvas.width);
-    const domScale = canvas.height / clone.offsetHeight;
 
     if (totalHeightMm <= pdfHeight) {
+      console.log('[PDF_EXPORT_LOG] 5. Generating single page PDF with ATS text layer...');
       pdf.addImage(canvas.toDataURL('image/jpeg', 0.98), 'JPEG', 0, 0, pdfWidth, totalHeightMm);
-      injectSearchableTextLayer(pdf, {
-        clone,
-        pdfWidthMm: pdfWidth,
-        pdfHeightMm: pdfHeight,
-        topMarginMm: 0,
-        pageTopPx: 0,
-        pageBottomPx: clone.offsetHeight,
-      });
+      injectPageTextLayer(pdf, clone, canvas.width, canvas.height, 0, canvas.height, pdfWidth, 0);
     } else {
+      console.log('[PDF_EXPORT_LOG] 5. Generating multi-page PDF with smart cuts & ATS text layer...');
+      
       const maxPageSliceHeightPx = Math.round((canvas.width / pdfWidth) * printableHeightMm);
       let yOffsetPx = 0;
+      let isFirstPage = true;
 
       while (yOffsetPx < canvas.height) {
         const currentSlicePx = findCleanPageCut(clone, yOffsetPx, maxPageSliceHeightPx, canvas.height);
-
+        
         const sliceCanvas = document.createElement('canvas');
         sliceCanvas.width = canvas.width;
         sliceCanvas.height = currentSlicePx;
@@ -154,9 +312,10 @@ export async function exportResumeToPDF(filename = 'resume.pdf'): Promise<void> 
           ctx.drawImage(canvas, 0, yOffsetPx, canvas.width, currentSlicePx, 0, 0, canvas.width, currentSlicePx);
         }
 
+        // Calculate EXACT height in mm for this slice to NEVER distort aspect ratio
         const currentSliceMm = (currentSlicePx / canvas.width) * pdfWidth;
 
-        if (yOffsetPx > 0) {
+        if (!isFirstPage) {
           pdf.addPage();
         }
 
@@ -169,29 +328,31 @@ export async function exportResumeToPDF(filename = 'resume.pdf'): Promise<void> 
           currentSliceMm
         );
 
-        const pageTopPx = yOffsetPx / domScale;
-        const pageBottomPx = (yOffsetPx + currentSlicePx) / domScale;
-
-        injectSearchableTextLayer(pdf, {
+        // Inject ONLY the text fragments belonging to this page slice
+        injectPageTextLayer(
+          pdf,
           clone,
-          pdfWidthMm: pdfWidth,
-          pdfHeightMm: pdfHeight,
-          topMarginMm,
-          pageTopPx,
-          pageBottomPx,
-        });
+          canvas.width,
+          canvas.height,
+          yOffsetPx,
+          currentSlicePx,
+          pdfWidth,
+          topMarginMm
+        );
 
         yOffsetPx += currentSlicePx;
+        isFirstPage = false;
       }
     }
 
-    const elapsedMs = Math.round(performance.now() - startedAt);
-    console.log(`[PDF_EXPORT] generated ${cleanFilename} in ${elapsedMs}ms`);
+    console.log('[PDF_EXPORT_LOG] 6. Triggering pdf.save()...');
     pdf.save(cleanFilename);
+    console.log('[PDF_EXPORT_LOG] 7. pdf.save() completed successfully!');
   } catch (err) {
-    console.error('[PDF_EXPORT] ERROR:', err);
+    console.error('[PDF_EXPORT_LOG] ERROR:', err);
     alert('Failed to generate PDF. Please check the browser console for details.');
   } finally {
+    console.log('[PDF_EXPORT_LOG] 8. Running finally container cleanup...');
     if (document.body.contains(container)) {
       document.body.removeChild(container);
     }
