@@ -1,44 +1,59 @@
 import html2pdf from 'html2pdf.js';
 
-export function exportResumeToPDF(filename = 'resume.pdf'): void {
-  const element = document.querySelector('.a4-paper') as HTMLElement;
-  if (!element) {
-    window.print();
+export async function exportResumeToPDF(filename = 'resume.pdf'): Promise<void> {
+  const paperElement = document.querySelector('.a4-paper') as HTMLElement;
+  if (!paperElement) {
+    alert('Resume paper canvas not found.');
     return;
   }
 
-  // Create an un-transformed clone for crisp html2canvas PDF rendering
-  const clone = element.cloneNode(true) as HTMLElement;
+  const cleanFilename = filename.endsWith('.pdf') ? filename : `${filename}.pdf`;
+
+  // Create an off-screen container for crisp, un-scaled PDF generation
+  const container = document.createElement('div');
+  container.style.position = 'absolute';
+  container.style.left = '-9999px';
+  container.style.top = '0';
+  container.style.width = '794px';
+  container.style.backgroundColor = '#ffffff';
+
+  const clone = paperElement.cloneNode(true) as HTMLElement;
   clone.style.transform = 'none';
   clone.style.margin = '0';
-  clone.style.position = 'fixed';
-  clone.style.left = '-9999px';
-  clone.style.top = '0';
-  clone.style.zIndex = '-9999';
-  document.body.appendChild(clone);
+  clone.style.boxShadow = 'none';
+  clone.style.width = '794px';
 
-  const cleanFilename = filename.endsWith('.pdf') ? filename : `${filename}.pdf`;
+  // Remove red page-break warning overlays from PDF output
+  clone.querySelectorAll('.page-break-line, .page-break-label').forEach((el) => el.remove());
+
+  container.appendChild(clone);
+  document.body.appendChild(container);
 
   const opt = {
     margin: 0,
     filename: cleanFilename,
     image: { type: 'jpeg' as const, quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true, logging: false },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' as const },
+    html2canvas: {
+      scale: 2,
+      useCORS: true,
+      logging: false,
+      scrollX: 0,
+      scrollY: 0,
+      windowWidth: 794,
+    },
+    jsPDF: { unit: 'mm' as const, format: 'a4' as const, orientation: 'portrait' as const },
   };
 
   try {
-    const worker = html2pdf().set(opt).from(clone);
-    worker.save().then(() => {
-      clone.remove();
-    }).catch((err: unknown) => {
-      console.warn('html2pdf worker error, falling back to window.print():', err);
-      clone.remove();
-      window.print();
-    });
+    await html2pdf().set(opt).from(clone).save();
   } catch (err) {
-    console.warn('html2pdf exception, falling back to window.print():', err);
-    clone.remove();
+    console.error('PDF export error:', err);
+    alert('Export error occurred. Opening print view.');
     window.print();
+  } finally {
+    // ALWAYS remove container to prevent UI freezing
+    if (document.body.contains(container)) {
+      document.body.removeChild(container);
+    }
   }
 }

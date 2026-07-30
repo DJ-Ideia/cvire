@@ -16,6 +16,23 @@
   }
 }
 
+/* Theme Accent Dynamic Overrides */
+.text-blue-400, .text-blue-500, .text-blue-600 {
+  color: var(--accent-blue) !important;
+}
+
+.bg-blue-500, .bg-blue-600 {
+  background-color: var(--accent-blue) !important;
+}
+
+.bg-blue-500\/10, .bg-blue-600\/20 {
+  background-color: color-mix(in srgb, var(--accent-blue) 15%, transparent) !important;
+}
+
+.border-blue-500, .border-blue-500\/30, .border-blue-500\/50 {
+  border-color: var(--accent-blue) !important;
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
@@ -23,16 +40,16 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #0d1322;
+  background: var(--bg-dark);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #23314d;
+  background: var(--border-dark);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3b82f6;
+  background: var(--accent-blue);
 }
 
 /* A4 Visual Canvas Styling */
@@ -71,26 +88,49 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
-/* Print Styles */
+/* Clean Print Styles - Hides all site UI, headers, sidebars & footers */
 @media print {
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
   body {
-    background: white !important;
-    color: black !important;
-  }
-
-  .no-print {
-    display: none !important;
-  }
-
-  .a4-paper {
-    box-shadow: none !important;
-    width: 100% !important;
+    background: #ffffff !important;
+    color: #000000 !important;
     margin: 0 !important;
     padding: 0 !important;
   }
 
+  /* Hide everything on the page by default */
+  body > * {
+    display: none !important;
+  }
+
+  /* Show only root and paper canvas */
+  #root,
+  #root > * {
+    display: block !important;
+  }
+
+  header,
+  nav,
+  button,
+  input,
+  .no-print,
   .page-break-line,
   .page-break-label {
     display: none !important;
+  }
+
+  .a4-paper {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    transform: none !important;
   }
 }
