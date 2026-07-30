@@ -62,7 +62,7 @@
     "addSection": "Adicionar Seção",
     "addItem": "Adicionar Item",
     "itemTitle": "Título / Cargo / Categoria",
-    "itemSubtitle": "Empresa / Instituição / Subtítulo",
+    "itemSubtitle": "Empresa / Instituição / Nível",
     "startDate": "Data de Início",
     "endDate": "Data de Fim",
     "present": "Presente",
@@ -70,7 +70,10 @@
     "bulletPoints": "Pontos Principais (Bullets) / Conquistas",
     "addBullet": "Adicionar Ponto (Bullet)",
     "tags": "Habilidades / Tags (separadas por vírgula)",
-    "tagsPlaceholder": "ex: Python, BigQuery, ETL, GCP"
+    "tagsPlaceholder": "ex: Python, BigQuery, ETL, GCP",
+    "skillModeLabel": "Formato de Exibição das Habilidades",
+    "skillFormatTags": "Tags em Linha (Vírgula)",
+    "skillFormatBullets": "Lista de Bullets (Um abaixo do outro)"
   },
   "preview": {
     "editMode": "Apenas Edição",

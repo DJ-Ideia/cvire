@@ -62,7 +62,7 @@
     "addSection": "Add Section",
     "addItem": "Add Item",
     "itemTitle": "Title / Degree / Skill Category",
-    "itemSubtitle": "Organization / Institution / Subtitle",
+    "itemSubtitle": "Organization / Institution / Level",
     "startDate": "Start Date",
     "endDate": "End Date",
     "present": "Present",
@@ -70,7 +70,10 @@
     "bulletPoints": "Bullet Points / Achievements",
     "addBullet": "Add Bullet Point",
     "tags": "Skills / Tags (comma separated)",
-    "tagsPlaceholder": "e.g. Python, BigQuery, ETL, GCP"
+    "tagsPlaceholder": "e.g. Python, BigQuery, ETL, GCP",
+    "skillModeLabel": "Skills Display Format",
+    "skillFormatTags": "Inline Tags (Line)",
+    "skillFormatBullets": "Bullet Points (List)"
   },
   "preview": {
     "editMode": "Edit Only",

@@ -13,6 +13,16 @@ export const ModernTechTemplate: React.FC<TemplateProps> = ({ profile, previewRe
     .map((id) => sections[id])
     .filter((sec) => sec && sec.visible && sec.column === 'sidebar');
 
+  const cleanUrl = (url?: string) => {
+    if (!url) return '';
+    return url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
+  };
+
+  const getFullUrl = (url?: string) => {
+    if (!url) return '#';
+    return url.startsWith('http') ? url : `https://${url}`;
+  };
+
   return (
     <div
       ref={previewRef}
@@ -36,14 +46,36 @@ export const ModernTechTemplate: React.FC<TemplateProps> = ({ profile, previewRe
           {personal.email && <div>{personal.email}</div>}
           {personal.phone && <div>{personal.phone}</div>}
           {personal.location && <div>{personal.location}</div>}
-          {personal.linkedinUrl && <div className="text-blue-600 truncate">{personal.linkedinUrl}</div>}
+          {personal.linkedinUrl && (
+            <div className="text-blue-600 font-medium">
+              <a href={getFullUrl(personal.linkedinUrl)} target="_blank" rel="noreferrer">
+                {cleanUrl(personal.linkedinUrl)}
+              </a>
+            </div>
+          )}
+          {personal.githubUrl && (
+            <div className="text-blue-600 font-medium">
+              <a href={getFullUrl(personal.githubUrl)} target="_blank" rel="noreferrer">
+                {cleanUrl(personal.githubUrl)}
+              </a>
+            </div>
+          )}
+          {personal.portfolioUrl && (
+            <div className="text-blue-600 font-medium">
+              <a href={getFullUrl(personal.portfolioUrl)} target="_blank" rel="noreferrer">
+                {cleanUrl(personal.portfolioUrl)}
+              </a>
+            </div>
+          )}
         </div>
       </header>
 
-      {/* Summary */}
+      {/* Summary with Optimal Line-Length */}
       {summary && (
-        <div className="mb-6">
-          <p className="text-xs text-slate-700 leading-relaxed italic">{summary}</p>
+        <div className="mb-6 max-w-[650px]">
+          <p className="text-xs text-slate-700 leading-relaxed italic border-l-2 pl-3" style={{ borderColor: `${primaryColor}60` }}>
+            {summary}
+          </p>
         </div>
       )}
 
@@ -82,7 +114,7 @@ export const ModernTechTemplate: React.FC<TemplateProps> = ({ profile, previewRe
                       </ul>
                     )}
 
-                    {/* Tags */}
+                    {/* Main Item Tags */}
                     {item.tags && item.tags.length > 0 && (
                       <div className="flex flex-wrap gap-1 mt-2">
                         {item.tags.map((tag, idx) => (
@@ -103,34 +135,45 @@ export const ModernTechTemplate: React.FC<TemplateProps> = ({ profile, previewRe
           ))}
         </div>
 
-        {/* Sidebar Column (1/3 width) */}
-        <div className="col-span-1 space-y-6 border-l pl-5 border-slate-200">
-          {sidebarSections.map((sec) => (
-            <div key={sec.id} className="space-y-3">
-              <h2 className="text-xs font-bold uppercase tracking-wider border-b pb-1" style={{ color: primaryColor, borderColor: `${primaryColor}40` }}>
-                {sec.title}
-              </h2>
+        {/* Sidebar Column (1/3 width) - h-fit ensures border stops when sidebar content ends */}
+        {sidebarSections.length > 0 && (
+          <div className="col-span-1 space-y-6 border-l pl-5 border-slate-200 h-fit">
+            {sidebarSections.map((sec) => (
+              <div key={sec.id} className="space-y-3">
+                <h2 className="text-xs font-bold uppercase tracking-wider border-b pb-1" style={{ color: primaryColor, borderColor: `${primaryColor}40` }}>
+                  {sec.title}
+                </h2>
 
-              <div className="space-y-3">
-                {sec.items.map((item) => (
-                  <div key={item.id}>
-                    <h3 className="font-semibold text-xs text-slate-900">{item.title}</h3>
-                    {item.subtitle && <p className="text-[11px] text-slate-500">{item.subtitle}</p>}
-                    {item.bulletItems && item.bulletItems.length > 0 && (
-                      <ul className="mt-1 space-y-1 text-[11px] text-slate-600">
-                        {item.bulletItems
-                          .filter((b) => b.enabled)
-                          .map((b) => (
-                            <li key={b.id}>{b.text}</li>
-                          ))}
-                      </ul>
-                    )}
-                  </div>
-                ))}
+                <div className="space-y-3">
+                  {sec.items.map((item) => (
+                    <div key={item.id} className="space-y-1">
+                      <h3 className="font-semibold text-xs text-slate-900">{item.title}</h3>
+                      {item.subtitle && <p className="text-[11px] text-slate-500 font-medium">{item.subtitle}</p>}
+                      
+                      {/* Technical Skill Tags (Dot Separated) */}
+                      {item.tags && item.tags.length > 0 && (
+                        <p className="text-[11px] text-slate-600 leading-normal font-normal">
+                          {item.tags.join(' • ')}
+                        </p>
+                      )}
+
+                      {/* Sidebar Item Bullets */}
+                      {item.bulletItems && item.bulletItems.length > 0 && (
+                        <ul className="mt-1 space-y-1 text-[11px] text-slate-600">
+                          {item.bulletItems
+                            .filter((b) => b.enabled)
+                            .map((b) => (
+                              <li key={b.id}>{b.text}</li>
+                            ))}
+                        </ul>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
