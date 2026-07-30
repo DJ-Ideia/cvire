@@ -1,0 +1,249 @@
+[
+  {
+    "id": "johnny-costa-en-2026",
+    "title": "Johnny Costa - Data Engineer (EN)",
+    "language": "en-US",
+    "isFavorite": true,
+    "isArchived": false,
+    "createdAt": 1785422400000,
+    "updatedAt": 1785422400000,
+    "templateId": "modern-tech",
+    "personal": {
+      "fullName": "Johnny Costa",
+      "jobTitle": "Data Engineer / Data Analyst",
+      "email": "johnnywscosta@gmail.com",
+      "phone": "+55 79 98142-3483",
+      "location": "Aracaju, Brazil",
+      "linkedinUrl": "https://linkedin.com",
+      "portfolioUrl": "https://portfolio.com",
+      "photoFormat": "hidden"
+    },
+    "summary": "Data Engineer and Analyst with 3+ years of experience building ETL pipelines, cloud data solutions, and BI tools across financial services and automotive engineering (GCP, AWS, BigQuery, Python, SQL). Proven track record delivering measurable results: 80% ML recall rate in fraud detection, 60% SLA reduction, and 70% faster data preparation. Currently deepening expertise in AWS and Databricks.",
+    "sectionsOrder": ["experience", "education", "skills", "languages"],
+    "sections": {
+      "experience": {
+        "id": "experience",
+        "type": "experience",
+        "title": "Professional Experience",
+        "column": "main",
+        "visible": true,
+        "items": [
+          {
+            "id": "exp-1",
+            "title": "Data Engineer / Data Analyst",
+            "subtitle": "Global Automotive",
+            "location": "Remote",
+            "startDate": "May 2025",
+            "endDate": "Present",
+            "current": true,
+            "bulletItems": [
+              {
+                "id": "b-1-1",
+                "text": "Engineered an automated web scraping solution to collect and store 1,000+ vehicle records, reducing data collection time from several days to under 2 hours and establishing a reliable, continuously updated data source for engineering analysis (Python, BigQuery).",
+                "enabled": true,
+                "isMetricHighlighted": true
+              },
+              {
+                "id": "b-1-2",
+                "text": "Built and automated an ETL pipeline to normalize and load vehicle data into BigQuery, reducing manual data preparation time by ~70% and enabling seamless consumption by 10+ downstream users and analytical tools (Python, BigQuery, GCP).",
+                "enabled": true,
+                "isMetricHighlighted": true
+              },
+              {
+                "id": "b-1-3",
+                "text": "Optimized a Looker Studio dashboard querying terabyte-scale tables in BigQuery — implemented partitioning strategies that reduced query execution time by ~65%, delivering real-time access to key vehicle data for engineering decision-making (BigQuery, SQL).",
+                "enabled": true,
+                "isMetricHighlighted": true
+              },
+              {
+                "id": "b-1-4",
+                "text": "Developing a full-stack internal data tool for Ford North America to replace manual Excel-based workflows — projected to reduce analysis time by 50%+, featuring user management, file handling, and interactive visualizations, with POC delivered and MVP in progress (Python, Streamlit, Pandas, PostgreSQL).",
+                "enabled": true,
+                "isMetricHighlighted": true
+              },
+              {
+                "id": "b-1-5",
+                "text": "Designed an automated email monitoring workflow using Power Automate and JavaScript to track overdue tasks and notify supervisors in real time — eliminating ~3h/week of manual follow-ups and delivering a Power BI dashboard supporting Ford North America managers in reporting operational changes (Power Automate, Power BI, JavaScript).",
+                "enabled": true,
+                "isMetricHighlighted": true
+              }
+            ]
+          },
+          {
+            "id": "exp-2",
+            "title": "Data Modeling and ETL Researcher",
+            "subtitle": "Ford",
+            "startDate": "Oct 2024",
+            "endDate": "May 2025",
+            "current": false,
+            "bulletItems": [
+              {
+                "id": "b-2-1",
+                "text": "Developed a scalable ETL pipeline in Python on GCP and BigQuery, reducing data loading and preparation time for vehicle data by 70%.",
+                "enabled": true,
+                "isMetricHighlighted": true
+              },
+              {
+                "id": "b-2-2",
+                "text": "Co-developed a machine learning model for vehicle weight estimation, delivering predictive insights at total and subsystem levels directly used by the engineering team (Python, ML, Streamlit).",
+                "enabled": true
+              },
+              {
+                "id": "b-2-3",
+                "text": "Automated data collection and transformation in BigQuery, creating optimized queries that reduced insight generation time by ~40% for the engineering team.",
+                "enabled": true,
+                "isMetricHighlighted": true
+              }
+            ]
+          },
+          {
+            "id": "exp-3",
+            "title": "Fraud Data Analyst",
+            "subtitle": "Banesecard",
+            "startDate": "Jul 2023",
+            "endDate": "Mar 2024",
+            "current": false,
+            "bulletItems": [
+              {
+                "id": "b-3-1",
+                "text": "Built a Machine Learning model with Python and Apache Spark to predict fraudulent transactions, achieving an 80% Recall rate and significantly improving detection accuracy.",
+                "enabled": true,
+                "isMetricHighlighted": true
+              },
+              {
+                "id": "b-3-2",
+                "text": "Developed a Python script to automate the identification of potential credit fraud, analyzing phone numbers, emails, and addresses, which made the process 80% faster.",
+                "enabled": true,
+                "isMetricHighlighted": true
+              },
+              {
+                "id": "b-3-3",
+                "text": "Engineered and maintained ETL processes using Python, SQL, and Power BI, enabling proactive decision-making and reducing team response time by 65%.",
+                "enabled": true,
+                "isMetricHighlighted": true
+              },
+              {
+                "id": "b-3-4",
+                "text": "Designed and modeled KPI dashboards using Power BI (DAX & M), saving a minimum of BRL 1 million by identifying fraud and improving customer contact efficiency.",
+                "enabled": true,
+                "isMetricHighlighted": true
+              },
+              {
+                "id": "b-3-5",
+                "text": "Implemented the Kanban agile method using Trello, resulting in 50% more efficient and transparent task management for the team.",
+                "enabled": true,
+                "isMetricHighlighted": true
+              }
+            ]
+          }
+        ]
+      },
+      "education": {
+        "id": "education",
+        "type": "education",
+        "title": "Education",
+        "column": "main",
+        "visible": true,
+        "items": [
+          {
+            "id": "edu-1",
+            "title": "Postgraduate Degree in Data Engineering",
+            "subtitle": "Faculdade Focus",
+            "startDate": "Jan 2026",
+            "endDate": "Dec 2026",
+            "bulletItems": []
+          },
+          {
+            "id": "edu-2",
+            "title": "Postgraduate Degree in Software Engineering",
+            "subtitle": "Faculdade Cenes",
+            "startDate": "Oct 2024",
+            "endDate": "May 2025",
+            "bulletItems": []
+          },
+          {
+            "id": "edu-3",
+            "title": "Postgraduate Degree in BI, Big Data & AI",
+            "subtitle": "Faculdade Focus",
+            "startDate": "Jun 2024",
+            "endDate": "Nov 2024",
+            "bulletItems": []
+          },
+          {
+            "id": "edu-4",
+            "title": "Bachelor's Degree in Computer Science",
+            "subtitle": "Universidade Tiradentes",
+            "startDate": "Jan 2019",
+            "endDate": "Dec 2023",
+            "bulletItems": []
+          }
+        ]
+      },
+      "skills": {
+        "id": "skills",
+        "type": "skills",
+        "title": "Technical Skills",
+        "column": "sidebar",
+        "visible": true,
+        "items": [
+          {
+            "id": "sk-1",
+            "title": "Programming & Databases",
+            "bulletItems": [],
+            "tags": ["Python", "SQL", "PostgreSQL", "BigQuery", "Apache Spark"]
+          },
+          {
+            "id": "sk-2",
+            "title": "Data Engineering & Cloud",
+            "bulletItems": [],
+            "tags": ["ETL / ELT Pipelines", "GCP", "AWS", "Databricks", "Docker", "Data Modeling", "Web Scraping"]
+          },
+          {
+            "id": "sk-3",
+            "title": "Analytics & Visualization",
+            "bulletItems": [],
+            "tags": ["Power BI (DAX/M)", "Looker Studio", "Streamlit", "Pandas", "Machine Learning"]
+          }
+        ]
+      },
+      "languages": {
+        "id": "languages",
+        "type": "languages",
+        "title": "Languages",
+        "column": "sidebar",
+        "visible": true,
+        "items": [
+          {
+            "id": "lang-1",
+            "title": "Portuguese",
+            "subtitle": "Native",
+            "bulletItems": []
+          },
+          {
+            "id": "lang-2",
+            "title": "English",
+            "subtitle": "CEFR B2 (Upper Intermediate)",
+            "bulletItems": []
+          }
+        ]
+      }
+    },
+    "theme": {
+      "primaryColor": "#d97706",
+      "accentColor": "#b45309",
+      "textColor": "#1e293b",
+      "backgroundColor": "#ffffff",
+      "fontFamily": "Inter",
+      "fontSizeScale": "md",
+      "lineHeight": 1.45,
+      "columnGap": 24,
+      "sectionSpacing": "normal",
+      "pageMargins": "normal",
+      "borderRadius": 8,
+      "headerStyle": "classic",
+      "dividerStyle": "solid",
+      "bulletStyle": "disc",
+      "textAlignment": "left"
+    }
+  }
+]
