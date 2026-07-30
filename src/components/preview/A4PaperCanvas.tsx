@@ -9,12 +9,13 @@ export const A4PaperCanvas: React.FC = () => {
   const paperRef = useRef<HTMLDivElement>(null);
   const [pageBreaks, setPageBreaks] = useState<number[]>([]);
   const [effectiveScale, setEffectiveScale] = useState<number>(zoomLevel);
+  const [paperHeight, setPaperHeight] = useState<number>(1123);
 
   useEffect(() => {
     const handleResize = () => {
       const screenWidth = window.innerWidth;
       if (screenWidth < 820) {
-        // Automatically fit A4 paper width to mobile screen
+        // Automatically fit A4 paper width to mobile screen (padding 16px each side)
         const mobileScale = Math.min(zoomLevel, (screenWidth - 32) / 794);
         setEffectiveScale(mobileScale);
       } else {
@@ -33,8 +34,9 @@ export const A4PaperCanvas: React.FC = () => {
     const observer = new ResizeObserver(() => {
       if (!paperRef.current) return;
       const totalHeight = paperRef.current.scrollHeight;
-      const a4PageHeight = 1123; // Standard A4 height at 96 DPI
+      setPaperHeight(totalHeight);
 
+      const a4PageHeight = 1123; // Standard A4 height at 96 DPI
       const breaks: number[] = [];
       let currentHeight = a4PageHeight;
 
@@ -53,23 +55,35 @@ export const A4PaperCanvas: React.FC = () => {
   if (!activeProfile) return null;
 
   const TemplateComponent = getTemplateRenderer(activeProfile.templateId);
+  const scaledWidth = Math.round(794 * effectiveScale);
+  const scaledHeight = Math.round(paperHeight * effectiveScale);
 
   return (
-    <div className="flex-1 overflow-auto bg-[#090d16] p-4 sm:p-8 flex justify-center items-start min-h-screen">
+    <div className="flex-1 overflow-x-hidden overflow-y-auto bg-[#090d16] p-2 sm:p-8 flex justify-center items-start min-h-screen">
+      {/* Outer Scaled Container matching exact scaled dimensions */}
       <div
-        className="transition-transform origin-top duration-200"
-        style={{ transform: `scale(${effectiveScale})` }}
+        style={{
+          width: `${scaledWidth}px`,
+          height: `${scaledHeight}px`,
+          position: 'relative',
+        }}
+        className="transition-all duration-200"
       >
-        <div className="relative">
-          {/* Render Active Template */}
-          <TemplateComponent profile={activeProfile} previewRef={paperRef} />
+        <div
+          className="transition-transform origin-top-left duration-200"
+          style={{ transform: `scale(${effectiveScale})` }}
+        >
+          <div className="relative">
+            {/* Render Active Template */}
+            <TemplateComponent profile={activeProfile} previewRef={paperRef} />
 
-          {/* Dynamic Visual Page Cut Lines */}
-          {pageBreaks.map((breakY, index) => (
-            <div key={index} className="page-break-line" style={{ top: `${breakY}px` }}>
-              <span className="page-break-label">A4 Page {index + 2} Split</span>
-            </div>
-          ))}
+            {/* Dynamic Visual Page Cut Lines */}
+            {pageBreaks.map((breakY, index) => (
+              <div key={index} className="page-break-line" style={{ top: `${breakY}px` }}>
+                <span className="page-break-label">A4 Page {index + 2} Split</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
