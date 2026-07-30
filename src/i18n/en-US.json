@@ -1,35 +1,29 @@
 {
-  "app": {
-    "title": "cvire — CV Builder Pro",
-    "subtitle": "Offline-First, ATS-Engineered Resume Builder"
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "close": "Close",
+    "copy": "Copy",
+    "download": "Download",
+    "upload": "Upload",
+    "loading": "Loading..."
   },
   "dashboard": {
-    "myResumes": "My Resumes",
+    "title": "My Resumes",
+    "subtitle": "Client-side ATS resume engineering workspace",
     "searchPlaceholder": "Search resumes by title or candidate name...",
     "newResume": "New Resume",
-    "demoProfiles": "Demo Templates",
+    "demoTemplates": "Demo Templates",
+    "myResumes": "My Resumes",
     "favorite": "Favorite",
     "archived": "Archived",
     "lastEdited": "Last edited",
     "duplicate": "Duplicate",
-    "delete": "Delete",
     "exportJson": "Export JSON",
     "importJson": "Import JSON"
-  },
-  "editor": {
-    "personalInfo": "Personal Information",
-    "fullName": "Full Name",
-    "jobTitle": "Professional Title",
-    "email": "Email Address",
-    "phone": "Phone Number",
-    "location": "Location / City, Country",
-    "summary": "Professional Summary",
-    "sections": "Resume Sections",
-    "addSection": "Add Section",
-    "addItem": "Add Item",
-    "addBullet": "Add Bullet Point",
-    "mainColumn": "Main Column",
-    "sidebarColumn": "Sidebar Column"
   },
   "preview": {
     "editMode": "Edit Only",
@@ -39,14 +33,14 @@
     "zoomIn": "Zoom In",
     "zoomOut": "Zoom Out",
     "resetZoom": "Reset Zoom",
-    "exportPdf": "Export Vector PDF",
+    "exportPdf": "Export PDF",
     "autoFit": "Auto-Fit Page"
   },
   "ats": {
-    "atsScore": "ATS Compatibility Score",
-    "linterTitle": "Resume Linter Diagnostics",
-    "jobMatcher": "Job Matcher & Keywords",
-    "atsPreview": "ATS Robot Text View",
-    "heatmapToggle": "Keyword Heatmap"
+    "scoreTitle": "ATS Score",
+    "plainTextView": "ATS Plain Text View",
+    "missingKeywords": "Missing Keywords",
+    "quantifiedMetrics": "Quantified Metrics",
+    "actionVerbs": "Action Verbs"
   }
 }

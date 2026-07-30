@@ -1,52 +1,46 @@
 {
-  "app": {
-    "title": "cvire — CV Builder Pro",
-    "subtitle": "Gerador de Currículos Offline-First Otimizado para ATS"
+  "common": {
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "add": "Adicionar",
+    "close": "Fechar",
+    "copy": "Copiar",
+    "download": "Baixar",
+    "upload": "Enviar",
+    "loading": "Carregando..."
   },
   "dashboard": {
-    "myResumes": "Meus Currículos",
-    "searchPlaceholder": "Buscar currículos por título ou nome...",
+    "title": "Meus Currículos",
+    "subtitle": "Ambiente cliente-side para engenharia de currículos ATS",
+    "searchPlaceholder": "Buscar currículos por título ou nome do candidato...",
     "newResume": "Novo Currículo",
-    "demoProfiles": "Modelos de Teste",
-    "favorite": "Favorito",
-    "archived": "Arquivado",
-    "lastEdited": "Última edição",
+    "demoTemplates": "Modelos Demo",
+    "myResumes": "Meus Currículos",
+    "favorite": "Favoritos",
+    "archived": "Arquivados",
+    "lastEdited": "Editado em",
     "duplicate": "Duplicar",
-    "delete": "Excluir",
     "exportJson": "Exportar JSON",
     "importJson": "Importar JSON"
   },
-  "editor": {
-    "personalInfo": "Informações Pessoais",
-    "fullName": "Nome Completo",
-    "jobTitle": "Título Profissional",
-    "email": "E-mail",
-    "phone": "Telefone",
-    "location": "Localização",
-    "summary": "Resumo Profissional",
-    "sections": "Seções do Currículo",
-    "addSection": "Adicionar Seção",
-    "addItem": "Adicionar Item",
-    "addBullet": "Adicionar Tópico (Bullet)",
-    "mainColumn": "Coluna Principal",
-    "sidebarColumn": "Coluna Lateral"
-  },
   "preview": {
     "editMode": "Apenas Edição",
-    "splitMode": "Visualização Dividida",
-    "previewMode": "Preview Folha A4",
+    "splitMode": "Modo Dividido",
+    "previewMode": "Ver Folha A4",
     "pageSplitWarning": "Linha de Corte A4",
     "zoomIn": "Aumentar Zoom",
     "zoomOut": "Diminuir Zoom",
     "resetZoom": "Resetar Zoom",
-    "exportPdf": "Exportar PDF Vetorial",
-    "autoFit": "Auto-Ajustar Página"
+    "exportPdf": "Exportar PDF",
+    "autoFit": "Ajustar à Página"
   },
   "ats": {
-    "atsScore": "Pontuação de Compatibilidade ATS",
-    "linterTitle": "Diagnósticos do Resume Linter",
-    "jobMatcher": "Otimizador de Vaga & Keywords",
-    "atsPreview": "Visão do Robô ATS",
-    "heatmapToggle": "Heatmap de Palavras-chave"
+    "scoreTitle": "Pontuação ATS",
+    "plainTextView": "Visualização Texto Puro ATS",
+    "missingKeywords": "Palavras-chave Ausentes",
+    "quantifiedMetrics": "Métricas Quantificadas",
+    "actionVerbs": "Verbos de Ação"
   }
 }
