@@ -13,8 +13,10 @@ import { APIKeyModal } from './components/ai/APIKeyModal';
 import { DemoTemplateModal } from './components/dashboard/DemoTemplateModal';
 import { TemplatePickerModal } from './components/templates/TemplatePickerModal';
 import { ThemeCustomizerDrawer } from './components/editor/ThemeCustomizerDrawer';
+import { VersionHistoryDrawer } from './components/dashboard/VersionHistoryDrawer';
+import { CompareModal } from './components/dashboard/CompareModal';
 import { exportResumeToPDF } from './services/exportService';
-import { ArrowLeft, LayoutTemplate, Palette } from 'lucide-react';
+import { ArrowLeft, LayoutTemplate, Palette, History, GitCompare } from 'lucide-react';
 
 export const App: React.FC = () => {
   const { initStore, activeProfile, selectProfile, isLoading } = useCVStore();
@@ -101,6 +103,22 @@ export const App: React.FC = () => {
               </button>
 
               <button
+                onClick={() => openModal('version-history')}
+                className="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-700 transition-all flex items-center gap-1.5"
+              >
+                <History className="w-3.5 h-3.5" />
+                <span>History</span>
+              </button>
+
+              <button
+                onClick={() => openModal('compare-cv')}
+                className="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-700 transition-all flex items-center gap-1.5"
+              >
+                <GitCompare className="w-3.5 h-3.5" />
+                <span>Compare</span>
+              </button>
+
+              <button
                 onClick={() => openModal('job-matcher')}
                 className="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-700 transition-all"
               >
@@ -139,6 +157,8 @@ export const App: React.FC = () => {
       {/* Global Modals */}
       <TemplatePickerModal />
       <ThemeCustomizerDrawer />
+      <VersionHistoryDrawer />
+      <CompareModal />
       <ATSScoreGauge />
       <ATSPlainPreviewModal />
       <JobMatcherDrawer />
