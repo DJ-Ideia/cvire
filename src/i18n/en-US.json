@@ -1,0 +1,52 @@
+{
+  "app": {
+    "title": "cvire — CV Builder Pro",
+    "subtitle": "Offline-First, ATS-Engineered Resume Builder"
+  },
+  "dashboard": {
+    "myResumes": "My Resumes",
+    "searchPlaceholder": "Search resumes by title or candidate name...",
+    "newResume": "New Resume",
+    "demoProfiles": "Demo Templates",
+    "favorite": "Favorite",
+    "archived": "Archived",
+    "lastEdited": "Last edited",
+    "duplicate": "Duplicate",
+    "delete": "Delete",
+    "exportJson": "Export JSON",
+    "importJson": "Import JSON"
+  },
+  "editor": {
+    "personalInfo": "Personal Information",
+    "fullName": "Full Name",
+    "jobTitle": "Professional Title",
+    "email": "Email Address",
+    "phone": "Phone Number",
+    "location": "Location / City, Country",
+    "summary": "Professional Summary",
+    "sections": "Resume Sections",
+    "addSection": "Add Section",
+    "addItem": "Add Item",
+    "addBullet": "Add Bullet Point",
+    "mainColumn": "Main Column",
+    "sidebarColumn": "Sidebar Column"
+  },
+  "preview": {
+    "editMode": "Edit Only",
+    "splitMode": "Split View",
+    "previewMode": "Preview Paper",
+    "pageSplitWarning": "A4 Page Cut Line",
+    "zoomIn": "Zoom In",
+    "zoomOut": "Zoom Out",
+    "resetZoom": "Reset Zoom",
+    "exportPdf": "Export Vector PDF",
+    "autoFit": "Auto-Fit Page"
+  },
+  "ats": {
+    "atsScore": "ATS Compatibility Score",
+    "linterTitle": "Resume Linter Diagnostics",
+    "jobMatcher": "Job Matcher & Keywords",
+    "atsPreview": "ATS Robot Text View",
+    "heatmapToggle": "Keyword Heatmap"
+  }
+}

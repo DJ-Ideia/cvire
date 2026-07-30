@@ -1,0 +1,52 @@
+{
+  "app": {
+    "title": "cvire — CV Builder Pro",
+    "subtitle": "Gerador de Currículos Offline-First Otimizado para ATS"
+  },
+  "dashboard": {
+    "myResumes": "Meus Currículos",
+    "searchPlaceholder": "Buscar currículos por título ou nome...",
+    "newResume": "Novo Currículo",
+    "demoProfiles": "Modelos de Teste",
+    "favorite": "Favorito",
+    "archived": "Arquivado",
+    "lastEdited": "Última edição",
+    "duplicate": "Duplicar",
+    "delete": "Excluir",
+    "exportJson": "Exportar JSON",
+    "importJson": "Importar JSON"
+  },
+  "editor": {
+    "personalInfo": "Informações Pessoais",
+    "fullName": "Nome Completo",
+    "jobTitle": "Título Profissional",
+    "email": "E-mail",
+    "phone": "Telefone",
+    "location": "Localização",
+    "summary": "Resumo Profissional",
+    "sections": "Seções do Currículo",
+    "addSection": "Adicionar Seção",
+    "addItem": "Adicionar Item",
+    "addBullet": "Adicionar Tópico (Bullet)",
+    "mainColumn": "Coluna Principal",
+    "sidebarColumn": "Coluna Lateral"
+  },
+  "preview": {
+    "editMode": "Apenas Edição",
+    "splitMode": "Visualização Dividida",
+    "previewMode": "Preview Folha A4",
+    "pageSplitWarning": "Linha de Corte A4",
+    "zoomIn": "Aumentar Zoom",
+    "zoomOut": "Diminuir Zoom",
+    "resetZoom": "Resetar Zoom",
+    "exportPdf": "Exportar PDF Vetorial",
+    "autoFit": "Auto-Ajustar Página"
+  },
+  "ats": {
+    "atsScore": "Pontuação de Compatibilidade ATS",
+    "linterTitle": "Diagnósticos do Resume Linter",
+    "jobMatcher": "Otimizador de Vaga & Keywords",
+    "atsPreview": "Visão do Robô ATS",
+    "heatmapToggle": "Heatmap de Palavras-chave"
+  }
+}

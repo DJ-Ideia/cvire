@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-dark: #090d16;
+    --card-dark: #131b2e;
+    --border-dark: #222f47;
+    --accent-blue: #3b82f6;
+  }
+
+  body {
+    background-color: var(--bg-dark);
+    color: #f8fafc;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    overflow-x: hidden;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0d1322;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #23314d;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3b82f6;
+}
+
+/* A4 Visual Canvas Styling */
+.a4-paper {
+  width: 794px;
+  min-height: 1123px;
+  background-color: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  box-sizing: border-box;
+  position: relative;
+}
+
+/* Page Split Indicator */
+.page-break-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 2px dashed #f43f5e;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.page-break-label {
+  position: absolute;
+  right: 12px;
+  top: -12px;
+  background-color: #f43f5e;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Print Styles */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .a4-paper {
+    box-shadow: none !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .page-break-line,
+  .page-break-label {
+    display: none !important;
+  }
+}
