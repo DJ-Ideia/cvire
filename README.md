@@ -1,6 +1,6 @@
 <div align="center">
   <br />
-  <h1>📄 cvire — CV Builder Pro</h1>
+  <h1>📄 cvire</h1>
   <p><strong>A Next-Generation, 100% Client-Side & Offline-First Resume Engineering Environment</strong></p>
 
   [![React](https://img.shields.io/badge/React-19.0-61DAFB?logo=react&logoColor=white)](https://react.dev)

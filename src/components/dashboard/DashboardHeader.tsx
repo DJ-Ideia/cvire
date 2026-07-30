@@ -2,6 +2,7 @@ import React from 'react';
 import { Plus, Sparkles, Search, Globe } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useCVStore } from '../../store/useCVStore';
+import { CvireLogo } from '../common/CvireLogo';
 
 interface DashboardHeaderProps {
   searchQuery: string;
@@ -25,19 +26,10 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   return (
     <header className="bg-[#131b2e] border-b border-[#222f47] px-6 py-5 sticky top-0 z-30 shadow-md">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
-        {/* Title Brand */}
+        {/* Title Brand with Logo */}
         <div>
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-blue-500/20">
-              c
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-                cvire <span className="text-xs px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">Pro</span>
-              </h1>
-              <p className="text-xs text-slate-400">{t('app.subtitle')}</p>
-            </div>
-          </div>
+          <CvireLogo size={36} />
+          <p className="text-xs text-slate-400 mt-1">{t('app.subtitle')}</p>
         </div>
 
         {/* Search Bar */}
@@ -56,7 +48,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
         <div className="flex items-center gap-3">
           <button
             onClick={toggleLanguage}
-            className="p-2.5 rounded-xl bg-[#0d1322] border border-[#222f47] hover:border-slate-500 text-slate-300 transition-all flex items-center gap-2 text-xs font-medium"
+            className="p-2.5 rounded-xl bg-[#0d1322] border border-[#222f47] hover:border-slate-500 text-slate-300 transition-all flex items-center gap-2 text-xs font-medium cursor-pointer"
             title="Switch Language"
           >
             <Globe className="w-4 h-4 text-blue-400" />
@@ -65,7 +57,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
 
           <button
             onClick={onOpenDemoModal}
-            className="px-4 py-2.5 rounded-xl bg-[#0d1322] border border-[#222f47] hover:border-indigo-500 text-slate-200 transition-all flex items-center gap-2 text-xs font-semibold"
+            className="px-4 py-2.5 rounded-xl bg-[#0d1322] border border-[#222f47] hover:border-indigo-500 text-slate-200 transition-all flex items-center gap-2 text-xs font-semibold cursor-pointer"
           >
             <Sparkles className="w-4 h-4 text-indigo-400" />
             <span>{t('dashboard.demoProfiles')}</span>
