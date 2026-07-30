@@ -14,6 +14,7 @@ dist-ssr
 
 # Scratch and test artifacts
 scratch/
+tmp/
 *.pdf
 *.png
 
