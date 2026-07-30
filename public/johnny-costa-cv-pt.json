@@ -27,6 +27,7 @@
         "title": "Experiência Profissional",
         "column": "main",
         "visible": true,
+        "displayMode": "bullets",
         "items": [
           {
             "id": "exp-1-pt",
@@ -144,6 +145,7 @@
         "title": "Formação Acadêmica",
         "column": "main",
         "visible": true,
+        "displayMode": "compact",
         "items": [
           {
             "id": "edu-1-pt",
@@ -185,6 +187,7 @@
         "title": "Habilidades Técnicas",
         "column": "sidebar",
         "visible": true,
+        "displayMode": "tags",
         "items": [
           {
             "id": "sk-1-pt",
@@ -212,6 +215,7 @@
         "title": "Idiomas",
         "column": "sidebar",
         "visible": true,
+        "displayMode": "compact",
         "items": [
           {
             "id": "lang-1-pt",

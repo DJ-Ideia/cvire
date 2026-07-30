@@ -1,5 +1,6 @@
 import React from 'react';
 import { TemplateProps } from '../../../types/template';
+import { SectionContentRenderer, getFriendlyLinkLabel, getFullUrl } from '../SectionContentRenderer';
 
 export const ExecutiveClassicTemplate: React.FC<TemplateProps> = ({ profile, previewRef }) => {
   const { personal, summary, sections, theme } = profile;
@@ -30,7 +31,21 @@ export const ExecutiveClassicTemplate: React.FC<TemplateProps> = ({ profile, pre
           {personal.email && <span>{personal.email}</span>}
           {personal.phone && <span>• {personal.phone}</span>}
           {personal.location && <span>• {personal.location}</span>}
-          {personal.linkedinUrl && <span>• {personal.linkedinUrl}</span>}
+          {personal.linkedinUrl && (
+            <a href={getFullUrl(personal.linkedinUrl)} target="_blank" rel="noreferrer" className="text-blue-700 hover:underline">
+              • {getFriendlyLinkLabel(personal.linkedinUrl, 'LinkedIn')}
+            </a>
+          )}
+          {personal.githubUrl && (
+            <a href={getFullUrl(personal.githubUrl)} target="_blank" rel="noreferrer" className="text-blue-700 hover:underline">
+              • {getFriendlyLinkLabel(personal.githubUrl, 'GitHub')}
+            </a>
+          )}
+          {personal.portfolioUrl && (
+            <a href={getFullUrl(personal.portfolioUrl)} target="_blank" rel="noreferrer" className="text-blue-700 hover:underline">
+              • {getFriendlyLinkLabel(personal.portfolioUrl, 'Portfolio')}
+            </a>
+          )}
         </div>
       </header>
 
@@ -49,31 +64,7 @@ export const ExecutiveClassicTemplate: React.FC<TemplateProps> = ({ profile, pre
               {sec.title}
             </h2>
 
-            <div className="space-y-4">
-              {sec.items.map((item) => (
-                <div key={item.id} className="space-y-1">
-                  <div className="flex justify-between items-baseline">
-                    <h3 className="font-bold text-slate-900 text-sm">{item.title}</h3>
-                    <span className="text-xs text-slate-500 font-medium">
-                      {item.startDate} {item.startDate && item.endDate ? '-' : ''} {item.endDate}
-                    </span>
-                  </div>
-
-                  {item.subtitle && <p className="text-xs font-semibold italic text-slate-600">{item.subtitle}</p>}
-
-                  {/* Bullet Points */}
-                  {item.bulletItems && item.bulletItems.length > 0 && (
-                    <ul className="list-disc list-inside space-y-1 text-xs text-slate-700 mt-1">
-                      {item.bulletItems
-                        .filter((b) => b.enabled)
-                        .map((b) => (
-                          <li key={b.id}>{b.text}</li>
-                        ))}
-                    </ul>
-                  )}
-                </div>
-              ))}
-            </div>
+            <SectionContentRenderer section={sec} primaryColor={primaryColor} isSidebar={false} />
           </div>
         ))}
       </div>

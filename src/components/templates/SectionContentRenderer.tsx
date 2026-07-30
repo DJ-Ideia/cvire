@@ -1,0 +1,177 @@
+import React from 'react';
+import { CVSection, DisplayMode, getEffectiveDisplayMode } from '../../types/cv';
+
+interface SectionContentRendererProps {
+  section: CVSection;
+  primaryColor: string;
+  isSidebar?: boolean;
+}
+
+export const getFriendlyLinkLabel = (url?: string, fallbackLabel = 'Website') => {
+  if (!url) return '';
+  const lower = url.toLowerCase();
+  if (lower.includes('linkedin.com')) return 'LinkedIn';
+  if (lower.includes('github.com')) return 'GitHub';
+  if (lower.includes('portfolio')) return 'Portfolio';
+  return fallbackLabel;
+};
+
+export const getFullUrl = (url?: string) => {
+  if (!url) return '#';
+  return url.startsWith('http') ? url : `https://${url}`;
+};
+
+export const SectionContentRenderer: React.FC<SectionContentRendererProps> = ({
+  section,
+  primaryColor,
+  isSidebar = false,
+}) => {
+  const displayMode: DisplayMode = getEffectiveDisplayMode(section);
+  const items = section.items || [];
+
+  return (
+    <div className="space-y-4">
+      {items.map((item) => {
+        // 1. TAGS DISPLAY MODE (Exclusive: renders tags ONLY)
+        if (displayMode === 'tags') {
+          return (
+            <div key={item.id} className="space-y-1">
+              <h3 className={`font-semibold text-slate-900 ${isSidebar ? 'text-xs' : 'text-xs sm:text-sm'}`}>
+                {item.title}
+              </h3>
+              {item.subtitle && (
+                <p className="text-[11px] font-medium text-slate-500">{item.subtitle}</p>
+              )}
+              {item.tags && item.tags.length > 0 && (
+                <p className={`text-[#334155] font-normal leading-relaxed ${isSidebar ? 'text-[11px]' : 'text-xs'}`}>
+                  {item.tags.join(' • ')}
+                </p>
+              )}
+            </div>
+          );
+        }
+
+        // 2. COMPACT DISPLAY MODE (Exclusive: Title, Subtitle, Dates, Link ONLY)
+        if (displayMode === 'compact') {
+          return (
+            <div key={item.id} className="space-y-0.5">
+              <div className="flex justify-between items-baseline gap-2">
+                <h3 className={`font-bold text-slate-900 ${isSidebar ? 'text-xs' : 'text-xs sm:text-sm'}`}>
+                  {item.title}
+                  {item.linkUrl && (
+                    <a
+                      href={getFullUrl(item.linkUrl)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="ml-2 text-xs font-medium text-blue-600 hover:underline inline-flex items-center gap-0.5"
+                    >
+                      <span>[{getFriendlyLinkLabel(item.linkUrl, 'Link')}]</span>
+                    </a>
+                  )}
+                </h3>
+                {(item.startDate || item.endDate) && (
+                  <span className="text-xs font-medium text-slate-500 shrink-0">
+                    {item.startDate} {item.startDate && item.endDate ? '-' : ''} {item.endDate}
+                  </span>
+                )}
+              </div>
+              {item.subtitle && (
+                <p className={`font-semibold text-slate-600 ${isSidebar ? 'text-[11px]' : 'text-xs'}`}>
+                  {item.subtitle}
+                </p>
+              )}
+            </div>
+          );
+        }
+
+        // 3. BULLETS DISPLAY MODE (Exclusive: Title, Subtitle, Dates, Bullets ONLY)
+        if (displayMode === 'bullets') {
+          const enabledBullets = (item.bulletItems || []).filter((b) => b.enabled);
+          return (
+            <div key={item.id} className="space-y-1">
+              <div className="flex justify-between items-baseline gap-2">
+                <h3 className={`font-bold text-slate-900 ${isSidebar ? 'text-xs' : 'text-xs sm:text-sm'}`}>
+                  {item.title}
+                  {item.linkUrl && (
+                    <a
+                      href={getFullUrl(item.linkUrl)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="ml-2 text-xs font-medium text-blue-600 hover:underline"
+                    >
+                      [{getFriendlyLinkLabel(item.linkUrl, 'Project')}]
+                    </a>
+                  )}
+                </h3>
+                {(item.startDate || item.endDate) && (
+                  <span className="text-xs font-medium text-slate-500 shrink-0">
+                    {item.startDate} {item.startDate && item.endDate ? '-' : ''} {item.endDate}
+                  </span>
+                )}
+              </div>
+
+              {item.subtitle && (
+                <p className={`font-semibold text-slate-600 ${isSidebar ? 'text-[11px]' : 'text-xs'}`}>
+                  {item.subtitle}
+                </p>
+              )}
+
+              {enabledBullets.length > 0 && (
+                <ul className={`list-disc list-inside space-y-1 text-slate-700 mt-1 ${isSidebar ? 'text-[11px]' : 'text-xs'}`}>
+                  {enabledBullets.map((b) => (
+                    <li key={b.id} className={b.isMetricHighlighted ? 'font-medium text-slate-900' : ''}>
+                      {b.text}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          );
+        }
+
+        // 4. DETAILED DISPLAY MODE (Title, Subtitle, Dates, Location, Bullets, Links)
+        const enabledBullets = (item.bulletItems || []).filter((b) => b.enabled);
+        return (
+          <div key={item.id} className="space-y-1">
+            <div className="flex justify-between items-baseline gap-2">
+              <h3 className={`font-bold text-slate-900 ${isSidebar ? 'text-xs' : 'text-xs sm:text-sm'}`}>
+                {item.title}
+                {item.linkUrl && (
+                  <a
+                    href={getFullUrl(item.linkUrl)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="ml-2 text-xs font-medium text-blue-600 hover:underline"
+                  >
+                    [{getFriendlyLinkLabel(item.linkUrl, 'Link')}]
+                  </a>
+                )}
+              </h3>
+              {(item.startDate || item.endDate) && (
+                <span className="text-xs font-medium text-slate-500 shrink-0">
+                  {item.startDate} {item.startDate && item.endDate ? '-' : ''} {item.endDate}
+                </span>
+              )}
+            </div>
+
+            {item.subtitle && (
+              <p className={`font-semibold text-slate-600 ${isSidebar ? 'text-[11px]' : 'text-xs'}`}>
+                {item.subtitle} {item.location ? `• ${item.location}` : ''}
+              </p>
+            )}
+
+            {enabledBullets.length > 0 && (
+              <ul className={`list-disc list-inside space-y-1 text-slate-700 mt-1 ${isSidebar ? 'text-[11px]' : 'text-xs'}`}>
+                {enabledBullets.map((b) => (
+                  <li key={b.id} className={b.isMetricHighlighted ? 'font-medium text-slate-900' : ''}>
+                    {b.text}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+};

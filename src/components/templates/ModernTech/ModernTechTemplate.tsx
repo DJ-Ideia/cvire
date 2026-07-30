@@ -1,5 +1,6 @@
 import React from 'react';
 import { TemplateProps } from '../../../types/template';
+import { SectionContentRenderer, getFriendlyLinkLabel, getFullUrl } from '../SectionContentRenderer';
 
 export const ModernTechTemplate: React.FC<TemplateProps> = ({ profile, previewRef }) => {
   const { personal, summary, sections, theme } = profile;
@@ -12,16 +13,6 @@ export const ModernTechTemplate: React.FC<TemplateProps> = ({ profile, previewRe
   const sidebarSections = profile.sectionsOrder
     .map((id) => sections[id])
     .filter((sec) => sec && sec.visible && sec.column === 'sidebar');
-
-  const cleanUrl = (url?: string) => {
-    if (!url) return '';
-    return url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
-  };
-
-  const getFullUrl = (url?: string) => {
-    if (!url) return '#';
-    return url.startsWith('http') ? url : `https://${url}`;
-  };
 
   return (
     <div
@@ -49,21 +40,21 @@ export const ModernTechTemplate: React.FC<TemplateProps> = ({ profile, previewRe
           {personal.linkedinUrl && (
             <div className="text-blue-600 font-medium">
               <a href={getFullUrl(personal.linkedinUrl)} target="_blank" rel="noreferrer">
-                {cleanUrl(personal.linkedinUrl)}
+                {getFriendlyLinkLabel(personal.linkedinUrl, 'LinkedIn')}
               </a>
             </div>
           )}
           {personal.githubUrl && (
             <div className="text-blue-600 font-medium">
               <a href={getFullUrl(personal.githubUrl)} target="_blank" rel="noreferrer">
-                {cleanUrl(personal.githubUrl)}
+                {getFriendlyLinkLabel(personal.githubUrl, 'GitHub')}
               </a>
             </div>
           )}
           {personal.portfolioUrl && (
             <div className="text-blue-600 font-medium">
               <a href={getFullUrl(personal.portfolioUrl)} target="_blank" rel="noreferrer">
-                {cleanUrl(personal.portfolioUrl)}
+                {getFriendlyLinkLabel(personal.portfolioUrl, 'Portfolio')}
               </a>
             </div>
           )}
@@ -89,48 +80,7 @@ export const ModernTechTemplate: React.FC<TemplateProps> = ({ profile, previewRe
                 {sec.title}
               </h2>
 
-              <div className="space-y-4">
-                {sec.items.map((item) => (
-                  <div key={item.id} className="space-y-1">
-                    <div className="flex justify-between items-baseline">
-                      <h3 className="font-bold text-slate-900">{item.title}</h3>
-                      <span className="text-xs font-medium text-slate-500">
-                        {item.startDate} {item.startDate && item.endDate ? '-' : ''} {item.endDate}
-                      </span>
-                    </div>
-
-                    {item.subtitle && <p className="text-xs font-semibold text-slate-600">{item.subtitle}</p>}
-
-                    {/* Bullet Points */}
-                    {item.bulletItems && item.bulletItems.length > 0 && (
-                      <ul className="list-disc list-inside space-y-1 text-xs text-slate-700 mt-1">
-                        {item.bulletItems
-                          .filter((b) => b.enabled)
-                          .map((b) => (
-                            <li key={b.id} className={b.isMetricHighlighted ? 'font-medium text-slate-900' : ''}>
-                              {b.text}
-                            </li>
-                          ))}
-                      </ul>
-                    )}
-
-                    {/* Main Item Tags */}
-                    {item.tags && item.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-1 mt-2">
-                        {item.tags.map((tag, idx) => (
-                          <span
-                            key={idx}
-                            className="text-[10px] px-2 py-0.5 rounded font-medium"
-                            style={{ backgroundColor: `${primaryColor}15`, color: primaryColor }}
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
+              <SectionContentRenderer section={sec} primaryColor={primaryColor} isSidebar={false} />
             </div>
           ))}
         </div>
@@ -144,32 +94,7 @@ export const ModernTechTemplate: React.FC<TemplateProps> = ({ profile, previewRe
                   {sec.title}
                 </h2>
 
-                <div className="space-y-3">
-                  {sec.items.map((item) => (
-                    <div key={item.id} className="space-y-1">
-                      <h3 className="font-semibold text-xs text-slate-900">{item.title}</h3>
-                      {item.subtitle && <p className="text-[11px] text-slate-500 font-medium">{item.subtitle}</p>}
-                      
-                      {/* Technical Skill Tags (Dot Separated) */}
-                      {item.tags && item.tags.length > 0 && (
-                        <p className="text-[11px] text-slate-600 leading-normal font-normal">
-                          {item.tags.join(' • ')}
-                        </p>
-                      )}
-
-                      {/* Sidebar Item Bullets */}
-                      {item.bulletItems && item.bulletItems.length > 0 && (
-                        <ul className="mt-1 space-y-1 text-[11px] text-slate-600">
-                          {item.bulletItems
-                            .filter((b) => b.enabled)
-                            .map((b) => (
-                              <li key={b.id}>{b.text}</li>
-                            ))}
-                        </ul>
-                      )}
-                    </div>
-                  ))}
-                </div>
+                <SectionContentRenderer section={sec} primaryColor={primaryColor} isSidebar={true} />
               </div>
             ))}
           </div>

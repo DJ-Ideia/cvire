@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Plus, Eye, EyeOff, Trash2, GripVertical, ChevronDown, ChevronUp, CheckSquare, Square, Tag, Briefcase, ListFilter, AlignLeft, Award, FolderGit2, GraduationCap, Languages as LangIcon, Wrench, ArrowUp, ArrowDown } from 'lucide-react';
+import { Plus, Eye, EyeOff, Trash2, GripVertical, ChevronDown, ChevronUp, CheckSquare, Square, Tag, Briefcase, ListFilter, AlignLeft, Award, FolderGit2, GraduationCap, Languages as LangIcon, Wrench, ArrowUp, ArrowDown, LayoutList, Layers } from 'lucide-react';
 import { useCVStore } from '../../store/useCVStore';
 import { useTranslation } from 'react-i18next';
-import { SectionItem, BulletItem, SectionType } from '../../types/cv';
+import { SectionItem, BulletItem, SectionType, DisplayMode, getEffectiveDisplayMode } from '../../types/cv';
 
 export const SectionsList: React.FC = () => {
   const { t } = useTranslation();
@@ -10,6 +10,7 @@ export const SectionsList: React.FC = () => {
     activeProfile,
     toggleSectionVisibility,
     toggleSectionColumn,
+    updateSection,
     reorderSections,
     deleteSection,
     addSection,
@@ -22,7 +23,6 @@ export const SectionsList: React.FC = () => {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
   const [tagInputs, setTagInputs] = useState<Record<string, string>>({});
-  const [skillDisplayMode, setSkillDisplayMode] = useState<Record<string, 'tags' | 'bullets'>>({});
   const [isAddingSection, setIsAddingSection] = useState(false);
   const [customTitleInput, setCustomTitleInput] = useState('');
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
@@ -37,8 +37,23 @@ export const SectionsList: React.FC = () => {
     setExpandedItems((prev) => ({ ...prev, [itemId]: !prev[itemId] }));
   };
 
-  const handleAddPresetSection = (type: SectionType, defaultTitle: string) => {
+  const handleAddPresetSection = (type: SectionType, defaultTitle: string, defaultDisplayMode?: DisplayMode) => {
+    let mode: DisplayMode = defaultDisplayMode || 'bullets';
+    if (type === 'skills') mode = 'tags';
+    else if (type === 'education' || type === 'languages' || type === 'certifications') mode = 'compact';
+
     addSection(type, defaultTitle);
+    
+    // Set section-level displayMode on the newly created section
+    setTimeout(() => {
+      const active = useCVStore.getState().activeProfile;
+      if (!active) return;
+      const createdSecId = active.sectionsOrder[active.sectionsOrder.length - 1];
+      if (createdSecId) {
+        updateSection(createdSecId, { displayMode: mode, layout: { displayMode: mode } });
+      }
+    }, 50);
+
     setIsAddingSection(false);
     setCustomTitleInput('');
   };
@@ -194,7 +209,7 @@ export const SectionsList: React.FC = () => {
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
             <button
               type="button"
-              onClick={() => handleAddPresetSection('certifications', 'Certifications')}
+              onClick={() => handleAddPresetSection('certifications', 'Certifications', 'compact')}
               className="p-3 bg-[#0d1322] border border-[#222f47] hover:border-amber-500 hover:text-amber-400 rounded-xl text-xs font-semibold text-slate-300 flex flex-col items-center gap-1.5 transition-all cursor-pointer"
             >
               <Award className="w-5 h-5 text-amber-400" />
@@ -203,7 +218,7 @@ export const SectionsList: React.FC = () => {
 
             <button
               type="button"
-              onClick={() => handleAddPresetSection('projects', 'Featured Projects')}
+              onClick={() => handleAddPresetSection('projects', 'Featured Projects', 'bullets')}
               className="p-3 bg-[#0d1322] border border-[#222f47] hover:border-purple-500 hover:text-purple-400 rounded-xl text-xs font-semibold text-slate-300 flex flex-col items-center gap-1.5 transition-all cursor-pointer"
             >
               <FolderGit2 className="w-5 h-5 text-purple-400" />
@@ -212,7 +227,7 @@ export const SectionsList: React.FC = () => {
 
             <button
               type="button"
-              onClick={() => handleAddPresetSection('skills', 'Technical Skills')}
+              onClick={() => handleAddPresetSection('skills', 'Technical Skills', 'tags')}
               className="p-3 bg-[#0d1322] border border-[#222f47] hover:border-blue-500 hover:text-blue-400 rounded-xl text-xs font-semibold text-slate-300 flex flex-col items-center gap-1.5 transition-all cursor-pointer"
             >
               <Wrench className="w-5 h-5 text-blue-400" />
@@ -221,7 +236,7 @@ export const SectionsList: React.FC = () => {
 
             <button
               type="button"
-              onClick={() => handleAddPresetSection('education', 'Education')}
+              onClick={() => handleAddPresetSection('education', 'Education', 'compact')}
               className="p-3 bg-[#0d1322] border border-[#222f47] hover:border-emerald-500 hover:text-emerald-400 rounded-xl text-xs font-semibold text-slate-300 flex flex-col items-center gap-1.5 transition-all cursor-pointer"
             >
               <GraduationCap className="w-5 h-5 text-emerald-400" />
@@ -230,7 +245,7 @@ export const SectionsList: React.FC = () => {
 
             <button
               type="button"
-              onClick={() => handleAddPresetSection('languages', 'Languages')}
+              onClick={() => handleAddPresetSection('languages', 'Languages', 'compact')}
               className="p-3 bg-[#0d1322] border border-[#222f47] hover:border-indigo-500 hover:text-indigo-400 rounded-xl text-xs font-semibold text-slate-300 flex flex-col items-center gap-1.5 transition-all cursor-pointer"
             >
               <LangIcon className="w-5 h-5 text-indigo-400" />
@@ -239,7 +254,7 @@ export const SectionsList: React.FC = () => {
 
             <button
               type="button"
-              onClick={() => handleAddPresetSection('experience', 'Professional Experience')}
+              onClick={() => handleAddPresetSection('experience', 'Professional Experience', 'bullets')}
               className="p-3 bg-[#0d1322] border border-[#222f47] hover:border-sky-500 hover:text-sky-400 rounded-xl text-xs font-semibold text-slate-300 flex flex-col items-center gap-1.5 transition-all cursor-pointer"
             >
               <Briefcase className="w-5 h-5 text-sky-400" />
@@ -260,7 +275,7 @@ export const SectionsList: React.FC = () => {
               type="button"
               onClick={() => {
                 if (customTitleInput.trim()) {
-                  handleAddPresetSection('custom', customTitleInput.trim());
+                  handleAddPresetSection('custom', customTitleInput.trim(), 'bullets');
                 }
               }}
               className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-xl cursor-pointer"
@@ -275,7 +290,7 @@ export const SectionsList: React.FC = () => {
       <div className="space-y-3">
         {sectionsList.map((sec, index) => {
           const isSectionExpanded = expandedSection === sec.id || expandedSection === null;
-          const secType = sec.type || 'custom';
+          const sectionDisplayMode = getEffectiveDisplayMode(sec);
 
           return (
             <div
@@ -289,8 +304,8 @@ export const SectionsList: React.FC = () => {
               }`}
             >
               {/* Section Header */}
-              <div className="p-4 flex items-center justify-between gap-3 bg-[#131b2e]">
-                <div className="flex items-center gap-2 flex-1">
+              <div className="p-4 flex flex-wrap items-center justify-between gap-3 bg-[#131b2e]">
+                <div className="flex items-center gap-2 flex-1 min-w-[220px]">
                   <div title="Drag to reorder">
                     <GripVertical className="w-4 h-4 text-slate-500 hover:text-slate-200 cursor-grab active:cursor-grabbing shrink-0" />
                   </div>
@@ -329,7 +344,7 @@ export const SectionsList: React.FC = () => {
                     type="button"
                     onClick={() => toggleSectionColumn(sec.id)}
                     title={`Click to move section to ${sec.column === 'main' ? 'Sidebar' : 'Main'} column`}
-                    className={`text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded border transition-all cursor-pointer ${
+                    className={`text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded border transition-all cursor-pointer shrink-0 ${
                       sec.column === 'main'
                         ? 'bg-blue-500/10 text-blue-400 border-blue-500/30 hover:bg-blue-500/20'
                         : 'bg-purple-500/10 text-purple-400 border-purple-500/30 hover:bg-purple-500/20'
@@ -339,29 +354,70 @@ export const SectionsList: React.FC = () => {
                   </button>
                 </div>
 
-                <div className="flex items-center gap-1">
-                  <button
-                    onClick={() => toggleSectionVisibility(sec.id)}
-                    className="p-1.5 text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
-                    title="Toggle Visibility"
-                  >
-                    {sec.visible ? <Eye className="w-4 h-4 text-blue-400" /> : <EyeOff className="w-4 h-4" />}
-                  </button>
+                {/* Section Level Display Mode Selector (Tags | Bullets | Compact | Detailed) */}
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1 bg-[#0d1322] p-1 rounded-lg border border-[#222f47]">
+                    <button
+                      type="button"
+                      title="Render Section as Tags"
+                      onClick={() => updateSection(sec.id, { displayMode: 'tags', layout: { ...sec.layout, displayMode: 'tags' } })}
+                      className={`px-2 py-0.5 rounded text-[10px] font-semibold flex items-center gap-1 transition-all cursor-pointer ${
+                        sectionDisplayMode === 'tags' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
+                      }`}
+                    >
+                      <Tag className="w-3 h-3" />
+                      <span>Tags</span>
+                    </button>
 
-                  <button
-                    onClick={() => deleteSection(sec.id)}
-                    className="p-1.5 text-slate-400 hover:text-rose-400 transition-colors cursor-pointer"
-                    title="Delete Section"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                    <button
+                      type="button"
+                      title="Render Section as Bullets"
+                      onClick={() => updateSection(sec.id, { displayMode: 'bullets', layout: { ...sec.layout, displayMode: 'bullets' } })}
+                      className={`px-2 py-0.5 rounded text-[10px] font-semibold flex items-center gap-1 transition-all cursor-pointer ${
+                        sectionDisplayMode === 'bullets' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
+                      }`}
+                    >
+                      <ListFilter className="w-3 h-3" />
+                      <span>Bullets</span>
+                    </button>
 
-                  <button
-                    onClick={() => setExpandedSection(isSectionExpanded ? 'none' : sec.id)}
-                    className="p-1.5 text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
-                  >
-                    {isSectionExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                  </button>
+                    <button
+                      type="button"
+                      title="Render Section as Compact"
+                      onClick={() => updateSection(sec.id, { displayMode: 'compact', layout: { ...sec.layout, displayMode: 'compact' } })}
+                      className={`px-2 py-0.5 rounded text-[10px] font-semibold flex items-center gap-1 transition-all cursor-pointer ${
+                        sectionDisplayMode === 'compact' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
+                      }`}
+                    >
+                      <LayoutList className="w-3 h-3" />
+                      <span>Compact</span>
+                    </button>
+                  </div>
+
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => toggleSectionVisibility(sec.id)}
+                      className="p-1.5 text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
+                      title="Toggle Visibility"
+                    >
+                      {sec.visible ? <Eye className="w-4 h-4 text-blue-400" /> : <EyeOff className="w-4 h-4" />}
+                    </button>
+
+                    <button
+                      onClick={() => deleteSection(sec.id)}
+                      className="p-1.5 text-slate-400 hover:text-rose-400 transition-colors cursor-pointer"
+                      title="Delete Section"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+
+                    <button
+                      onClick={() => setExpandedSection(isSectionExpanded ? 'none' : sec.id)}
+                      className="p-1.5 text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
+                    >
+                      {isSectionExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -407,34 +463,83 @@ export const SectionsList: React.FC = () => {
                           </div>
                         </div>
 
-                        {/* Item Expanded Form */}
+                        {/* Item Expanded Form - Tailored by Section displayMode */}
                         {isItemExpanded && (
                           <div className="space-y-3 pt-1">
-                            {/* CERTIFICATIONS SECTION EDITOR */}
-                            {secType === 'certifications' ? (
+                            {/* TAGS MODE FORM (Exclusive for Tags displayMode) */}
+                            {sectionDisplayMode === 'tags' ? (
+                              <div className="space-y-3">
+                                <div>
+                                  <label className="block text-[11px] text-slate-400 font-medium mb-1">
+                                    Category / Group Title
+                                  </label>
+                                  <input
+                                    type="text"
+                                    value={item.title}
+                                    onChange={(e) => updateSectionItem(sec.id, item.id, { title: e.target.value })}
+                                    placeholder="e.g. Programming & Databases"
+                                    className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-lg px-3 py-1.5 text-slate-200 outline-none transition-all text-xs"
+                                  />
+                                </div>
+
+                                <div>
+                                  <label className="block text-[11px] text-slate-400 font-medium mb-1 flex items-center gap-1.5">
+                                    <Tag className="w-3 h-3 text-blue-400" />
+                                    <span>{t('editor.tags')}</span>
+                                  </label>
+                                  <input
+                                    type="text"
+                                    value={
+                                      tagInputs[item.id] !== undefined
+                                        ? tagInputs[item.id]
+                                        : (item.tags || []).join(', ')
+                                    }
+                                    onChange={(e) => {
+                                      const val = e.target.value;
+                                      setTagInputs((prev) => ({ ...prev, [item.id]: val }));
+                                      const parsed = val
+                                        .split(',')
+                                        .map((s) => s.trim())
+                                        .filter(Boolean);
+                                      updateSectionItem(sec.id, item.id, { tags: parsed });
+                                    }}
+                                    onBlur={() => {
+                                      setTagInputs((prev) => {
+                                        const copy = { ...prev };
+                                        delete copy[item.id];
+                                        return copy;
+                                      });
+                                    }}
+                                    placeholder={t('editor.tagsPlaceholder')}
+                                    className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-lg px-3 py-1.5 text-slate-200 outline-none text-xs transition-all"
+                                  />
+                                </div>
+                              </div>
+                            ) : sectionDisplayMode === 'compact' ? (
+                              /* COMPACT MODE FORM (Title, Subtitle, Dates, Link URL) */
                               <div className="space-y-3 text-xs">
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                   <div>
                                     <label className="block text-[11px] text-slate-400 font-medium mb-1">
-                                      {t('editor.certName')}
+                                      Title / Degree / Language
                                     </label>
                                     <input
                                       type="text"
                                       value={item.title}
                                       onChange={(e) => updateSectionItem(sec.id, item.id, { title: e.target.value })}
-                                      placeholder="e.g. AWS Certified Solutions Architect"
+                                      placeholder="e.g. AWS Certified Engineer / English"
                                       className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-lg px-3 py-1.5 text-slate-200 outline-none transition-all"
                                     />
                                   </div>
                                   <div>
                                     <label className="block text-[11px] text-slate-400 font-medium mb-1">
-                                      {t('editor.certProvider')}
+                                      Subtitle / Institution / Level
                                     </label>
                                     <input
                                       type="text"
                                       value={item.subtitle || ''}
                                       onChange={(e) => updateSectionItem(sec.id, item.id, { subtitle: e.target.value })}
-                                      placeholder="e.g. Amazon Web Services"
+                                      placeholder="e.g. Amazon Web Services / Native"
                                       className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-lg px-3 py-1.5 text-slate-200 outline-none transition-all"
                                     />
                                   </div>
@@ -443,7 +548,7 @@ export const SectionsList: React.FC = () => {
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                   <div>
                                     <label className="block text-[11px] text-slate-400 font-medium mb-1">
-                                      {t('editor.certDate')}
+                                      {t('editor.startDate')}
                                     </label>
                                     <input
                                       type="text"
@@ -468,31 +573,32 @@ export const SectionsList: React.FC = () => {
                                   </div>
                                 </div>
                               </div>
-                            ) : secType === 'projects' ? (
-                              /* PROJECTS SECTION EDITOR */
+                            ) : (
+                              /* BULLETS / DETAILED MODE FORM */
                               <div className="space-y-3 text-xs">
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                   <div>
                                     <label className="block text-[11px] text-slate-400 font-medium mb-1">
-                                      {t('editor.projName')}
+                                      {t('editor.itemTitle')}
                                     </label>
                                     <input
                                       type="text"
                                       value={item.title}
                                       onChange={(e) => updateSectionItem(sec.id, item.id, { title: e.target.value })}
-                                      placeholder="e.g. Full-Stack Data Tool"
+                                      placeholder="e.g. Senior Data Engineer"
                                       className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-lg px-3 py-1.5 text-slate-200 outline-none transition-all"
                                     />
                                   </div>
+
                                   <div>
                                     <label className="block text-[11px] text-slate-400 font-medium mb-1">
-                                      {t('editor.projRole')}
+                                      {t('editor.itemSubtitle')}
                                     </label>
                                     <input
                                       type="text"
                                       value={item.subtitle || ''}
                                       onChange={(e) => updateSectionItem(sec.id, item.id, { subtitle: e.target.value })}
-                                      placeholder="e.g. Lead Developer • Python, PostgreSQL"
+                                      placeholder="e.g. Global Automotive"
                                       className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-lg px-3 py-1.5 text-slate-200 outline-none transition-all"
                                     />
                                   </div>
@@ -507,7 +613,7 @@ export const SectionsList: React.FC = () => {
                                       type="text"
                                       value={item.startDate || ''}
                                       onChange={(e) => updateSectionItem(sec.id, item.id, { startDate: e.target.value })}
-                                      placeholder="Jan 2025"
+                                      placeholder="May 2025"
                                       className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-lg px-3 py-1.5 text-slate-200 outline-none transition-all"
                                     />
                                   </div>
@@ -542,40 +648,6 @@ export const SectionsList: React.FC = () => {
                                   </div>
                                 </div>
 
-                                {/* Tech Stack Tags */}
-                                <div>
-                                  <label className="block text-[11px] text-slate-400 font-medium mb-1 flex items-center gap-1.5">
-                                    <Tag className="w-3 h-3 text-blue-400" />
-                                    <span>{t('editor.tags')}</span>
-                                  </label>
-                                  <input
-                                    type="text"
-                                    value={
-                                      tagInputs[item.id] !== undefined
-                                        ? tagInputs[item.id]
-                                        : (item.tags || []).join(', ')
-                                    }
-                                    onChange={(e) => {
-                                      const val = e.target.value;
-                                      setTagInputs((prev) => ({ ...prev, [item.id]: val }));
-                                      const parsed = val
-                                        .split(',')
-                                        .map((s) => s.trim())
-                                        .filter(Boolean);
-                                      updateSectionItem(sec.id, item.id, { tags: parsed });
-                                    }}
-                                    onBlur={() => {
-                                      setTagInputs((prev) => {
-                                        const copy = { ...prev };
-                                        delete copy[item.id];
-                                        return copy;
-                                      });
-                                    }}
-                                    placeholder={t('editor.tagsPlaceholder')}
-                                    className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-lg px-3 py-1.5 text-slate-200 outline-none text-xs transition-all"
-                                  />
-                                </div>
-
                                 {/* Bullet Points Editor */}
                                 <div className="space-y-2 pt-2 border-t border-[#222f47]/50">
                                   <div className="flex items-center justify-between">
@@ -612,410 +684,7 @@ export const SectionsList: React.FC = () => {
                                           rows={2}
                                           value={bullet.text}
                                           onChange={(e) => handleUpdateBullet(sec.id, item, bullet.id, { text: e.target.value })}
-                                          placeholder="Describe project highlights or architecture..."
-                                          className={`flex-1 bg-transparent text-xs text-slate-200 outline-none resize-y leading-relaxed ${
-                                            !bullet.enabled ? 'line-through opacity-50' : ''
-                                          }`}
-                                        />
-
-                                        <button
-                                          type="button"
-                                          onClick={() => handleDeleteBullet(sec.id, item, bullet.id)}
-                                          className="mt-1 text-slate-500 hover:text-rose-400 cursor-pointer transition-colors"
-                                          title="Delete Bullet"
-                                        >
-                                          <Trash2 className="w-3.5 h-3.5" />
-                                        </button>
-                                      </div>
-                                    ))}
-                                  </div>
-                                </div>
-                              </div>
-                            ) : secType === 'languages' ? (
-                              /* LANGUAGES SECTION EDITOR */
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                                <div>
-                                  <label className="block text-[11px] text-slate-400 font-medium mb-1">
-                                    Language
-                                  </label>
-                                  <input
-                                    type="text"
-                                    value={item.title}
-                                    onChange={(e) => updateSectionItem(sec.id, item.id, { title: e.target.value })}
-                                    placeholder="e.g. English"
-                                    className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-lg px-3 py-1.5 text-slate-200 outline-none transition-all"
-                                  />
-                                </div>
-                                <div>
-                                  <label className="block text-[11px] text-slate-400 font-medium mb-1">
-                                    Proficiency
-                                  </label>
-                                  <input
-                                    type="text"
-                                    value={item.subtitle || ''}
-                                    onChange={(e) => updateSectionItem(sec.id, item.id, { subtitle: e.target.value })}
-                                    placeholder="e.g. Native / CEFR B2"
-                                    className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-lg px-3 py-1.5 text-slate-200 outline-none transition-all"
-                                  />
-                                </div>
-                              </div>
-                            ) : secType === 'education' ? (
-                              /* EDUCATION SECTION EDITOR */
-                              <div className="space-y-3">
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                                  <div>
-                                    <label className="block text-[11px] text-slate-400 font-medium mb-1">
-                                      Degree / Course Title
-                                    </label>
-                                    <input
-                                      type="text"
-                                      value={item.title}
-                                      onChange={(e) => updateSectionItem(sec.id, item.id, { title: e.target.value })}
-                                      placeholder="e.g. Bachelor's in Computer Science"
-                                      className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-lg px-3 py-1.5 text-slate-200 outline-none transition-all"
-                                    />
-                                  </div>
-                                  <div>
-                                    <label className="block text-[11px] text-slate-400 font-medium mb-1">
-                                      Institution / University
-                                    </label>
-                                    <input
-                                      type="text"
-                                      value={item.subtitle || ''}
-                                      onChange={(e) => updateSectionItem(sec.id, item.id, { subtitle: e.target.value })}
-                                      placeholder="e.g. Universidade Tiradentes"
-                                      className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-lg px-3 py-1.5 text-slate-200 outline-none transition-all"
-                                    />
-                                  </div>
-                                </div>
-
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                                  <div>
-                                    <label className="block text-[11px] text-slate-400 font-medium mb-1">
-                                      {t('editor.startDate')}
-                                    </label>
-                                    <input
-                                      type="text"
-                                      value={item.startDate || ''}
-                                      onChange={(e) => updateSectionItem(sec.id, item.id, { startDate: e.target.value })}
-                                      placeholder="Jan 2019"
-                                      className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-lg px-3 py-1.5 text-slate-200 outline-none transition-all"
-                                    />
-                                  </div>
-                                  <div>
-                                    <label className="block text-[11px] text-slate-400 font-medium mb-1">
-                                      {t('editor.endDate')}
-                                    </label>
-                                    <input
-                                      type="text"
-                                      value={item.endDate || ''}
-                                      onChange={(e) => updateSectionItem(sec.id, item.id, { endDate: e.target.value })}
-                                      placeholder="Dec 2023"
-                                      className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-lg px-3 py-1.5 text-slate-200 outline-none transition-all"
-                                    />
-                                  </div>
-                                </div>
-                              </div>
-                            ) : secType === 'skills' ? (
-                              /* TECHNICAL SKILLS SECTION EDITOR */
-                              <div className="space-y-3">
-                                <div>
-                                  <label className="block text-[11px] text-slate-400 font-medium mb-1">
-                                    Skill Category Title
-                                  </label>
-                                  <input
-                                    type="text"
-                                    value={item.title}
-                                    onChange={(e) => updateSectionItem(sec.id, item.id, { title: e.target.value })}
-                                    placeholder="e.g. Programming & Databases"
-                                    className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-lg px-3 py-1.5 text-slate-200 outline-none transition-all text-xs"
-                                  />
-                                </div>
-
-                                {/* Mode Switcher Buttons */}
-                                <div className="space-y-2 pt-2 border-t border-[#222f47]/50">
-                                  <div className="flex items-center justify-between">
-                                    <span className="text-[11px] font-bold text-slate-300">
-                                      {t('editor.skillModeLabel')}
-                                    </span>
-
-                                    <div className="flex items-center gap-1 bg-[#0d1322] p-1 rounded-lg border border-[#222f47]">
-                                      <button
-                                        type="button"
-                                        onClick={() =>
-                                          setSkillDisplayMode((prev) => ({ ...prev, [item.id]: 'tags' }))
-                                        }
-                                        className={`px-2.5 py-1 rounded text-[11px] font-medium flex items-center gap-1 transition-all cursor-pointer ${
-                                          (skillDisplayMode[item.id] || (item.tags && item.tags.length > 0 ? 'tags' : 'bullets')) === 'tags'
-                                            ? 'bg-blue-600 text-white shadow'
-                                            : 'text-slate-400 hover:text-slate-200'
-                                        }`}
-                                      >
-                                        <AlignLeft className="w-3 h-3" />
-                                        <span>{t('editor.skillFormatTags')}</span>
-                                      </button>
-
-                                      <button
-                                        type="button"
-                                        onClick={() =>
-                                          setSkillDisplayMode((prev) => ({ ...prev, [item.id]: 'bullets' }))
-                                        }
-                                        className={`px-2.5 py-1 rounded text-[11px] font-medium flex items-center gap-1 transition-all cursor-pointer ${
-                                          (skillDisplayMode[item.id] || (item.tags && item.tags.length > 0 ? 'tags' : 'bullets')) === 'bullets'
-                                            ? 'bg-blue-600 text-white shadow'
-                                            : 'text-slate-400 hover:text-slate-200'
-                                        }`}
-                                      >
-                                        <ListFilter className="w-3 h-3" />
-                                        <span>{t('editor.skillFormatBullets')}</span>
-                                      </button>
-                                    </div>
-                                  </div>
-
-                                  {/* Tags Format View (Comma Separated) */}
-                                  {(skillDisplayMode[item.id] || (item.tags && item.tags.length > 0 ? 'tags' : 'bullets')) === 'tags' ? (
-                                    <div>
-                                      <label className="block text-[11px] text-slate-400 font-medium mb-1 flex items-center gap-1.5">
-                                        <Tag className="w-3 h-3 text-blue-400" />
-                                        <span>{t('editor.tags')}</span>
-                                      </label>
-                                      <input
-                                        type="text"
-                                        value={
-                                          tagInputs[item.id] !== undefined
-                                            ? tagInputs[item.id]
-                                            : (item.tags || []).join(', ')
-                                        }
-                                        onChange={(e) => {
-                                          const val = e.target.value;
-                                          setTagInputs((prev) => ({ ...prev, [item.id]: val }));
-                                          const parsed = val
-                                            .split(',')
-                                            .map((s) => s.trim())
-                                            .filter(Boolean);
-                                          updateSectionItem(sec.id, item.id, { tags: parsed });
-                                        }}
-                                        onBlur={() => {
-                                          setTagInputs((prev) => {
-                                            const copy = { ...prev };
-                                            delete copy[item.id];
-                                            return copy;
-                                          });
-                                        }}
-                                        placeholder={t('editor.tagsPlaceholder')}
-                                        className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-lg px-3 py-1.5 text-slate-200 outline-none text-xs transition-all"
-                                      />
-                                    </div>
-                                  ) : (
-                                    /* Bullets Format View (One Below Another) */
-                                    <div className="space-y-2">
-                                      <div className="flex items-center justify-between">
-                                        <label className="text-[11px] font-bold text-slate-300">
-                                          {t('editor.bulletPoints')} ({(item.bulletItems || []).length})
-                                        </label>
-                                        <button
-                                          type="button"
-                                          onClick={() => handleAddBullet(sec.id, item)}
-                                          className="text-xs text-blue-400 hover:text-blue-300 font-medium flex items-center gap-1 cursor-pointer transition-colors"
-                                        >
-                                          <Plus className="w-3.5 h-3.5" />
-                                          <span>{t('editor.addBullet')}</span>
-                                        </button>
-                                      </div>
-
-                                      <div className="space-y-2">
-                                        {(item.bulletItems || []).map((bullet, bIdx) => (
-                                          <div key={bullet.id || bIdx} className="flex items-start gap-2 bg-[#0d1322] border border-[#222f47] p-2 rounded-lg">
-                                            <button
-                                              type="button"
-                                              onClick={() => handleUpdateBullet(sec.id, item, bullet.id, { enabled: !bullet.enabled })}
-                                              className="mt-1 text-slate-400 hover:text-blue-400 cursor-pointer"
-                                              title={bullet.enabled ? 'Disable Bullet' : 'Enable Bullet'}
-                                            >
-                                              {bullet.enabled ? (
-                                                <CheckSquare className="w-3.5 h-3.5 text-blue-400" />
-                                              ) : (
-                                                <Square className="w-3.5 h-3.5" />
-                                              )}
-                                            </button>
-
-                                            <input
-                                              type="text"
-                                              value={bullet.text}
-                                              onChange={(e) => handleUpdateBullet(sec.id, item, bullet.id, { text: e.target.value })}
-                                              placeholder="Skill item..."
-                                              className={`flex-1 bg-transparent text-xs text-slate-200 outline-none ${
-                                                !bullet.enabled ? 'line-through opacity-50' : ''
-                                              }`}
-                                            />
-
-                                            <button
-                                              type="button"
-                                              onClick={() => handleDeleteBullet(sec.id, item, bullet.id)}
-                                              className="mt-1 text-slate-500 hover:text-rose-400 cursor-pointer transition-colors"
-                                              title="Delete Bullet"
-                                            >
-                                              <Trash2 className="w-3.5 h-3.5" />
-                                            </button>
-                                          </div>
-                                        ))}
-                                      </div>
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-                            ) : (
-                              /* STANDARD / EXPERIENCE / CUSTOM SECTION EDITOR */
-                              <div className="space-y-3">
-                                {/* Title & Subtitle */}
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                                  <div>
-                                    <label className="block text-[11px] text-slate-400 font-medium mb-1">
-                                      {t('editor.itemTitle')}
-                                    </label>
-                                    <input
-                                      type="text"
-                                      value={item.title}
-                                      onChange={(e) => updateSectionItem(sec.id, item.id, { title: e.target.value })}
-                                      placeholder="e.g. Senior Data Engineer"
-                                      className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-lg px-3 py-1.5 text-slate-200 outline-none transition-all"
-                                    />
-                                  </div>
-
-                                  <div>
-                                    <label className="block text-[11px] text-slate-400 font-medium mb-1">
-                                      {t('editor.itemSubtitle')}
-                                    </label>
-                                    <input
-                                      type="text"
-                                      value={item.subtitle || ''}
-                                      onChange={(e) => updateSectionItem(sec.id, item.id, { subtitle: e.target.value })}
-                                      placeholder="e.g. Global Automotive"
-                                      className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-lg px-3 py-1.5 text-slate-200 outline-none transition-all"
-                                    />
-                                  </div>
-                                </div>
-
-                                {/* Dates & Location */}
-                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-                                  <div>
-                                    <label className="block text-[11px] text-slate-400 font-medium mb-1">
-                                      {t('editor.startDate')}
-                                    </label>
-                                    <input
-                                      type="text"
-                                      value={item.startDate || ''}
-                                      onChange={(e) => updateSectionItem(sec.id, item.id, { startDate: e.target.value })}
-                                      placeholder="May 2025"
-                                      className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-lg px-3 py-1.5 text-slate-200 outline-none transition-all"
-                                    />
-                                  </div>
-
-                                  <div>
-                                    <label className="block text-[11px] text-slate-400 font-medium mb-1">
-                                      {t('editor.endDate')}
-                                    </label>
-                                    <input
-                                      type="text"
-                                      value={item.current ? t('editor.present') : item.endDate || ''}
-                                      onChange={(e) => updateSectionItem(sec.id, item.id, { endDate: e.target.value })}
-                                      disabled={item.current}
-                                      placeholder="Present"
-                                      className={`w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-lg px-3 py-1.5 text-slate-200 outline-none transition-all ${
-                                        item.current ? 'opacity-60 cursor-not-allowed' : ''
-                                      }`}
-                                    />
-                                  </div>
-
-                                  <div className="flex items-end pb-1.5">
-                                    <label className="flex items-center gap-2 text-slate-300 text-xs cursor-pointer select-none">
-                                      <input
-                                        type="checkbox"
-                                        checked={item.current || false}
-                                        onChange={(e) =>
-                                          updateSectionItem(sec.id, item.id, {
-                                            current: e.target.checked,
-                                            endDate: e.target.checked ? 'Present' : item.endDate,
-                                          })
-                                        }
-                                        className="rounded border-[#222f47] text-blue-600 focus:ring-0 cursor-pointer"
-                                      />
-                                      <span>{t('editor.currentRole')}</span>
-                                    </label>
-                                  </div>
-                                </div>
-
-                                {/* Tags Input */}
-                                <div>
-                                  <label className="block text-[11px] text-slate-400 font-medium mb-1 flex items-center gap-1.5">
-                                    <Tag className="w-3 h-3 text-blue-400" />
-                                    <span>{t('editor.tags')}</span>
-                                  </label>
-                                  <input
-                                    type="text"
-                                    value={
-                                      tagInputs[item.id] !== undefined
-                                        ? tagInputs[item.id]
-                                        : (item.tags || []).join(', ')
-                                    }
-                                    onChange={(e) => {
-                                      const val = e.target.value;
-                                      setTagInputs((prev) => ({ ...prev, [item.id]: val }));
-                                      const parsed = val
-                                        .split(',')
-                                        .map((s) => s.trim())
-                                        .filter(Boolean);
-                                      updateSectionItem(sec.id, item.id, { tags: parsed });
-                                    }}
-                                    onBlur={() => {
-                                      setTagInputs((prev) => {
-                                        const copy = { ...prev };
-                                        delete copy[item.id];
-                                        return copy;
-                                      });
-                                    }}
-                                    placeholder={t('editor.tagsPlaceholder')}
-                                    className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-lg px-3 py-1.5 text-slate-200 outline-none text-xs transition-all"
-                                  />
-                                </div>
-
-                                {/* Bullet Points Editor */}
-                                <div className="space-y-2 pt-2 border-t border-[#222f47]/50">
-                                  <div className="flex items-center justify-between">
-                                    <label className="text-[11px] font-bold text-slate-300">
-                                      {t('editor.bulletPoints')} ({(item.bulletItems || []).length})
-                                    </label>
-                                    <button
-                                      type="button"
-                                      onClick={() => handleAddBullet(sec.id, item)}
-                                      className="text-xs text-blue-400 hover:text-blue-300 font-medium flex items-center gap-1 cursor-pointer transition-colors"
-                                    >
-                                      <Plus className="w-3.5 h-3.5" />
-                                      <span>{t('editor.addBullet')}</span>
-                                    </button>
-                                  </div>
-
-                                  <div className="space-y-2">
-                                    {(item.bulletItems || []).map((bullet, bIdx) => (
-                                      <div key={bullet.id || bIdx} className="flex items-start gap-2 bg-[#0d1322] border border-[#222f47] p-2 rounded-lg">
-                                        <button
-                                          type="button"
-                                          onClick={() => handleUpdateBullet(sec.id, item, bullet.id, { enabled: !bullet.enabled })}
-                                          className="mt-1 text-slate-400 hover:text-blue-400 cursor-pointer"
-                                          title={bullet.enabled ? 'Disable Bullet' : 'Enable Bullet'}
-                                        >
-                                          {bullet.enabled ? (
-                                            <CheckSquare className="w-3.5 h-3.5 text-blue-400" />
-                                          ) : (
-                                            <Square className="w-3.5 h-3.5" />
-                                          )}
-                                        </button>
-
-                                        <textarea
-                                          rows={2}
-                                          value={bullet.text}
-                                          onChange={(e) => handleUpdateBullet(sec.id, item, bullet.id, { text: e.target.value })}
-                                          placeholder="Describe your achievement, metric, or responsibility..."
+                                          placeholder="Describe achievement or responsibility..."
                                           className={`flex-1 bg-transparent text-xs text-slate-200 outline-none resize-y leading-relaxed ${
                                             !bullet.enabled ? 'line-through opacity-50' : ''
                                           }`}
@@ -1042,7 +711,7 @@ export const SectionsList: React.FC = () => {
                   })}
 
                   <button
-                    onClick={() => handleAddItem(sec.id, secType)}
+                    onClick={() => handleAddItem(sec.id, sec.type)}
                     className="w-full py-2.5 border border-dashed border-[#222f47] hover:border-blue-500 text-slate-400 hover:text-blue-400 text-xs font-semibold rounded-xl flex items-center justify-center gap-1.5 transition-all cursor-pointer"
                   >
                     <Plus className="w-3.5 h-3.5" />

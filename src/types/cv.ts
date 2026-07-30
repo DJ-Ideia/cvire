@@ -21,6 +21,15 @@ export type TemplateId =
   | 'compact-single'
   | string;
 
+export type DisplayMode = 'tags' | 'bullets' | 'compact' | 'detailed';
+
+export interface SectionLayoutConfig {
+  displayMode?: DisplayMode;
+  chipStyle?: 'dots' | 'pills' | 'bordered';
+  showDates?: boolean;
+  showSubtitle?: boolean;
+}
+
 export interface PersonalInfo {
   fullName: string;
   jobTitle: string;
@@ -60,8 +69,25 @@ export interface CVSection {
   title: string;            // Section header title (e.g. "Work Experience")
   column: 'main' | 'sidebar';
   visible: boolean;
+  displayMode?: DisplayMode; // Section-level rendering mode
+  layout?: SectionLayoutConfig; // Extensible presentation config
   items: SectionItem[];
 }
+
+export const getEffectiveDisplayMode = (sec: CVSection): DisplayMode => {
+  if (sec.displayMode) return sec.displayMode;
+  if (sec.layout?.displayMode) return sec.layout.displayMode;
+
+  // Fallback defaults for legacy JSON compatibility
+  if (sec.type === 'skills') {
+    const hasTags = sec.items.some((item) => item.tags && item.tags.length > 0);
+    return hasTags ? 'tags' : 'bullets';
+  }
+  if (sec.type === 'languages' || sec.type === 'education' || sec.type === 'certifications') {
+    return 'compact';
+  }
+  return 'bullets';
+};
 
 export interface ThemeSettings {
   primaryColor: string;     // Hex code (e.g. "#3b82f6")

@@ -29,6 +29,7 @@ interface CVStoreState {
 
   // Section Updates
   updateSectionTitle: (sectionId: string, title: string) => void;
+  updateSection: (sectionId: string, partial: Partial<CVSection>) => void;
   toggleSectionVisibility: (sectionId: string) => void;
   toggleSectionColumn: (sectionId: string) => void;
   reorderSections: (newOrder: string[]) => void;
@@ -225,6 +226,26 @@ export const useCVStore = create<CVStoreState>((set, get) => ({
       sections: {
         ...active.sections,
         [sectionId]: { ...active.sections[sectionId], title },
+      },
+      updatedAt: Date.now(),
+    };
+
+    db.profiles.put(updated);
+    set({
+      activeProfile: updated,
+      profiles: get().profiles.map((p) => (p.id === updated.id ? updated : p)),
+    });
+  },
+
+  updateSection: (sectionId: string, partial: Partial<CVSection>) => {
+    const active = get().activeProfile;
+    if (!active || !active.sections[sectionId]) return;
+
+    const updated: CVProfile = {
+      ...active,
+      sections: {
+        ...active.sections,
+        [sectionId]: { ...active.sections[sectionId], ...partial },
       },
       updatedAt: Date.now(),
     };
