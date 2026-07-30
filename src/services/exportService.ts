@@ -92,8 +92,77 @@ function findCleanPageCut(
   return Math.max(100, bestCutPx - yOffsetPx);
 }
 
+/**
+ * Inject invisible searchable vector text into jsPDF so ATS systems (Workday, Taleo, Greenhouse)
+ * and PDF readers can extract 100% of the raw text strings, titles, bullet points, and contact info.
+ */
+function injectSearchableTextLayer(
+  pdf: jsPDF,
+  clone: HTMLElement,
+  pdfWidthMm: number,
+  pdfHeightMm: number,
+  topMarginMm: number
+): void {
+  const paperRect = clone.getBoundingClientRect();
+  if (!paperRect.width || !paperRect.height) return;
+
+  const mmPerPxWidth = pdfWidthMm / clone.offsetWidth;
+  const mmPerPxHeight = pdfHeightMm / clone.offsetHeight;
+
+  const textNodes: { text: string; el: HTMLElement }[] = [];
+
+  const selectors = 'h1, h2, h3, h4, p, li, span, a';
+  const elements = Array.from(clone.querySelectorAll(selectors)) as HTMLElement[];
+
+  elements.forEach((el) => {
+    const hasChildTextNode = Array.from(el.childNodes).some(
+      (node) => node.nodeType === Node.TEXT_NODE && node.textContent && node.textContent.trim().length > 0
+    );
+
+    if (hasChildTextNode) {
+      const text = el.innerText || el.textContent;
+      if (text && text.trim().length > 0) {
+        textNodes.push({ text: text.trim(), el });
+      }
+    }
+  });
+
+  try {
+    pdf.setTextColor(255, 255, 255);
+  } catch {
+    // Ignore
+  }
+
+  textNodes.forEach(({ text, el }) => {
+    try {
+      const rect = el.getBoundingClientRect();
+      const relLeftPx = rect.left - paperRect.left;
+      const relTopPx = rect.top - paperRect.top;
+
+      const xMm = Math.max(2, relLeftPx * mmPerPxWidth);
+      const yMm = Math.max(4, relTopPx * mmPerPxHeight + topMarginMm);
+
+      const computedStyle = window.getComputedStyle(el);
+      const fontSizePx = parseFloat(computedStyle.fontSize) || 12;
+      const fontSizePt = Math.max(6, Math.min(24, fontSizePx * 0.75));
+
+      pdf.setFontSize(fontSizePt);
+      
+      const lines = text.split('\n').map((l) => l.trim()).filter(Boolean);
+      lines.forEach((line, idx) => {
+        const lineYMm = yMm + (idx * (fontSizePt * 0.35));
+        if (lineYMm < pdfHeightMm - 2) {
+          pdf.text(line, xMm, lineYMm, { renderingMode: 'invisible' as any });
+        }
+      });
+    } catch {
+      // Ignore individual text injection errors
+    }
+  });
+}
+
 export async function exportResumeToPDF(filename = 'resume.pdf'): Promise<void> {
-  console.log('[PDF_EXPORT_LOG] 1. Starting exportResumeToPDF with smart element-aware slice math...');
+  console.log('[PDF_EXPORT_LOG] 1. Starting exportResumeToPDF with smart element-aware slice math & ATS text layer...');
   const paperElement = document.querySelector('.a4-paper') as HTMLElement;
   if (!paperElement) {
     alert('Resume canvas not found.');
@@ -142,10 +211,11 @@ export async function exportResumeToPDF(filename = 'resume.pdf'): Promise<void> 
     const totalHeightMm = pdfWidth * (canvas.height / canvas.width);
 
     if (totalHeightMm <= pdfHeight) {
-      console.log('[PDF_EXPORT_LOG] 5. Generating single page PDF...');
+      console.log('[PDF_EXPORT_LOG] 5. Generating single page PDF with ATS text layer...');
       pdf.addImage(canvas.toDataURL('image/jpeg', 0.98), 'JPEG', 0, 0, pdfWidth, totalHeightMm);
+      injectSearchableTextLayer(pdf, clone, pdfWidth, pdfHeight, 0);
     } else {
-      console.log('[PDF_EXPORT_LOG] 5. Generating multi-page PDF with smart cuts & margins...');
+      console.log('[PDF_EXPORT_LOG] 5. Generating multi-page PDF with smart cuts & ATS text layer...');
       
       const maxPageSliceHeightPx = Math.round((canvas.width / pdfWidth) * printableHeightMm);
       let yOffsetPx = 0;
@@ -179,6 +249,8 @@ export async function exportResumeToPDF(filename = 'resume.pdf'): Promise<void> 
           pdfWidth,
           currentSliceMm
         );
+
+        injectSearchableTextLayer(pdf, clone, pdfWidth, pdfHeight, topMarginMm);
 
         yOffsetPx += currentSlicePx;
       }
