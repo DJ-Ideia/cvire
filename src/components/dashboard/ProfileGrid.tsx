@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Star, Archive, Layers, Upload, Plus } from 'lucide-react';
+import { Star, Archive, Layers, Plus } from 'lucide-react';
 import { useCVStore } from '../../store/useCVStore';
 import { ProfileCard } from './ProfileCard';
 import { useTranslation } from 'react-i18next';
-import { CVProfile } from '../../types/cv';
 
 interface ProfileGridProps {
   searchQuery: string;
@@ -12,7 +11,7 @@ interface ProfileGridProps {
 
 export const ProfileGrid: React.FC<ProfileGridProps> = ({ searchQuery, onSelectProfile }) => {
   const { t } = useTranslation();
-  const { profiles, createProfile, importProfiles } = useCVStore();
+  const { profiles, createProfile } = useCVStore();
   const [tab, setTab] = useState<'all' | 'favorites' | 'archived'>('all');
 
   const filteredProfiles = profiles.filter((p) => {
@@ -31,31 +30,14 @@ export const ProfileGrid: React.FC<ProfileGridProps> = ({ searchQuery, onSelectP
     return !p.isArchived;
   });
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      try {
-        const parsed = JSON.parse(event.target?.result as string);
-        const incoming = Array.isArray(parsed) ? parsed : [parsed];
-        importProfiles(incoming as CVProfile[]);
-      } catch (err) {
-        alert('Invalid JSON file format.');
-      }
-    };
-    reader.readAsText(file);
-  };
-
   return (
     <div className="max-w-7xl mx-auto px-6 py-8">
-      {/* Tab Navigation & Import Controls */}
+      {/* Tab Navigation */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-4 border-b border-[#222f47]">
         <div className="flex items-center gap-2 bg-[#0d1322] p-1 rounded-xl border border-[#222f47]">
           <button
             onClick={() => setTab('all')}
-            className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-2 ${
               tab === 'all'
                 ? 'bg-blue-600 text-white shadow-md'
                 : 'text-slate-400 hover:text-slate-200'
@@ -67,7 +49,7 @@ export const ProfileGrid: React.FC<ProfileGridProps> = ({ searchQuery, onSelectP
 
           <button
             onClick={() => setTab('favorites')}
-            className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-2 ${
               tab === 'favorites'
                 ? 'bg-amber-500 text-white shadow-md'
                 : 'text-slate-400 hover:text-slate-200'
@@ -79,7 +61,7 @@ export const ProfileGrid: React.FC<ProfileGridProps> = ({ searchQuery, onSelectP
 
           <button
             onClick={() => setTab('archived')}
-            className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-2 ${
               tab === 'archived'
                 ? 'bg-slate-700 text-white shadow-md'
                 : 'text-slate-400 hover:text-slate-200'
@@ -89,13 +71,6 @@ export const ProfileGrid: React.FC<ProfileGridProps> = ({ searchQuery, onSelectP
             <span>{t('dashboard.archived')} ({profiles.filter((p) => p.isArchived).length})</span>
           </button>
         </div>
-
-        {/* Import Action */}
-        <label className="px-4 py-2 rounded-xl bg-[#0d1322] border border-[#222f47] hover:border-slate-500 text-slate-300 text-xs font-medium flex items-center gap-2 cursor-pointer transition-all">
-          <Upload className="w-4 h-4 text-blue-400" />
-          <span>{t('dashboard.importJson')}</span>
-          <input type="file" accept=".json" onChange={handleFileUpload} className="hidden" />
-        </label>
       </div>
 
       {/* Profile Cards Grid */}
@@ -117,7 +92,7 @@ export const ProfileGrid: React.FC<ProfileGridProps> = ({ searchQuery, onSelectP
           </p>
           <button
             onClick={() => createProfile()}
-            className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold inline-flex items-center gap-2 transition-all shadow-lg shadow-blue-600/30"
+            className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold inline-flex items-center gap-2 transition-all shadow-lg shadow-blue-600/30 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Create First Resume</span>

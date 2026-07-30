@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, Copy, Trash2, Download, FileText, ArrowRight } from 'lucide-react';
+import { Star, Copy, Trash2, FileText, ArrowRight } from 'lucide-react';
 import { CVProfile } from '../../types/cv';
 import { useCVStore } from '../../store/useCVStore';
 import { useTranslation } from 'react-i18next';
@@ -12,17 +12,6 @@ interface ProfileCardProps {
 export const ProfileCard: React.FC<ProfileCardProps> = ({ profile, onSelect }) => {
   const { t } = useTranslation();
   const { toggleFavorite, duplicateProfile, deleteProfile } = useCVStore();
-
-  const handleExportJSON = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(profile, null, 2));
-    const downloadAnchor = document.createElement('a');
-    downloadAnchor.setAttribute('href', dataStr);
-    downloadAnchor.setAttribute('download', `${profile.title.toLowerCase().replace(/\s+/g, '-')}.json`);
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    downloadAnchor.remove();
-  };
 
   const formattedDate = new Date(profile.updatedAt).toLocaleDateString(undefined, {
     month: 'short',
@@ -52,7 +41,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ profile, onSelect }) =
               e.stopPropagation();
               toggleFavorite(profile.id);
             }}
-            className={`p-1.5 rounded-lg transition-colors ${
+            className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
               profile.isFavorite
                 ? 'text-amber-400 bg-amber-400/10'
                 : 'text-slate-500 hover:text-amber-400 hover:bg-slate-800'
@@ -79,20 +68,12 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ profile, onSelect }) =
 
         <div className="flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
           <button
-            onClick={handleExportJSON}
-            title={t('dashboard.exportJson')}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-blue-400 hover:bg-slate-800 transition-colors"
-          >
-            <Download className="w-3.5 h-3.5" />
-          </button>
-
-          <button
             onClick={(e) => {
               e.stopPropagation();
               duplicateProfile(profile.id);
             }}
             title={t('dashboard.duplicate')}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-indigo-400 hover:bg-slate-800 transition-colors"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-indigo-400 hover:bg-slate-800 transition-colors cursor-pointer"
           >
             <Copy className="w-3.5 h-3.5" />
           </button>
@@ -103,7 +84,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ profile, onSelect }) =
               deleteProfile(profile.id);
             }}
             title={t('dashboard.delete')}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-slate-800 transition-colors"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-slate-800 transition-colors cursor-pointer"
           >
             <Trash2 className="w-3.5 h-3.5" />
           </button>
