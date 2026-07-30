@@ -11,12 +11,17 @@
     "upload": "Enviar",
     "loading": "Carregando..."
   },
+  "app": {
+    "title": "cvire",
+    "subtitle": "Criador de Currículos 100% Local e Offline"
+  },
   "dashboard": {
     "title": "Meus Currículos",
     "subtitle": "Ambiente cliente-side para engenharia de currículos ATS",
     "searchPlaceholder": "Buscar currículos por título ou nome do candidato...",
     "newResume": "Novo Currículo",
     "demoTemplates": "Modelos Demo",
+    "demoProfiles": "Modelos Demo",
     "myResumes": "Meus Currículos",
     "favorite": "Favoritos",
     "archived": "Arquivados",

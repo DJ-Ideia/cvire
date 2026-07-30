@@ -11,12 +11,17 @@
     "upload": "Upload",
     "loading": "Loading..."
   },
+  "app": {
+    "title": "cvire",
+    "subtitle": "100% Client-Side & Offline-First Resume Builder"
+  },
   "dashboard": {
     "title": "My Resumes",
     "subtitle": "Client-side ATS resume engineering workspace",
     "searchPlaceholder": "Search resumes by title or candidate name...",
     "newResume": "New Resume",
     "demoTemplates": "Demo Templates",
+    "demoProfiles": "Demo Templates",
     "myResumes": "My Resumes",
     "favorite": "Favorite",
     "archived": "Archived",
