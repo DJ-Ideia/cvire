@@ -11,8 +11,10 @@ import { ATSPlainPreviewModal } from './components/ats/ATSPlainPreviewModal';
 import { JobMatcherDrawer } from './components/ai/JobMatcherDrawer';
 import { APIKeyModal } from './components/ai/APIKeyModal';
 import { DemoTemplateModal } from './components/dashboard/DemoTemplateModal';
+import { TemplatePickerModal } from './components/templates/TemplatePickerModal';
+import { ThemeCustomizerDrawer } from './components/editor/ThemeCustomizerDrawer';
 import { exportResumeToPDF } from './services/exportService';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, LayoutTemplate, Palette } from 'lucide-react';
 
 export const App: React.FC = () => {
   const { initStore, activeProfile, selectProfile, isLoading } = useCVStore();
@@ -83,15 +85,31 @@ export const App: React.FC = () => {
 
             <div className="flex items-center gap-2">
               <button
+                onClick={() => openModal('template-picker')}
+                className="px-3 py-1.5 rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-semibold hover:bg-blue-500/20 transition-all flex items-center gap-1.5"
+              >
+                <LayoutTemplate className="w-3.5 h-3.5" />
+                <span>Templates</span>
+              </button>
+
+              <button
+                onClick={() => openModal('theme-customizer')}
+                className="px-3 py-1.5 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-400 text-xs font-semibold hover:bg-purple-500/20 transition-all flex items-center gap-1.5"
+              >
+                <Palette className="w-3.5 h-3.5" />
+                <span>Theme</span>
+              </button>
+
+              <button
                 onClick={() => openModal('job-matcher')}
-                className="px-3 py-1.5 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-400 text-xs font-semibold hover:bg-purple-500/20 transition-all"
+                className="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-700 transition-all"
               >
                 Match Job
               </button>
 
               <button
                 onClick={() => openModal('api-key-byok')}
-                className="px-3 py-1.5 rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-semibold hover:bg-blue-500/20 transition-all"
+                className="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-700 transition-all"
               >
                 BYOK Key
               </button>
@@ -119,6 +137,8 @@ export const App: React.FC = () => {
       )}
 
       {/* Global Modals */}
+      <TemplatePickerModal />
+      <ThemeCustomizerDrawer />
       <ATSScoreGauge />
       <ATSPlainPreviewModal />
       <JobMatcherDrawer />
