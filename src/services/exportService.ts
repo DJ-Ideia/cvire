@@ -45,8 +45,55 @@ function inlineComputedColors(rootElement: HTMLElement): void {
   walk(rootElement);
 }
 
+/**
+ * Find the optimal vertical cut Y coordinate so page breaks don't slice through text lines or headings.
+ */
+function findCleanPageCut(
+  clone: HTMLElement,
+  yOffsetPx: number,
+  maxSlicePx: number,
+  canvasHeightPx: number
+): number {
+  if (yOffsetPx + maxSlicePx >= canvasHeightPx) {
+    return canvasHeightPx - yOffsetPx;
+  }
+
+  const targetCutY = yOffsetPx + maxSlicePx;
+  const paperRect = clone.getBoundingClientRect();
+
+  if (!paperRect.height) {
+    return maxSlicePx;
+  }
+
+  // Scale factor between DOM px and 2x canvas px
+  const scale = (canvasHeightPx / clone.offsetHeight);
+
+  const blockElements = Array.from(
+    clone.querySelectorAll('h1, h2, h3, h4, p, li, tr, .experience-item, .education-item')
+  ) as HTMLElement[];
+
+  let bestCutPx = targetCutY;
+
+  for (const block of blockElements) {
+    const rect = block.getBoundingClientRect();
+    const blockTopPx = Math.round((rect.top - paperRect.top) * scale);
+    const blockBottomPx = Math.round((rect.bottom - paperRect.top) * scale);
+
+    // Check if page boundary cuts inside this text/block element
+    if (targetCutY > blockTopPx + 8 && targetCutY < blockBottomPx - 4) {
+      // If pushing to top of block leaves at least 65% of page filled, cut before block
+      if (blockTopPx - yOffsetPx > maxSlicePx * 0.65) {
+        bestCutPx = blockTopPx;
+        break;
+      }
+    }
+  }
+
+  return Math.max(100, bestCutPx - yOffsetPx);
+}
+
 export async function exportResumeToPDF(filename = 'resume.pdf'): Promise<void> {
-  console.log('[PDF_EXPORT_LOG] 1. Starting exportResumeToPDF with html2canvas-pro...');
+  console.log('[PDF_EXPORT_LOG] 1. Starting exportResumeToPDF with smart element-aware slice math...');
   const paperElement = document.querySelector('.a4-paper') as HTMLElement;
   if (!paperElement) {
     alert('Resume canvas not found.');
@@ -87,36 +134,53 @@ export async function exportResumeToPDF(filename = 'resume.pdf'): Promise<void> 
 
     const pdfWidth = 210; // A4 width in mm
     const pdfHeight = 297; // A4 height in mm
-    const totalHeightMm = pdfWidth * (canvas.height / canvas.width);
+    const topMarginMm = 10; // Top margin in mm
+    const bottomMarginMm = 10; // Bottom margin in mm
+    const printableHeightMm = pdfHeight - topMarginMm - bottomMarginMm; // 277 mm printable height
 
     const pdf = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+    const totalHeightMm = pdfWidth * (canvas.height / canvas.width);
 
     if (totalHeightMm <= pdfHeight) {
       console.log('[PDF_EXPORT_LOG] 5. Generating single page PDF...');
       pdf.addImage(canvas.toDataURL('image/jpeg', 0.98), 'JPEG', 0, 0, pdfWidth, totalHeightMm);
     } else {
-      console.log('[PDF_EXPORT_LOG] 5. Generating multi-page PDF...');
-      const pageHeightPx = Math.round((canvas.width / pdfWidth) * pdfHeight);
-      let yOffset = 0;
+      console.log('[PDF_EXPORT_LOG] 5. Generating multi-page PDF with smart cuts & margins...');
+      
+      const maxPageSliceHeightPx = Math.round((canvas.width / pdfWidth) * printableHeightMm);
+      let yOffsetPx = 0;
 
-      while (yOffset < canvas.height) {
+      while (yOffsetPx < canvas.height) {
+        const currentSlicePx = findCleanPageCut(clone, yOffsetPx, maxPageSliceHeightPx, canvas.height);
+        
         const sliceCanvas = document.createElement('canvas');
         sliceCanvas.width = canvas.width;
-        sliceCanvas.height = Math.min(pageHeightPx, canvas.height - yOffset);
+        sliceCanvas.height = currentSlicePx;
 
         const ctx = sliceCanvas.getContext('2d');
         if (ctx) {
           ctx.fillStyle = '#ffffff';
           ctx.fillRect(0, 0, sliceCanvas.width, sliceCanvas.height);
-          ctx.drawImage(canvas, 0, -yOffset);
+          ctx.drawImage(canvas, 0, yOffsetPx, canvas.width, currentSlicePx, 0, 0, canvas.width, currentSlicePx);
         }
 
-        if (yOffset > 0) {
+        // Calculate EXACT height in mm for this slice to NEVER distort aspect ratio
+        const currentSliceMm = (currentSlicePx / canvas.width) * pdfWidth;
+
+        if (yOffsetPx > 0) {
           pdf.addPage();
         }
 
-        pdf.addImage(sliceCanvas.toDataURL('image/jpeg', 0.98), 'JPEG', 0, 0, pdfWidth, pdfHeight);
-        yOffset += pageHeightPx;
+        pdf.addImage(
+          sliceCanvas.toDataURL('image/jpeg', 0.98),
+          'JPEG',
+          0,
+          topMarginMm,
+          pdfWidth,
+          currentSliceMm
+        );
+
+        yOffsetPx += currentSlicePx;
       }
     }
 

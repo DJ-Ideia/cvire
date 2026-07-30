@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useCVStore } from './store/useCVStore';
 import { useUIStore } from './store/useUIStore';
+import { useTranslation } from 'react-i18next';
 import { DashboardHeader } from './components/dashboard/DashboardHeader';
 import { ProfileGrid } from './components/dashboard/ProfileGrid';
 import { EditorShell } from './components/editor/EditorShell';
@@ -20,6 +21,7 @@ import { exportResumeToPDF } from './services/exportService';
 import { ArrowLeft, LayoutTemplate, Palette, History, GitCompare, BarChart3, Pencil } from 'lucide-react';
 
 export const App: React.FC = () => {
+  const { t } = useTranslation();
   const { initStore, activeProfile, selectProfile, updateProfileTitle, isLoading } = useCVStore();
   const { viewMode, openModal } = useUIStore();
 
@@ -90,7 +92,7 @@ export const App: React.FC = () => {
               className="px-3 py-1.5 rounded-xl bg-[#0d1322] border border-[#222f47] hover:border-slate-500 text-slate-300 text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>Dashboard</span>
+              <span>{t('topbar.dashboard')}</span>
             </button>
 
             <div className="flex items-center gap-1.5 bg-[#0d1322] px-3 py-1 rounded-xl border border-[#222f47] focus-within:border-blue-500 transition-all">
@@ -99,10 +101,10 @@ export const App: React.FC = () => {
                 type="text"
                 value={activeProfile?.title || ''}
                 onChange={(e) => updateProfileTitle(e.target.value)}
-                placeholder="Resume Title..."
+                placeholder={t('topbar.resumeTitlePlaceholder')}
                 className="bg-transparent text-xs sm:text-sm font-bold text-slate-100 outline-none w-36 sm:w-52"
               />
-              <span className="text-[10px] text-slate-500 shrink-0">Saved</span>
+              <span className="text-[10px] text-slate-500 shrink-0">{t('topbar.saved')}</span>
             </div>
 
             <div className="flex items-center gap-2 overflow-x-auto max-w-full pb-1 md:pb-0">
@@ -111,7 +113,7 @@ export const App: React.FC = () => {
                 className="px-3 py-1.5 rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-semibold hover:bg-blue-500/20 transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer"
               >
                 <LayoutTemplate className="w-3.5 h-3.5" />
-                <span>Templates</span>
+                <span>{t('topbar.templates')}</span>
               </button>
 
               <button
@@ -119,7 +121,7 @@ export const App: React.FC = () => {
                 className="px-3 py-1.5 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-400 text-xs font-semibold hover:bg-purple-500/20 transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer"
               >
                 <Palette className="w-3.5 h-3.5" />
-                <span>Theme</span>
+                <span>{t('topbar.theme')}</span>
               </button>
 
               <button
@@ -127,7 +129,7 @@ export const App: React.FC = () => {
                 className="px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold hover:bg-emerald-500/20 transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer"
               >
                 <BarChart3 className="w-3.5 h-3.5" />
-                <span>Stats</span>
+                <span>{t('topbar.stats')}</span>
               </button>
 
               <button
@@ -135,7 +137,7 @@ export const App: React.FC = () => {
                 className="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-700 transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer"
               >
                 <History className="w-3.5 h-3.5" />
-                <span>History</span>
+                <span>{t('topbar.history')}</span>
               </button>
 
               <button
@@ -143,21 +145,21 @@ export const App: React.FC = () => {
                 className="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-700 transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer"
               >
                 <GitCompare className="w-3.5 h-3.5" />
-                <span>Compare</span>
+                <span>{t('topbar.compare')}</span>
               </button>
 
               <button
                 onClick={() => openModal('job-matcher')}
                 className="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-700 transition-all whitespace-nowrap cursor-pointer"
               >
-                Match Job
+                <span>{t('topbar.matchJob')}</span>
               </button>
 
               <button
                 onClick={() => openModal('api-key-byok')}
                 className="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-700 transition-all whitespace-nowrap cursor-pointer"
               >
-                BYOK Key
+                <span>{t('topbar.byokKey')}</span>
               </button>
             </div>
           </div>

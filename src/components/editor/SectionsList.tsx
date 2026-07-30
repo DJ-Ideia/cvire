@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Plus, Eye, EyeOff, Trash2, GripVertical, ChevronDown, ChevronUp } from 'lucide-react';
+import { Plus, Eye, EyeOff, Trash2, GripVertical, ChevronDown, ChevronUp, CheckSquare, Square, Tag, Calendar, MapPin, Briefcase } from 'lucide-react';
 import { useCVStore } from '../../store/useCVStore';
 import { useTranslation } from 'react-i18next';
+import { SectionItem, BulletItem } from '../../types/cv';
 
 export const SectionsList: React.FC = () => {
   const { t } = useTranslation();
@@ -11,11 +12,13 @@ export const SectionsList: React.FC = () => {
     deleteSection,
     addSection,
     addSectionItem,
+    updateSectionItem,
     deleteSectionItem,
     updateSectionTitle,
   } = useCVStore();
 
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
+  const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
   const [newSectionTitle, setNewSectionTitle] = useState('');
   const [isAddingSection, setIsAddingSection] = useState(false);
 
@@ -24,6 +27,10 @@ export const SectionsList: React.FC = () => {
   const sectionsList = activeProfile.sectionsOrder
     .map((id) => activeProfile.sections[id])
     .filter(Boolean);
+
+  const toggleItemExpanded = (itemId: string) => {
+    setExpandedItems((prev) => ({ ...prev, [itemId]: !prev[itemId] }));
+  };
 
   const handleCreateSection = (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,15 +41,42 @@ export const SectionsList: React.FC = () => {
   };
 
   const handleAddItem = (secId: string) => {
+    const newItemId = `item-${Date.now()}`;
     addSectionItem(secId, {
-      title: 'New Position / Project',
-      subtitle: 'Organization',
-      startDate: 'Jan 2024',
+      title: 'New Position / Skill Category',
+      subtitle: 'Company / Organization',
+      startDate: 'Jan 2025',
       endDate: 'Present',
+      current: true,
       bulletItems: [
-        { id: `b-${Date.now()}`, text: 'Led key initiative improving metrics by 25%.', enabled: true },
+        { id: `b-${Date.now()}`, text: 'Key accomplishment or responsibility using quantifiable metrics.', enabled: true },
       ],
+      tags: [],
     });
+    setExpandedItems((prev) => ({ ...prev, [newItemId]: true }));
+  };
+
+  // Bullet Points Helper Mutations
+  const handleUpdateBullet = (secId: string, item: SectionItem, bulletId: string, partial: Partial<BulletItem>) => {
+    const updatedBullets = (item.bulletItems || []).map((b) =>
+      b.id === bulletId ? { ...b, ...partial } : b
+    );
+    updateSectionItem(secId, item.id, { bulletItems: updatedBullets });
+  };
+
+  const handleAddBullet = (secId: string, item: SectionItem) => {
+    const newBullet: BulletItem = {
+      id: `b-${Date.now()}`,
+      text: '',
+      enabled: true,
+    };
+    const updatedBullets = [...(item.bulletItems || []), newBullet];
+    updateSectionItem(secId, item.id, { bulletItems: updatedBullets });
+  };
+
+  const handleDeleteBullet = (secId: string, item: SectionItem, bulletId: string) => {
+    const updatedBullets = (item.bulletItems || []).filter((b) => b.id !== bulletId);
+    updateSectionItem(secId, item.id, { bulletItems: updatedBullets });
   };
 
   return (
@@ -51,7 +85,7 @@ export const SectionsList: React.FC = () => {
         <h2 className="text-sm font-bold text-slate-100">{t('editor.sections')}</h2>
         <button
           onClick={() => setIsAddingSection(true)}
-          className="px-3 py-1.5 rounded-xl bg-blue-600/20 text-blue-400 border border-blue-500/30 hover:bg-blue-600/30 text-xs font-semibold flex items-center gap-1.5 transition-all"
+          className="px-3 py-1.5 rounded-xl bg-blue-600/20 text-blue-400 border border-blue-500/30 hover:bg-blue-600/30 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
         >
           <Plus className="w-3.5 h-3.5" />
           <span>{t('editor.addSection')}</span>
@@ -66,18 +100,18 @@ export const SectionsList: React.FC = () => {
             placeholder="Section Title (e.g. Certifications, Projects)"
             value={newSectionTitle}
             onChange={(e) => setNewSectionTitle(e.target.value)}
-            className="flex-1 bg-[#0d1322] border border-[#222f47] rounded-xl px-3 py-2 text-xs text-slate-200 outline-none"
+            className="flex-1 bg-[#0d1322] border border-[#222f47] rounded-xl px-3 py-2 text-xs text-slate-200 outline-none focus:border-blue-500"
             autoFocus
           />
-          <button type="submit" className="px-4 py-2 bg-blue-600 text-white text-xs font-semibold rounded-xl">
-            Save
+          <button type="submit" className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-xl cursor-pointer">
+            {t('common.save')}
           </button>
           <button
             type="button"
             onClick={() => setIsAddingSection(false)}
-            className="px-3 py-2 bg-slate-800 text-slate-400 text-xs rounded-xl"
+            className="px-3 py-2 bg-slate-800 text-slate-400 text-xs rounded-xl cursor-pointer"
           >
-            Cancel
+            {t('common.cancel')}
           </button>
         </form>
       )}
@@ -85,7 +119,7 @@ export const SectionsList: React.FC = () => {
       {/* Section List */}
       <div className="space-y-3">
         {sectionsList.map((sec) => {
-          const isExpanded = expandedSection === sec.id;
+          const isSectionExpanded = expandedSection === sec.id || expandedSection === null;
 
           return (
             <div
@@ -94,7 +128,7 @@ export const SectionsList: React.FC = () => {
                 sec.visible ? 'border-[#222f47]' : 'border-[#222f47]/50 opacity-60'
               }`}
             >
-              {/* Header */}
+              {/* Section Header */}
               <div className="p-4 flex items-center justify-between gap-3 bg-[#131b2e]">
                 <div className="flex items-center gap-3 flex-1">
                   <GripVertical className="w-4 h-4 text-slate-600 cursor-grab" />
@@ -102,7 +136,7 @@ export const SectionsList: React.FC = () => {
                     type="text"
                     value={sec.title}
                     onChange={(e) => updateSectionTitle(sec.id, e.target.value)}
-                    className="bg-transparent font-bold text-sm text-slate-100 outline-none border-b border-transparent focus:border-blue-500 px-1"
+                    className="bg-transparent font-bold text-sm text-slate-100 outline-none border-b border-transparent focus:border-blue-500 px-1 transition-all"
                   />
                   <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-[#0d1322] text-slate-400 border border-[#222f47]">
                     {sec.column}
@@ -112,7 +146,7 @@ export const SectionsList: React.FC = () => {
                 <div className="flex items-center gap-1">
                   <button
                     onClick={() => toggleSectionVisibility(sec.id)}
-                    className="p-1.5 text-slate-400 hover:text-slate-200"
+                    className="p-1.5 text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
                     title="Toggle Visibility"
                   >
                     {sec.visible ? <Eye className="w-4 h-4 text-blue-400" /> : <EyeOff className="w-4 h-4" />}
@@ -120,47 +154,229 @@ export const SectionsList: React.FC = () => {
 
                   <button
                     onClick={() => deleteSection(sec.id)}
-                    className="p-1.5 text-slate-400 hover:text-rose-400"
+                    className="p-1.5 text-slate-400 hover:text-rose-400 transition-colors cursor-pointer"
                     title="Delete Section"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
 
                   <button
-                    onClick={() => setExpandedSection(isExpanded ? null : sec.id)}
-                    className="p-1.5 text-slate-400 hover:text-slate-200"
+                    onClick={() => setExpandedSection(isSectionExpanded ? 'none' : sec.id)}
+                    className="p-1.5 text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
                   >
-                    {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                    {isSectionExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                   </button>
                 </div>
               </div>
 
               {/* Items Expanded Body */}
-              {isExpanded && (
-                <div className="p-4 border-t border-[#222f47] bg-[#0d1322]/50 space-y-3">
-                  {sec.items.map((item) => (
-                    <div key={item.id} className="bg-[#131b2e] border border-[#222f47] p-3.5 rounded-xl space-y-2 text-xs">
-                      <div className="flex justify-between items-start gap-2">
-                        <div className="font-semibold text-slate-200">{item.title}</div>
-                        <button
-                          onClick={() => deleteSectionItem(sec.id, item.id)}
-                          className="text-slate-500 hover:text-rose-400"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                      <div className="text-slate-400 text-[11px]">{item.subtitle} • {item.startDate} - {item.endDate}</div>
+              {isSectionExpanded && (
+                <div className="p-4 border-t border-[#222f47] bg-[#0d1322]/50 space-y-4">
+                  {sec.items.map((item) => {
+                    const isItemExpanded = expandedItems[item.id] ?? true;
 
-                      {/* Bullets count */}
-                      <div className="text-[11px] text-blue-400 font-mono">
-                        {item.bulletItems ? item.bulletItems.length : 0} bullet points
+                    return (
+                      <div key={item.id} className="bg-[#131b2e] border border-[#222f47] rounded-xl p-4 space-y-3">
+                        {/* Item Card Header */}
+                        <div className="flex items-center justify-between gap-2 border-b border-[#222f47]/60 pb-2">
+                          <div
+                            onClick={() => toggleItemExpanded(item.id)}
+                            className="flex items-center gap-2 cursor-pointer flex-1"
+                          >
+                            <Briefcase className="w-3.5 h-3.5 text-blue-400" />
+                            <span className="font-semibold text-xs text-slate-200">
+                              {item.title || 'Untitled Item'}
+                            </span>
+                            {item.subtitle && (
+                              <span className="text-[11px] text-slate-400 font-normal">
+                                • {item.subtitle}
+                              </span>
+                            )}
+                          </div>
+
+                          <div className="flex items-center gap-1">
+                            <button
+                              onClick={() => deleteSectionItem(sec.id, item.id)}
+                              className="p-1 text-slate-500 hover:text-rose-400 transition-colors cursor-pointer"
+                              title="Delete Item"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              onClick={() => toggleItemExpanded(item.id)}
+                              className="p-1 text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
+                            >
+                              {isItemExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Item Expanded Form */}
+                        {isItemExpanded && (
+                          <div className="space-y-3 pt-1">
+                            {/* Title & Subtitle */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                              <div>
+                                <label className="block text-[11px] text-slate-400 font-medium mb-1">
+                                  {t('editor.itemTitle')}
+                                </label>
+                                <input
+                                  type="text"
+                                  value={item.title}
+                                  onChange={(e) => updateSectionItem(sec.id, item.id, { title: e.target.value })}
+                                  placeholder="e.g. Senior Data Engineer"
+                                  className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-lg px-3 py-1.5 text-slate-200 outline-none transition-all"
+                                />
+                              </div>
+
+                              <div>
+                                <label className="block text-[11px] text-slate-400 font-medium mb-1">
+                                  {t('editor.itemSubtitle')}
+                                </label>
+                                <input
+                                  type="text"
+                                  value={item.subtitle || ''}
+                                  onChange={(e) => updateSectionItem(sec.id, item.id, { subtitle: e.target.value })}
+                                  placeholder="e.g. Global Automotive"
+                                  className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-lg px-3 py-1.5 text-slate-200 outline-none transition-all"
+                                />
+                              </div>
+                            </div>
+
+                            {/* Dates & Location */}
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                              <div>
+                                <label className="block text-[11px] text-slate-400 font-medium mb-1">
+                                  {t('editor.startDate')}
+                                </label>
+                                <input
+                                  type="text"
+                                  value={item.startDate || ''}
+                                  onChange={(e) => updateSectionItem(sec.id, item.id, { startDate: e.target.value })}
+                                  placeholder="May 2025"
+                                  className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-lg px-3 py-1.5 text-slate-200 outline-none transition-all"
+                                />
+                              </div>
+
+                              <div>
+                                <label className="block text-[11px] text-slate-400 font-medium mb-1">
+                                  {t('editor.endDate')}
+                                </label>
+                                <input
+                                  type="text"
+                                  value={item.current ? t('editor.present') : item.endDate || ''}
+                                  onChange={(e) => updateSectionItem(sec.id, item.id, { endDate: e.target.value })}
+                                  disabled={item.current}
+                                  placeholder="Present"
+                                  className={`w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-lg px-3 py-1.5 text-slate-200 outline-none transition-all ${
+                                    item.current ? 'opacity-60 cursor-not-allowed' : ''
+                                  }`}
+                                />
+                              </div>
+
+                              <div className="flex items-end pb-1.5">
+                                <label className="flex items-center gap-2 text-slate-300 text-xs cursor-pointer select-none">
+                                  <input
+                                    type="checkbox"
+                                    checked={item.current || false}
+                                    onChange={(e) =>
+                                      updateSectionItem(sec.id, item.id, {
+                                        current: e.target.checked,
+                                        endDate: e.target.checked ? 'Present' : item.endDate,
+                                      })
+                                    }
+                                    className="rounded border-[#222f47] text-blue-600 focus:ring-0 cursor-pointer"
+                                  />
+                                  <span>{t('editor.currentRole')}</span>
+                                </label>
+                              </div>
+                            </div>
+
+                            {/* Tags Input (for Skills / Tech Stack) */}
+                            <div>
+                              <label className="block text-[11px] text-slate-400 font-medium mb-1 flex items-center gap-1.5">
+                                <Tag className="w-3 h-3 text-blue-400" />
+                                <span>{t('editor.tags')}</span>
+                              </label>
+                              <input
+                                type="text"
+                                value={(item.tags || []).join(', ')}
+                                onChange={(e) =>
+                                  updateSectionItem(sec.id, item.id, {
+                                    tags: e.target.value
+                                      .split(',')
+                                      .map((s) => s.trim())
+                                      .filter(Boolean),
+                                  })
+                                }
+                                placeholder={t('editor.tagsPlaceholder')}
+                                className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-lg px-3 py-1.5 text-slate-200 outline-none text-xs transition-all"
+                              />
+                            </div>
+
+                            {/* Bullet Points Editor */}
+                            <div className="space-y-2 pt-2 border-t border-[#222f47]/50">
+                              <div className="flex items-center justify-between">
+                                <label className="text-[11px] font-bold text-slate-300">
+                                  {t('editor.bulletPoints')} ({(item.bulletItems || []).length})
+                                </label>
+                                <button
+                                  type="button"
+                                  onClick={() => handleAddBullet(sec.id, item)}
+                                  className="text-xs text-blue-400 hover:text-blue-300 font-medium flex items-center gap-1 cursor-pointer transition-colors"
+                                >
+                                  <Plus className="w-3.5 h-3.5" />
+                                  <span>{t('editor.addBullet')}</span>
+                                </button>
+                              </div>
+
+                              <div className="space-y-2">
+                                {(item.bulletItems || []).map((bullet, bIdx) => (
+                                  <div key={bullet.id || bIdx} className="flex items-start gap-2 bg-[#0d1322] border border-[#222f47] p-2 rounded-lg">
+                                    <button
+                                      type="button"
+                                      onClick={() => handleUpdateBullet(sec.id, item, bullet.id, { enabled: !bullet.enabled })}
+                                      className="mt-1 text-slate-400 hover:text-blue-400 cursor-pointer"
+                                      title={bullet.enabled ? 'Disable Bullet' : 'Enable Bullet'}
+                                    >
+                                      {bullet.enabled ? (
+                                        <CheckSquare className="w-3.5 h-3.5 text-blue-400" />
+                                      ) : (
+                                        <Square className="w-3.5 h-3.5" />
+                                      )}
+                                    </button>
+
+                                    <textarea
+                                      rows={2}
+                                      value={bullet.text}
+                                      onChange={(e) => handleUpdateBullet(sec.id, item, bullet.id, { text: e.target.value })}
+                                      placeholder="Describe your achievement, metric, or responsibility..."
+                                      className={`flex-1 bg-transparent text-xs text-slate-200 outline-none resize-y leading-relaxed ${
+                                        !bullet.enabled ? 'line-through opacity-50' : ''
+                                      }`}
+                                    />
+
+                                    <button
+                                      type="button"
+                                      onClick={() => handleDeleteBullet(sec.id, item, bullet.id)}
+                                      className="mt-1 text-slate-500 hover:text-rose-400 cursor-pointer transition-colors"
+                                      title="Delete Bullet"
+                                    >
+                                      <Trash2 className="w-3.5 h-3.5" />
+                                    </button>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
 
                   <button
                     onClick={() => handleAddItem(sec.id)}
-                    className="w-full py-2 border border-dashed border-[#222f47] hover:border-blue-500 text-slate-400 hover:text-blue-400 text-xs font-semibold rounded-xl flex items-center justify-center gap-1.5 transition-all"
+                    className="w-full py-2.5 border border-dashed border-[#222f47] hover:border-blue-500 text-slate-400 hover:text-blue-400 text-xs font-semibold rounded-xl flex items-center justify-center gap-1.5 transition-all cursor-pointer"
                   >
                     <Plus className="w-3.5 h-3.5" />
                     <span>{t('editor.addItem')}</span>

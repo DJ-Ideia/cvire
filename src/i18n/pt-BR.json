@@ -15,6 +15,18 @@
     "title": "cvire",
     "subtitle": "Criador de Currículos 100% Local e Offline"
   },
+  "topbar": {
+    "dashboard": "Dashboard",
+    "templates": "Modelos",
+    "theme": "Tema",
+    "stats": "Estatísticas",
+    "history": "Histórico",
+    "compare": "Comparar",
+    "matchJob": "Vaga Target",
+    "byokKey": "Chave AI",
+    "saved": "Salvo",
+    "resumeTitlePlaceholder": "Título do Currículo..."
+  },
   "dashboard": {
     "title": "Meus Currículos",
     "subtitle": "Ambiente cliente-side para engenharia de currículos ATS",
@@ -35,6 +47,30 @@
     "duplicate": "Duplicar",
     "exportJson": "Exportar JSON",
     "importJson": "Importar JSON"
+  },
+  "editor": {
+    "personalInfo": "Informações Pessoais",
+    "fullName": "Nome Completo",
+    "jobTitle": "Cargo / Título Profissional",
+    "email": "Endereço de E-mail",
+    "phone": "Telefone / WhatsApp",
+    "location": "Localização (Cidade, Estado/País)",
+    "linkedinUrl": "Link do LinkedIn",
+    "portfolioUrl": "Link do Portfólio / Website",
+    "summary": "Resumo Profissional",
+    "sections": "Seções e Conteúdo do Currículo",
+    "addSection": "Adicionar Seção",
+    "addItem": "Adicionar Item",
+    "itemTitle": "Título / Cargo / Categoria",
+    "itemSubtitle": "Empresa / Instituição / Subtítulo",
+    "startDate": "Data de Início",
+    "endDate": "Data de Fim",
+    "present": "Presente",
+    "currentRole": "Trabalho / Estudo aqui atualmente",
+    "bulletPoints": "Pontos Principais (Bullets) / Conquistas",
+    "addBullet": "Adicionar Ponto (Bullet)",
+    "tags": "Habilidades / Tags (separadas por vírgula)",
+    "tagsPlaceholder": "ex: Python, BigQuery, ETL, GCP"
   },
   "preview": {
     "editMode": "Apenas Edição",

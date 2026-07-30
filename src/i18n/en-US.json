@@ -15,6 +15,18 @@
     "title": "cvire",
     "subtitle": "100% Client-Side & Offline-First Resume Builder"
   },
+  "topbar": {
+    "dashboard": "Dashboard",
+    "templates": "Templates",
+    "theme": "Theme",
+    "stats": "Stats",
+    "history": "History",
+    "compare": "Compare",
+    "matchJob": "Match Job",
+    "byokKey": "BYOK Key",
+    "saved": "Saved",
+    "resumeTitlePlaceholder": "Resume Title..."
+  },
   "dashboard": {
     "title": "My Resumes",
     "subtitle": "Client-side ATS resume engineering workspace",
@@ -35,6 +47,30 @@
     "duplicate": "Duplicate",
     "exportJson": "Export JSON",
     "importJson": "Import JSON"
+  },
+  "editor": {
+    "personalInfo": "Personal Information",
+    "fullName": "Full Name",
+    "jobTitle": "Job Title / Role",
+    "email": "Email Address",
+    "phone": "Phone Number",
+    "location": "Location (City, Country)",
+    "linkedinUrl": "LinkedIn URL",
+    "portfolioUrl": "Portfolio / Website URL",
+    "summary": "Professional Summary",
+    "sections": "Resume Sections & Content",
+    "addSection": "Add Section",
+    "addItem": "Add Item",
+    "itemTitle": "Title / Degree / Skill Category",
+    "itemSubtitle": "Organization / Institution / Subtitle",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "present": "Present",
+    "currentRole": "Currently here",
+    "bulletPoints": "Bullet Points / Achievements",
+    "addBullet": "Add Bullet Point",
+    "tags": "Skills / Tags (comma separated)",
+    "tagsPlaceholder": "e.g. Python, BigQuery, ETL, GCP"
   },
   "preview": {
     "editMode": "Edit Only",
