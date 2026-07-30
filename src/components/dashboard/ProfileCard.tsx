@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, Copy, Trash2, FileText, ArrowRight, Download, FileCode } from 'lucide-react';
+import { Star, Copy, Trash2, FileText, ArrowRight, Download, FileCode, Archive } from 'lucide-react';
 import { CVProfile } from '../../types/cv';
 import { useCVStore } from '../../store/useCVStore';
 import { useTranslation } from 'react-i18next';
@@ -13,7 +13,7 @@ interface ProfileCardProps {
 
 export const ProfileCard: React.FC<ProfileCardProps> = ({ profile, onSelect, onExportPDF }) => {
   const { t } = useTranslation();
-  const { toggleFavorite, duplicateProfile, deleteProfile } = useCVStore();
+  const { toggleFavorite, toggleArchive, duplicateProfile, deleteProfile } = useCVStore();
 
   const formattedDate = new Date(profile.updatedAt).toLocaleDateString(undefined, {
     month: 'short',
@@ -102,6 +102,21 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ profile, onSelect, onE
             className="p-1.5 rounded-lg text-slate-400 hover:text-indigo-400 hover:bg-slate-800 transition-colors cursor-pointer"
           >
             <Copy className="w-3.5 h-3.5" />
+          </button>
+
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleArchive(profile.id);
+            }}
+            title={profile.isArchived ? t('dashboard.unarchive') : t('dashboard.archive')}
+            className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+              profile.isArchived
+                ? 'text-amber-400 bg-amber-500/10 hover:bg-amber-500/20'
+                : 'text-slate-400 hover:text-amber-400 hover:bg-slate-800'
+            }`}
+          >
+            <Archive className="w-3.5 h-3.5" />
           </button>
 
           <button

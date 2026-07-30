@@ -86,19 +86,27 @@ export const ProfileGrid: React.FC<ProfileGridProps> = ({ searchQuery, onSelectP
         /* Empty State */
         <div className="text-center py-16 bg-[#131b2e]/50 border border-dashed border-[#222f47] rounded-3xl p-8 max-w-lg mx-auto">
           <div className="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center mx-auto mb-4">
-            <Layers className="w-6 h-6" />
+            {tab === 'archived' ? (
+              <Archive className="w-6 h-6 text-slate-400" />
+            ) : (
+              <Layers className="w-6 h-6" />
+            )}
           </div>
-          <h3 className="text-lg font-bold text-slate-200 mb-1">No Resumes Found</h3>
+          <h3 className="text-lg font-bold text-slate-200 mb-1">
+            {tab === 'archived' ? t('dashboard.noArchivedTitle') : t('dashboard.noResumesTitle')}
+          </h3>
           <p className="text-xs text-slate-400 mb-6">
-            Get started by creating a new custom resume or loading sample demo data.
+            {tab === 'archived' ? t('dashboard.noArchivedSubtitle') : t('dashboard.noResumesSubtitle')}
           </p>
-          <button
-            onClick={() => createProfile()}
-            className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold inline-flex items-center gap-2 transition-all shadow-lg shadow-blue-600/30 cursor-pointer"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Create First Resume</span>
-          </button>
+          {tab !== 'archived' && (
+            <button
+              onClick={() => createProfile()}
+              className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold inline-flex items-center gap-2 transition-all shadow-lg shadow-blue-600/30 cursor-pointer"
+            >
+              <Plus className="w-4 h-4" />
+              <span>{t('dashboard.newResume')}</span>
+            </button>
+          )}
         </div>
       )}
     </div>
