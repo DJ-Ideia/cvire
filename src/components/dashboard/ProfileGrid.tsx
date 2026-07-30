@@ -3,13 +3,15 @@ import { Star, Archive, Layers, Plus } from 'lucide-react';
 import { useCVStore } from '../../store/useCVStore';
 import { ProfileCard } from './ProfileCard';
 import { useTranslation } from 'react-i18next';
+import { CVProfile } from '../../types/cv';
 
 interface ProfileGridProps {
   searchQuery: string;
   onSelectProfile: (id: string) => void;
+  onExportPDF?: (profile: CVProfile) => void;
 }
 
-export const ProfileGrid: React.FC<ProfileGridProps> = ({ searchQuery, onSelectProfile }) => {
+export const ProfileGrid: React.FC<ProfileGridProps> = ({ searchQuery, onSelectProfile, onExportPDF }) => {
   const { t } = useTranslation();
   const { profiles, createProfile } = useCVStore();
   const [tab, setTab] = useState<'all' | 'favorites' | 'archived'>('all');
@@ -77,7 +79,7 @@ export const ProfileGrid: React.FC<ProfileGridProps> = ({ searchQuery, onSelectP
       {filteredProfiles.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredProfiles.map((p) => (
-            <ProfileCard key={p.id} profile={p} onSelect={onSelectProfile} />
+            <ProfileCard key={p.id} profile={p} onSelect={onSelectProfile} onExportPDF={onExportPDF} />
           ))}
         </div>
       ) : (

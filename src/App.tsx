@@ -43,6 +43,14 @@ export const App: React.FC = () => {
     exportResumeToPDF(filename);
   };
 
+  const handleDashboardExportPDF = (profile: { id: string; title: string }) => {
+    selectProfile(profile.id);
+    setCurrentView('editor');
+    setTimeout(() => {
+      exportResumeToPDF(`${profile.title.toLowerCase().replace(/\s+/g, '-')}.pdf`);
+    }, 300);
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#090d16] flex items-center justify-center text-slate-400 font-mono text-sm">
@@ -65,7 +73,11 @@ export const App: React.FC = () => {
             onOpenDemoModal={() => setIsDemoModalOpen(true)}
           />
           <main className="flex-1">
-            <ProfileGrid searchQuery={searchQuery} onSelectProfile={handleSelectProfile} />
+            <ProfileGrid
+              searchQuery={searchQuery}
+              onSelectProfile={handleSelectProfile}
+              onExportPDF={handleDashboardExportPDF}
+            />
           </main>
         </div>
       ) : (

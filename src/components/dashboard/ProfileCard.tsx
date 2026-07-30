@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, Copy, Trash2, FileText, ArrowRight } from 'lucide-react';
+import { Star, Copy, Trash2, FileText, ArrowRight, Download } from 'lucide-react';
 import { CVProfile } from '../../types/cv';
 import { useCVStore } from '../../store/useCVStore';
 import { useTranslation } from 'react-i18next';
@@ -7,9 +7,10 @@ import { useTranslation } from 'react-i18next';
 interface ProfileCardProps {
   profile: CVProfile;
   onSelect: (id: string) => void;
+  onExportPDF?: (profile: CVProfile) => void;
 }
 
-export const ProfileCard: React.FC<ProfileCardProps> = ({ profile, onSelect }) => {
+export const ProfileCard: React.FC<ProfileCardProps> = ({ profile, onSelect, onExportPDF }) => {
   const { t } = useTranslation();
   const { toggleFavorite, duplicateProfile, deleteProfile } = useCVStore();
 
@@ -67,6 +68,19 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ profile, onSelect }) =
         </span>
 
         <div className="flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
+          {onExportPDF && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onExportPDF(profile);
+              }}
+              title="Download PDF"
+              className="p-1.5 rounded-lg text-slate-400 hover:text-blue-400 hover:bg-slate-800 transition-colors cursor-pointer"
+            >
+              <Download className="w-3.5 h-3.5" />
+            </button>
+          )}
+
           <button
             onClick={(e) => {
               e.stopPropagation();
