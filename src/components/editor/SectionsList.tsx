@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Eye, EyeOff, Trash2, GripVertical, ChevronDown, ChevronUp, CheckSquare, Square, Tag, Briefcase, ListFilter, AlignLeft, Award, FolderGit2, GraduationCap, Languages as LangIcon, Wrench } from 'lucide-react';
+import { Plus, Eye, EyeOff, Trash2, GripVertical, ChevronDown, ChevronUp, CheckSquare, Square, Tag, Briefcase, ListFilter, AlignLeft, Award, FolderGit2, GraduationCap, Languages as LangIcon, Wrench, ArrowUp, ArrowDown } from 'lucide-react';
 import { useCVStore } from '../../store/useCVStore';
 import { useTranslation } from 'react-i18next';
 import { SectionItem, BulletItem, SectionType } from '../../types/cv';
@@ -9,6 +9,8 @@ export const SectionsList: React.FC = () => {
   const {
     activeProfile,
     toggleSectionVisibility,
+    toggleSectionColumn,
+    reorderSections,
     deleteSection,
     addSection,
     addSectionItem,
@@ -23,6 +25,7 @@ export const SectionsList: React.FC = () => {
   const [skillDisplayMode, setSkillDisplayMode] = useState<Record<string, 'tags' | 'bullets'>>({});
   const [isAddingSection, setIsAddingSection] = useState(false);
   const [customTitleInput, setCustomTitleInput] = useState('');
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
   if (!activeProfile) return null;
 
@@ -38,6 +41,40 @@ export const SectionsList: React.FC = () => {
     addSection(type, defaultTitle);
     setIsAddingSection(false);
     setCustomTitleInput('');
+  };
+
+  // Reorder Sections Helper (Up / Down)
+  const handleMoveSection = (index: number, direction: 'up' | 'down') => {
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= sectionsList.length) return;
+
+    const newOrder = [...activeProfile.sectionsOrder];
+    const [moved] = newOrder.splice(index, 1);
+    newOrder.splice(targetIndex, 0, moved);
+    reorderSections(newOrder);
+  };
+
+  // HTML5 Drag and Drop Handlers
+  const handleDragStart = (e: React.DragEvent, index: number) => {
+    setDraggedIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', String(index));
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDrop = (e: React.DragEvent, targetIndex: number) => {
+    e.preventDefault();
+    if (draggedIndex === null || draggedIndex === targetIndex) return;
+
+    const newOrder = [...activeProfile.sectionsOrder];
+    const [moved] = newOrder.splice(draggedIndex, 1);
+    newOrder.splice(targetIndex, 0, moved);
+    reorderSections(newOrder);
+    setDraggedIndex(null);
   };
 
   const handleAddItem = (secId: string, secType: string) => {
@@ -148,7 +185,7 @@ export const SectionsList: React.FC = () => {
             <span>{t('editor.selectSectionType')}</span>
             <button
               onClick={() => setIsAddingSection(false)}
-              className="text-slate-400 hover:text-slate-200 text-xs"
+              className="text-slate-400 hover:text-slate-200 text-xs cursor-pointer"
             >
               {t('common.cancel')}
             </button>
@@ -236,30 +273,70 @@ export const SectionsList: React.FC = () => {
 
       {/* Section List */}
       <div className="space-y-3">
-        {sectionsList.map((sec) => {
+        {sectionsList.map((sec, index) => {
           const isSectionExpanded = expandedSection === sec.id || expandedSection === null;
           const secType = sec.type || 'custom';
 
           return (
             <div
               key={sec.id}
+              draggable
+              onDragStart={(e) => handleDragStart(e, index)}
+              onDragOver={handleDragOver}
+              onDrop={(e) => handleDrop(e, index)}
               className={`bg-[#131b2e] border rounded-2xl transition-all overflow-hidden ${
-                sec.visible ? 'border-[#222f47]' : 'border-[#222f47]/50 opacity-60'
+                draggedIndex === index ? 'opacity-40 border-blue-500' : sec.visible ? 'border-[#222f47]' : 'border-[#222f47]/50 opacity-60'
               }`}
             >
               {/* Section Header */}
               <div className="p-4 flex items-center justify-between gap-3 bg-[#131b2e]">
-                <div className="flex items-center gap-3 flex-1">
-                  <GripVertical className="w-4 h-4 text-slate-600 cursor-grab" />
+                <div className="flex items-center gap-2 flex-1">
+                  <div title="Drag to reorder">
+                    <GripVertical className="w-4 h-4 text-slate-500 hover:text-slate-200 cursor-grab active:cursor-grabbing shrink-0" />
+                  </div>
+                  
+                  {/* Up / Down Reorder Arrows */}
+                  <div className="flex flex-col gap-0.5 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => handleMoveSection(index, 'up')}
+                      disabled={index === 0}
+                      className="p-0.5 text-slate-500 hover:text-blue-400 disabled:opacity-30 disabled:hover:text-slate-500 cursor-pointer"
+                      title="Move Up"
+                    >
+                      <ArrowUp className="w-3 h-3" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleMoveSection(index, 'down')}
+                      disabled={index === sectionsList.length - 1}
+                      className="p-0.5 text-slate-500 hover:text-blue-400 disabled:opacity-30 disabled:hover:text-slate-500 cursor-pointer"
+                      title="Move Down"
+                    >
+                      <ArrowDown className="w-3 h-3" />
+                    </button>
+                  </div>
+
                   <input
                     type="text"
                     value={sec.title}
                     onChange={(e) => updateSectionTitle(sec.id, e.target.value)}
-                    className="bg-transparent font-bold text-sm text-slate-100 outline-none border-b border-transparent focus:border-blue-500 px-1 transition-all"
+                    className="bg-transparent font-bold text-sm text-slate-100 outline-none border-b border-transparent focus:border-blue-500 px-1 transition-all flex-1 min-w-0"
                   />
-                  <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-[#0d1322] text-slate-400 border border-[#222f47]">
+
+                  {/* Interactive Column Switcher Button */}
+                  <button
+                    type="button"
+                    onClick={() => toggleSectionColumn(sec.id)}
+                    title={`Click to move section to ${sec.column === 'main' ? 'Sidebar' : 'Main'} column`}
+                    className={`text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded border transition-all cursor-pointer ${
+                      sec.column === 'main'
+                        ? 'bg-blue-500/10 text-blue-400 border-blue-500/30 hover:bg-blue-500/20'
+                        : 'bg-purple-500/10 text-purple-400 border-purple-500/30 hover:bg-purple-500/20'
+                    }`}
+                  >
                     {sec.column}
-                  </span>
+                  </button>
                 </div>
 
                 <div className="flex items-center gap-1">

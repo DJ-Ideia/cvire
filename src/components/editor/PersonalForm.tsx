@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, Briefcase, Mail, Phone, MapPin, Link } from 'lucide-react';
+import { User, Briefcase, Mail, Phone, MapPin, Link, Globe, Code } from 'lucide-react';
 import { useCVStore } from '../../store/useCVStore';
 import { useTranslation } from 'react-i18next';
 
@@ -28,7 +28,7 @@ export const PersonalForm: React.FC = () => {
               value={p.fullName || ''}
               onChange={(e) => updatePersonal({ fullName: e.target.value })}
               className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-xl pl-9 pr-3 py-2 text-slate-200 outline-none transition-all"
-              placeholder="John Doe"
+              placeholder="Johnny Costa"
             />
           </div>
         </div>
@@ -43,7 +43,7 @@ export const PersonalForm: React.FC = () => {
               value={p.jobTitle || ''}
               onChange={(e) => updatePersonal({ jobTitle: e.target.value })}
               className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-xl pl-9 pr-3 py-2 text-slate-200 outline-none transition-all"
-              placeholder="Senior Frontend Developer"
+              placeholder="Engenheiro de Dados / Analista de Dados"
             />
           </div>
         </div>
@@ -58,7 +58,7 @@ export const PersonalForm: React.FC = () => {
               value={p.email || ''}
               onChange={(e) => updatePersonal({ email: e.target.value })}
               className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-xl pl-9 pr-3 py-2 text-slate-200 outline-none transition-all"
-              placeholder="john@example.com"
+              placeholder="johnnywscosta@gmail.com"
             />
           </div>
         </div>
@@ -73,7 +73,7 @@ export const PersonalForm: React.FC = () => {
               value={p.phone || ''}
               onChange={(e) => updatePersonal({ phone: e.target.value })}
               className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-xl pl-9 pr-3 py-2 text-slate-200 outline-none transition-all"
-              placeholder="+1 (555) 000-0000"
+              placeholder="+55 79 98142-3483"
             />
           </div>
         </div>
@@ -88,14 +88,14 @@ export const PersonalForm: React.FC = () => {
               value={p.location || ''}
               onChange={(e) => updatePersonal({ location: e.target.value })}
               className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-xl pl-9 pr-3 py-2 text-slate-200 outline-none transition-all"
-              placeholder="San Francisco, CA"
+              placeholder="Aracaju, Sergipe - Brasil"
             />
           </div>
         </div>
 
         {/* LinkedIn */}
         <div>
-          <label className="block text-slate-400 font-medium mb-1">LinkedIn URL</label>
+          <label className="block text-slate-400 font-medium mb-1">{t('editor.linkedinUrl')}</label>
           <div className="relative">
             <Link className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
             <input
@@ -103,7 +103,37 @@ export const PersonalForm: React.FC = () => {
               value={p.linkedinUrl || ''}
               onChange={(e) => updatePersonal({ linkedinUrl: e.target.value })}
               className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-xl pl-9 pr-3 py-2 text-slate-200 outline-none transition-all"
-              placeholder="linkedin.com/in/johndoe"
+              placeholder="linkedin.com/in/johnnycosta"
+            />
+          </div>
+        </div>
+
+        {/* GitHub */}
+        <div>
+          <label className="block text-slate-400 font-medium mb-1">GitHub Profile URL</label>
+          <div className="relative">
+            <Code className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+            <input
+              type="text"
+              value={p.githubUrl || ''}
+              onChange={(e) => updatePersonal({ githubUrl: e.target.value })}
+              className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-xl pl-9 pr-3 py-2 text-slate-200 outline-none transition-all"
+              placeholder="github.com/jownao"
+            />
+          </div>
+        </div>
+
+        {/* Portfolio / Website */}
+        <div>
+          <label className="block text-slate-400 font-medium mb-1">{t('editor.portfolioUrl')}</label>
+          <div className="relative">
+            <Globe className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+            <input
+              type="text"
+              value={p.portfolioUrl || ''}
+              onChange={(e) => updatePersonal({ portfolioUrl: e.target.value })}
+              className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-xl pl-9 pr-3 py-2 text-slate-200 outline-none transition-all"
+              placeholder="portfolio.com"
             />
           </div>
         </div>
