@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Plus, Eye, EyeOff, Trash2, GripVertical, ChevronDown, ChevronUp } from 'lucide-react';
 import { useCVStore } from '../../store/useCVStore';
-import { CVSection, SectionItem } from '../../types/cv';
 import { useTranslation } from 'react-i18next';
 
 export const SectionsList: React.FC = () => {

@@ -1,9 +1,8 @@
 import React from 'react';
-import { TemplateProps } from '../../../types/template';
+import type { TemplateProps } from '../../../types/template';
 
 export const MinimalistCleanTemplate: React.FC<TemplateProps> = ({ profile, previewRef }) => {
   const { personal, summary, sections, theme } = profile;
-  const primaryColor = theme.primaryColor || '#0f172a';
 
   const visibleSections = profile.sectionsOrder
     .map((id) => sections[id])

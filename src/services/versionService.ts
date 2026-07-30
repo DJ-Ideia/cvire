@@ -1,9 +1,9 @@
 import { db } from '../db/cvDatabase';
-import { CVProfile, CVVersion } from '../types/cv';
+import type { CVProfile, CVVersion } from '../types/cv';
 
 export async function saveVersionSnapshot(profile: CVProfile, commitNote = 'Manual Snapshot'): Promise<string> {
   const versionId = `v-${Date.now()}`;
-  const { versionHistory, ...snapshotData } = profile;
+  const { versionHistory: _, ...snapshotData } = profile;
 
   const versionRecord: CVVersion & { profileId: string } = {
     versionId,

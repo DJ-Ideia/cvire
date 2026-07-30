@@ -288,7 +288,7 @@ export const useCVStore = create<CVStoreState>((set, get) => ({
     const active = get().activeProfile;
     if (!active) return;
 
-    const { [sectionId]: deleted, ...remainingSections } = active.sections;
+    const { [sectionId]: _deleted, ...remainingSections } = active.sections;
     const updated: CVProfile = {
       ...active,
       sectionsOrder: active.sectionsOrder.filter((id) => id !== sectionId),
