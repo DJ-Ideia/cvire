@@ -1,6 +1,21 @@
-# cvire
+<div align="center">
+  <br />
+  <h1>cvire</h1>
+  <p><strong>A client-side, offline-first resume builder designed for structured resume creation, ATS optimization, and precise A4 pagination.</strong></p>
 
-A client-side, offline-first resume builder designed for structured resume creation, ATS optimization, and precise A4 pagination.
+  [![React](https://img.shields.io/badge/React-19.0-61DAFB?logo=react&logoColor=white)](https://react.dev)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+  [![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?logo=vite&logoColor=white)](https://vite.dev)
+  [![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4.0-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+  [![Dexie IndexedDB](https://img.shields.io/badge/Dexie.js-IndexedDB-3178C6?logo=indexeddb&logoColor=white)](https://dexie.org)
+  [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+  <br />
+</div>
+
+---
+
+## Overview
 
 cvire runs entirely in the browser using IndexedDB for local persistent storage. Resume data, version history, and API keys remain encrypted on the user's device, requiring no backend services or external data tracking.
 
