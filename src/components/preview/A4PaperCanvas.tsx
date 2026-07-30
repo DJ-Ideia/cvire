@@ -8,6 +8,24 @@ export const A4PaperCanvas: React.FC = () => {
   const { zoomLevel } = useUIStore();
   const paperRef = useRef<HTMLDivElement>(null);
   const [pageBreaks, setPageBreaks] = useState<number[]>([]);
+  const [effectiveScale, setEffectiveScale] = useState<number>(zoomLevel);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const screenWidth = window.innerWidth;
+      if (screenWidth < 820) {
+        // Automatically fit A4 paper width to mobile screen
+        const mobileScale = Math.min(zoomLevel, (screenWidth - 32) / 794);
+        setEffectiveScale(mobileScale);
+      } else {
+        setEffectiveScale(zoomLevel);
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [zoomLevel]);
 
   useEffect(() => {
     if (!paperRef.current) return;
@@ -37,10 +55,10 @@ export const A4PaperCanvas: React.FC = () => {
   const TemplateComponent = getTemplateRenderer(activeProfile.templateId);
 
   return (
-    <div className="flex-1 overflow-auto bg-[#090d16] p-8 flex justify-center items-start min-h-screen">
+    <div className="flex-1 overflow-auto bg-[#090d16] p-4 sm:p-8 flex justify-center items-start min-h-screen">
       <div
         className="transition-transform origin-top duration-200"
-        style={{ transform: `scale(${zoomLevel})` }}
+        style={{ transform: `scale(${effectiveScale})` }}
       >
         <div className="relative">
           {/* Render Active Template */}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ZoomIn, ZoomOut, RotateCcw, Eye, Sliders, Download, Flame, ShieldAlert, FileCode } from 'lucide-react';
+import { ZoomIn, ZoomOut, RotateCcw, Download, Flame, ShieldAlert, FileCode } from 'lucide-react';
 import { useUIStore } from '../../store/useUIStore';
 import { useTranslation } from 'react-i18next';
 
@@ -20,12 +20,12 @@ export const ViewportToolbar: React.FC<ViewportToolbarProps> = ({ onExportPDF })
   } = useUIStore();
 
   return (
-    <div className="bg-[#131b2e] border-b border-[#222f47] px-4 py-2.5 flex items-center justify-between gap-4 text-xs">
+    <div className="bg-[#131b2e] border-b border-[#222f47] px-4 py-2.5 flex flex-wrap md:flex-nowrap items-center justify-between gap-3 text-xs overflow-x-auto">
       {/* View Mode Switches */}
       <div className="flex items-center gap-1 bg-[#0d1322] p-1 rounded-xl border border-[#222f47]">
         <button
           onClick={() => setViewMode('edit')}
-          className={`px-3 py-1.5 rounded-lg font-medium transition-all ${
+          className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
             viewMode === 'edit' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
           }`}
         >
@@ -34,7 +34,7 @@ export const ViewportToolbar: React.FC<ViewportToolbarProps> = ({ onExportPDF })
 
         <button
           onClick={() => setViewMode('split')}
-          className={`px-3 py-1.5 rounded-lg font-medium transition-all ${
+          className={`hidden md:block px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
             viewMode === 'split' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
           }`}
         >
@@ -43,7 +43,7 @@ export const ViewportToolbar: React.FC<ViewportToolbarProps> = ({ onExportPDF })
 
         <button
           onClick={() => setViewMode('preview')}
-          className={`px-3 py-1.5 rounded-lg font-medium transition-all ${
+          className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
             viewMode === 'preview' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
           }`}
         >
@@ -55,7 +55,7 @@ export const ViewportToolbar: React.FC<ViewportToolbarProps> = ({ onExportPDF })
       <div className="flex items-center gap-2 bg-[#0d1322] px-3 py-1.5 rounded-xl border border-[#222f47] text-slate-300">
         <button
           onClick={() => setZoomLevel(zoomLevel - 0.1)}
-          className="p-1 hover:text-blue-400 transition-colors"
+          className="p-1 hover:text-blue-400 transition-colors cursor-pointer"
           title={t('preview.zoomOut')}
         >
           <ZoomOut className="w-3.5 h-3.5" />
@@ -67,7 +67,7 @@ export const ViewportToolbar: React.FC<ViewportToolbarProps> = ({ onExportPDF })
 
         <button
           onClick={() => setZoomLevel(zoomLevel + 0.1)}
-          className="p-1 hover:text-blue-400 transition-colors"
+          className="p-1 hover:text-blue-400 transition-colors cursor-pointer"
           title={t('preview.zoomIn')}
         >
           <ZoomIn className="w-3.5 h-3.5" />
@@ -75,7 +75,7 @@ export const ViewportToolbar: React.FC<ViewportToolbarProps> = ({ onExportPDF })
 
         <button
           onClick={() => setZoomLevel(1.0)}
-          className="p-1 hover:text-amber-400 border-l border-[#222f47] ml-1 pl-2 transition-colors"
+          className="p-1 hover:text-amber-400 border-l border-[#222f47] ml-1 pl-2 transition-colors cursor-pointer"
           title={t('preview.resetZoom')}
         >
           <RotateCcw className="w-3.5 h-3.5" />
@@ -83,10 +83,10 @@ export const ViewportToolbar: React.FC<ViewportToolbarProps> = ({ onExportPDF })
       </div>
 
       {/* Tools & Export */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 overflow-x-auto">
         <button
           onClick={() => openModal('ats-linter')}
-          className="px-3 py-1.5 rounded-xl bg-[#0d1322] border border-[#222f47] hover:border-amber-500 text-amber-400 font-semibold flex items-center gap-1.5 transition-all"
+          className="px-3 py-1.5 rounded-xl bg-[#0d1322] border border-[#222f47] hover:border-amber-500 text-amber-400 font-semibold flex items-center gap-1.5 transition-all whitespace-nowrap cursor-pointer"
         >
           <ShieldAlert className="w-3.5 h-3.5" />
           <span>ATS Score</span>
@@ -94,7 +94,7 @@ export const ViewportToolbar: React.FC<ViewportToolbarProps> = ({ onExportPDF })
 
         <button
           onClick={() => openModal('ats-preview')}
-          className="px-3 py-1.5 rounded-xl bg-[#0d1322] border border-[#222f47] hover:border-indigo-500 text-indigo-400 font-semibold flex items-center gap-1.5 transition-all"
+          className="px-3 py-1.5 rounded-xl bg-[#0d1322] border border-[#222f47] hover:border-indigo-500 text-indigo-400 font-semibold flex items-center gap-1.5 transition-all whitespace-nowrap cursor-pointer"
         >
           <FileCode className="w-3.5 h-3.5" />
           <span>ATS View</span>
@@ -102,7 +102,7 @@ export const ViewportToolbar: React.FC<ViewportToolbarProps> = ({ onExportPDF })
 
         <button
           onClick={toggleHeatmap}
-          className={`px-3 py-1.5 rounded-xl border font-semibold flex items-center gap-1.5 transition-all ${
+          className={`px-3 py-1.5 rounded-xl border font-semibold flex items-center gap-1.5 transition-all whitespace-nowrap cursor-pointer ${
             isHeatmapActive
               ? 'bg-rose-500/20 border-rose-500 text-rose-400'
               : 'bg-[#0d1322] border-[#222f47] text-slate-300 hover:border-rose-500'
@@ -114,7 +114,7 @@ export const ViewportToolbar: React.FC<ViewportToolbarProps> = ({ onExportPDF })
 
         <button
           onClick={onExportPDF}
-          className="px-4 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold flex items-center gap-1.5 transition-all shadow-lg shadow-blue-600/20 cursor-pointer"
+          className="px-4 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold flex items-center gap-1.5 transition-all shadow-lg shadow-blue-600/20 whitespace-nowrap cursor-pointer"
         >
           <Download className="w-3.5 h-3.5" />
           <span>{t('preview.exportPdf')}</span>

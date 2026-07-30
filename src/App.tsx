@@ -72,24 +72,24 @@ export const App: React.FC = () => {
         /* Editor & Preview Split View */
         <div className="min-h-screen flex flex-col">
           {/* Top Bar Navigation */}
-          <div className="bg-[#131b2e] border-b border-[#222f47] px-6 py-3 flex items-center justify-between">
+          <div className="bg-[#131b2e] border-b border-[#222f47] px-4 sm:px-6 py-3 flex flex-wrap md:flex-nowrap items-center justify-between gap-3">
             <button
               onClick={() => setCurrentView('dashboard')}
-              className="px-3 py-1.5 rounded-xl bg-[#0d1322] border border-[#222f47] hover:border-slate-500 text-slate-300 text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer"
+              className="px-3 py-1.5 rounded-xl bg-[#0d1322] border border-[#222f47] hover:border-slate-500 text-slate-300 text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>Back to Dashboard</span>
+              <span>Dashboard</span>
             </button>
 
-            <div className="text-center">
-              <h2 className="text-sm font-bold text-slate-100">{activeProfile?.title}</h2>
-              <p className="text-[11px] text-slate-400">Auto-saved to IndexedDB</p>
+            <div className="text-center min-w-[120px]">
+              <h2 className="text-xs sm:text-sm font-bold text-slate-100 truncate max-w-[200px] sm:max-w-none">{activeProfile?.title}</h2>
+              <p className="text-[10px] text-slate-400">Auto-saved</p>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 overflow-x-auto max-w-full pb-1 md:pb-0">
               <button
                 onClick={() => openModal('template-picker')}
-                className="px-3 py-1.5 rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-semibold hover:bg-blue-500/20 transition-all flex items-center gap-1.5"
+                className="px-3 py-1.5 rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-semibold hover:bg-blue-500/20 transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer"
               >
                 <LayoutTemplate className="w-3.5 h-3.5" />
                 <span>Templates</span>
@@ -97,7 +97,7 @@ export const App: React.FC = () => {
 
               <button
                 onClick={() => openModal('theme-customizer')}
-                className="px-3 py-1.5 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-400 text-xs font-semibold hover:bg-purple-500/20 transition-all flex items-center gap-1.5"
+                className="px-3 py-1.5 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-400 text-xs font-semibold hover:bg-purple-500/20 transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer"
               >
                 <Palette className="w-3.5 h-3.5" />
                 <span>Theme</span>
@@ -105,7 +105,7 @@ export const App: React.FC = () => {
 
               <button
                 onClick={() => openModal('analytics')}
-                className="px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold hover:bg-emerald-500/20 transition-all flex items-center gap-1.5"
+                className="px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold hover:bg-emerald-500/20 transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer"
               >
                 <BarChart3 className="w-3.5 h-3.5" />
                 <span>Stats</span>
@@ -113,7 +113,7 @@ export const App: React.FC = () => {
 
               <button
                 onClick={() => openModal('version-history')}
-                className="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-700 transition-all flex items-center gap-1.5"
+                className="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-700 transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer"
               >
                 <History className="w-3.5 h-3.5" />
                 <span>History</span>
@@ -121,7 +121,7 @@ export const App: React.FC = () => {
 
               <button
                 onClick={() => openModal('compare-cv')}
-                className="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-700 transition-all flex items-center gap-1.5"
+                className="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-700 transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer"
               >
                 <GitCompare className="w-3.5 h-3.5" />
                 <span>Compare</span>
@@ -129,14 +129,14 @@ export const App: React.FC = () => {
 
               <button
                 onClick={() => openModal('job-matcher')}
-                className="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-700 transition-all"
+                className="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-700 transition-all whitespace-nowrap cursor-pointer"
               >
                 Match Job
               </button>
 
               <button
                 onClick={() => openModal('api-key-byok')}
-                className="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-700 transition-all"
+                className="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-700 transition-all whitespace-nowrap cursor-pointer"
               >
                 BYOK Key
               </button>
