@@ -15,8 +15,9 @@ import { TemplatePickerModal } from './components/templates/TemplatePickerModal'
 import { ThemeCustomizerDrawer } from './components/editor/ThemeCustomizerDrawer';
 import { VersionHistoryDrawer } from './components/dashboard/VersionHistoryDrawer';
 import { CompareModal } from './components/dashboard/CompareModal';
+import { AnalyticsModal } from './components/dashboard/AnalyticsModal';
 import { exportResumeToPDF } from './services/exportService';
-import { ArrowLeft, LayoutTemplate, Palette, History, GitCompare } from 'lucide-react';
+import { ArrowLeft, LayoutTemplate, Palette, History, GitCompare, BarChart3 } from 'lucide-react';
 
 export const App: React.FC = () => {
   const { initStore, activeProfile, selectProfile, isLoading } = useCVStore();
@@ -103,6 +104,14 @@ export const App: React.FC = () => {
               </button>
 
               <button
+                onClick={() => openModal('analytics')}
+                className="px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold hover:bg-emerald-500/20 transition-all flex items-center gap-1.5"
+              >
+                <BarChart3 className="w-3.5 h-3.5" />
+                <span>Stats</span>
+              </button>
+
+              <button
                 onClick={() => openModal('version-history')}
                 className="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-700 transition-all flex items-center gap-1.5"
               >
@@ -157,6 +166,7 @@ export const App: React.FC = () => {
       {/* Global Modals */}
       <TemplatePickerModal />
       <ThemeCustomizerDrawer />
+      <AnalyticsModal />
       <VersionHistoryDrawer />
       <CompareModal />
       <ATSScoreGauge />

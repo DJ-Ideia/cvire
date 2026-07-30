@@ -45,12 +45,13 @@
 
 ### Issue #13: Version History & Snapshot Restore
 - **Status:** [x] Completed
-- **What to build:** IndexedDB version history storage, manual checkpoints, version restoration.
 
 ### Issue #14: Side-by-Side CV Comparison
 - **Status:** [x] Completed
-- **What to build:** Dual-pane comparison modal for metrics, ATS scores, and section word counts.
 
 ### Issue #15: Templates #4 & #5 (Creative Accent & Compact Single)
 - **Status:** [x] Completed
-- **What to build:** `CreativeAccentTemplate` and `CompactSingleTemplate` renderers registered in `templateRegistry`.
+
+### Issue #16: Local Resume Analytics & Full Multi-Resume Backup Export
+- **Status:** [x] Completed
+- **What to build:** `analyticsService.ts`, `AnalyticsModal.tsx`, and `batchExportService.ts`.
