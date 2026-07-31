@@ -44,7 +44,8 @@
     "lastEdited": "Last edited",
     "duplicate": "Duplicate",
     "exportJson": "Export JSON",
-    "importJson": "Import JSON"
+    "importJson": "Import JSON",
+    "downloadAiJson": "AI JSON Template"
   },
   "editor": {
     "personalInfo": "Personal Information",

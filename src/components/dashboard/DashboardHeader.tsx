@@ -1,9 +1,9 @@
 import React, { useRef } from 'react';
-import { Plus, Sparkles, Search, Globe, Download, Upload } from 'lucide-react';
+import { Plus, Sparkles, Search, Globe, Download, Upload, FileCode } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useCVStore } from '../../store/useCVStore';
 import { CvireLogo } from '../common/CvireLogo';
-import { exportAllResumesJSON, importResumesJSON } from '../../services/backupService';
+import { exportAllResumesJSON, importResumesJSON, downloadAITemplateJSON } from '../../services/backupService';
 
 interface DashboardHeaderProps {
   searchQuery: string;
@@ -80,6 +80,16 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
           >
             <Globe className="w-4 h-4 text-blue-400" />
             <span>{i18n.language === 'en-US' ? 'EN' : 'PT'}</span>
+          </button>
+
+          {/* Download AI Schema Template JSON */}
+          <button
+            onClick={() => downloadAITemplateJSON()}
+            className="px-3 py-2.5 rounded-xl bg-[#0d1322] border border-[#222f47] hover:border-purple-500 text-slate-300 transition-all flex items-center gap-1.5 text-xs font-medium cursor-pointer"
+            title="Baixar Modelo JSON de exemplo para a IA preencher seu currículo"
+          >
+            <FileCode className="w-4 h-4 text-purple-400" />
+            <span className="hidden xl:inline">{t('dashboard.downloadAiJson')}</span>
           </button>
 
           {/* Export JSON Backup */}
