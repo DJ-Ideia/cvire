@@ -172,8 +172,8 @@ function injectPageTextLayer(
 
               // Determine column index:
               // - Header/Summary (yMm < 55 or full width): columnIndex 0
-              // - Left Main Column (xMm < 140): columnIndex 1
-              // - Right Sidebar Column (xMm >= 140): columnIndex 2
+              // - Left Main Column (xMm < 135): columnIndex 1
+              // - Right Sidebar Column (xMm >= 135): columnIndex 2
               let columnIndex = 0;
               if (yMm >= 50) {
                 columnIndex = xMm < 135 ? 1 : 2;
@@ -239,7 +239,7 @@ function injectPageTextLayer(
 }
 
 export async function exportResumeToPDF(filename = 'resume.pdf'): Promise<void> {
-  console.log('[PDF_EXPORT_LOG] 1. Starting exportResumeToPDF with vector text layer engine...');
+  console.log('[PDF_EXPORT_LOG] 1. Starting exportResumeToPDF with optimized JPEG compression...');
   const paperElement = document.querySelector('.a4-paper') as HTMLElement;
   if (!paperElement) {
     alert('Resume canvas not found.');
@@ -284,12 +284,15 @@ export async function exportResumeToPDF(filename = 'resume.pdf'): Promise<void> 
     const bottomMarginMm = 10; // Bottom margin in mm
     const printableHeightMm = pdfHeight - topMarginMm - bottomMarginMm; // 277 mm printable height
 
-    const pdf = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+    // Use compressed JPEG quality 0.82 to keep PDF size small (< 600KB) while maintaining pristine crispness
+    const JPEG_QUALITY = 0.82;
+
+    const pdf = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait', compress: true });
     const totalHeightMm = pdfWidth * (canvas.height / canvas.width);
 
     if (totalHeightMm <= pdfHeight) {
       console.log('[PDF_EXPORT_LOG] 5. Generating single page PDF with ATS text layer...');
-      pdf.addImage(canvas.toDataURL('image/jpeg', 0.98), 'JPEG', 0, 0, pdfWidth, totalHeightMm);
+      pdf.addImage(canvas.toDataURL('image/jpeg', JPEG_QUALITY), 'JPEG', 0, 0, pdfWidth, totalHeightMm, undefined, 'FAST');
       injectPageTextLayer(pdf, clone, canvas.width, canvas.height, 0, canvas.height, pdfWidth, 0);
     } else {
       console.log('[PDF_EXPORT_LOG] 5. Generating multi-page PDF with smart cuts & ATS text layer...');
@@ -320,12 +323,14 @@ export async function exportResumeToPDF(filename = 'resume.pdf'): Promise<void> 
         }
 
         pdf.addImage(
-          sliceCanvas.toDataURL('image/jpeg', 0.98),
+          sliceCanvas.toDataURL('image/jpeg', JPEG_QUALITY),
           'JPEG',
           0,
           topMarginMm,
           pdfWidth,
-          currentSliceMm
+          currentSliceMm,
+          undefined,
+          'FAST'
         );
 
         // Inject ONLY the text fragments belonging to this page slice
