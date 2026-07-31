@@ -21,8 +21,6 @@
     "theme": "Theme",
     "stats": "Stats",
     "history": "History",
-    "compare": "Compare",
-    "matchJob": "Match Job",
     "byokKey": "BYOK Key",
     "saved": "Saved",
     "resumeTitlePlaceholder": "Resume Title..."
@@ -91,7 +89,25 @@
     "zoomOut": "Zoom Out",
     "resetZoom": "Reset Zoom",
     "exportPdf": "Export PDF",
-    "autoFit": "Auto-Fit Page"
+    "autoFit": "Auto-Fit Page",
+    "jobMatchBtn": "Job Matcher (ATS)",
+    "atsViewBtn": "ATS Text View"
+  },
+  "jobMatcher": {
+    "title": "Job Keyword Matcher (ATS)",
+    "subtitle": "Compare your resume against target job description requirements",
+    "label": "Paste Job Description / Requirements",
+    "placeholder": "Paste the target job posting requirements (skills, tech stack, qualifications)...",
+    "btnAnalyze": "Analyze Match Compatibility %",
+    "matchResultTitle": "Job Match Compatibility",
+    "matchedCount": "keywords matched",
+    "missingCount": "missing in CV",
+    "matchedTitle": "Matched Keywords Present in CV",
+    "missingTitle": "Missing Target Keywords Required by Job",
+    "copyMissing": "Copy Missing",
+    "copied": "Copied!",
+    "noMatched": "No matching target keywords found yet.",
+    "allMatched": "Great job! All key target job requirements are present in your resume!"
   },
   "ats": {
     "scoreTitle": "ATS Score",

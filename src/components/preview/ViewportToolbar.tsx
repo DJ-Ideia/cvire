@@ -1,5 +1,5 @@
 import React from 'react';
-import { ZoomIn, ZoomOut, RotateCcw, Download, Flame, ShieldAlert, FileCode } from 'lucide-react';
+import { ZoomIn, ZoomOut, RotateCcw, Download, Target, FileCode } from 'lucide-react';
 import { useUIStore } from '../../store/useUIStore';
 import { useTranslation } from 'react-i18next';
 
@@ -14,8 +14,6 @@ export const ViewportToolbar: React.FC<ViewportToolbarProps> = ({ onExportPDF })
     setViewMode,
     zoomLevel,
     setZoomLevel,
-    isHeatmapActive,
-    toggleHeatmap,
     openModal,
   } = useUIStore();
 
@@ -85,11 +83,11 @@ export const ViewportToolbar: React.FC<ViewportToolbarProps> = ({ onExportPDF })
       {/* Tools & Export */}
       <div className="flex items-center gap-2 overflow-x-auto">
         <button
-          onClick={() => openModal('ats-linter')}
-          className="px-3 py-1.5 rounded-xl bg-[#0d1322] border border-[#222f47] hover:border-amber-500 text-amber-400 font-semibold flex items-center gap-1.5 transition-all whitespace-nowrap cursor-pointer"
+          onClick={() => openModal('job-matcher')}
+          className="px-3 py-1.5 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-400 hover:bg-purple-500/20 font-bold flex items-center gap-1.5 transition-all whitespace-nowrap cursor-pointer shadow-sm"
         >
-          <ShieldAlert className="w-3.5 h-3.5" />
-          <span>ATS Score</span>
+          <Target className="w-3.5 h-3.5" />
+          <span>{t('preview.jobMatchBtn')}</span>
         </button>
 
         <button
@@ -97,19 +95,7 @@ export const ViewportToolbar: React.FC<ViewportToolbarProps> = ({ onExportPDF })
           className="px-3 py-1.5 rounded-xl bg-[#0d1322] border border-[#222f47] hover:border-indigo-500 text-indigo-400 font-semibold flex items-center gap-1.5 transition-all whitespace-nowrap cursor-pointer"
         >
           <FileCode className="w-3.5 h-3.5" />
-          <span>ATS View</span>
-        </button>
-
-        <button
-          onClick={toggleHeatmap}
-          className={`px-3 py-1.5 rounded-xl border font-semibold flex items-center gap-1.5 transition-all whitespace-nowrap cursor-pointer ${
-            isHeatmapActive
-              ? 'bg-rose-500/20 border-rose-500 text-rose-400'
-              : 'bg-[#0d1322] border-[#222f47] text-slate-300 hover:border-rose-500'
-          }`}
-        >
-          <Flame className="w-3.5 h-3.5" />
-          <span>Heatmap</span>
+          <span>{t('preview.atsViewBtn')}</span>
         </button>
 
         <button

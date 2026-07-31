@@ -18,7 +18,7 @@ import { VersionHistoryDrawer } from './components/dashboard/VersionHistoryDrawe
 import { CompareModal } from './components/dashboard/CompareModal';
 import { AnalyticsModal } from './components/dashboard/AnalyticsModal';
 import { exportResumeToPDF } from './services/exportService';
-import { ArrowLeft, LayoutTemplate, Palette, History, GitCompare, BarChart3, Pencil } from 'lucide-react';
+import { ArrowLeft, LayoutTemplate, Palette, History, BarChart3, Pencil } from 'lucide-react';
 
 export const App: React.FC = () => {
   const { t } = useTranslation();
@@ -138,28 +138,6 @@ export const App: React.FC = () => {
               >
                 <History className="w-3.5 h-3.5" />
                 <span>{t('topbar.history')}</span>
-              </button>
-
-              <button
-                onClick={() => openModal('compare-cv')}
-                className="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-700 transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer"
-              >
-                <GitCompare className="w-3.5 h-3.5" />
-                <span>{t('topbar.compare')}</span>
-              </button>
-
-              <button
-                onClick={() => openModal('job-matcher')}
-                className="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-700 transition-all whitespace-nowrap cursor-pointer"
-              >
-                <span>{t('topbar.matchJob')}</span>
-              </button>
-
-              <button
-                onClick={() => openModal('api-key-byok')}
-                className="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold hover:bg-slate-700 transition-all whitespace-nowrap cursor-pointer"
-              >
-                <span>{t('topbar.byokKey')}</span>
               </button>
             </div>
           </div>

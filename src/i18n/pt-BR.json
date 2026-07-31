@@ -21,8 +21,6 @@
     "theme": "Tema",
     "stats": "Estatísticas",
     "history": "Histórico",
-    "compare": "Comparar",
-    "matchJob": "Vaga Target",
     "byokKey": "Chave AI",
     "saved": "Salvo",
     "resumeTitlePlaceholder": "Título do Currículo..."
@@ -91,7 +89,25 @@
     "zoomOut": "Diminuir Zoom",
     "resetZoom": "Resetar Zoom",
     "exportPdf": "Exportar PDF",
-    "autoFit": "Ajustar à Página"
+    "autoFit": "Ajustar à Página",
+    "jobMatchBtn": "Match da Vaga (ATS)",
+    "atsViewBtn": "Visão ATS (Texto)"
+  },
+  "jobMatcher": {
+    "title": "Match da Vaga (ATS)",
+    "subtitle": "Compare seu currículo com os requisitos reais da vaga desejada",
+    "label": "Cole a Descrição da Vaga (Job Description)",
+    "placeholder": "Cole aqui a descrição da vaga (requisitos, habilidades técnicas, diferenciais)...",
+    "btnAnalyze": "Analisar Compatibilidade (Match %)",
+    "matchResultTitle": "Compatibilidade da Vaga",
+    "matchedCount": "palavras encontradas",
+    "missingCount": "faltantes no CV",
+    "matchedTitle": "Palavras-chave Encontradas no seu CV",
+    "missingTitle": "Palavras-chave Faltantes na Vaga",
+    "copyMissing": "Copiar Faltantes",
+    "copied": "Copiado!",
+    "noMatched": "Nenhuma palavra-chave correspondente encontrada ainda.",
+    "allMatched": "Parabéns! Todas as palavras-chave principais da vaga foram encontradas no seu CV!"
   },
   "ats": {
     "scoreTitle": "Pontuação ATS",
