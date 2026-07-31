@@ -140,6 +140,7 @@ export const SectionsList: React.FC = () => {
         title: 'AWS Certified Solutions Architect',
         subtitle: 'Amazon Web Services',
         startDate: '2025',
+        endDate: '',
         linkUrl: 'https://credly.com',
       };
     } else if (secType === 'projects') {
@@ -159,6 +160,8 @@ export const SectionsList: React.FC = () => {
       baseItem = {
         title: 'Language Name',
         subtitle: 'Proficiency Level (e.g. Native / B2)',
+        startDate: '',
+        endDate: '',
       };
     } else if (secType === 'education') {
       baseItem = {
@@ -581,7 +584,7 @@ export const SectionsList: React.FC = () => {
                                 </div>
                               </div>
                             ) : sectionDisplayMode === 'compact' ? (
-                              /* COMPACT MODE FORM (Title, Subtitle, Dates, Link URL) */
+                              /* COMPACT MODE FORM (Title, Subtitle, Start Date, End Date, Link URL) */
                               <div className="space-y-3 text-xs">
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                   <div>
@@ -610,7 +613,7 @@ export const SectionsList: React.FC = () => {
                                   </div>
                                 </div>
 
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                                   <div>
                                     <label className="block text-[11px] text-slate-400 font-medium mb-1">
                                       {t('editor.startDate')}
@@ -619,8 +622,24 @@ export const SectionsList: React.FC = () => {
                                       type="text"
                                       value={item.startDate || ''}
                                       onChange={(e) => updateSectionItem(sec.id, item.id, { startDate: e.target.value })}
-                                      placeholder="e.g. 2025"
+                                      placeholder="e.g. Jan 2022"
                                       className="w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-lg px-3 py-1.5 text-slate-200 outline-none transition-all"
+                                    />
+                                  </div>
+
+                                  <div>
+                                    <label className="block text-[11px] text-slate-400 font-medium mb-1">
+                                      {t('editor.endDate')}
+                                    </label>
+                                    <input
+                                      type="text"
+                                      value={item.current ? t('editor.present') : item.endDate || ''}
+                                      onChange={(e) => updateSectionItem(sec.id, item.id, { endDate: e.target.value })}
+                                      disabled={item.current}
+                                      placeholder="e.g. Dec 2025"
+                                      className={`w-full bg-[#0d1322] border border-[#222f47] focus:border-blue-500 rounded-lg px-3 py-1.5 text-slate-200 outline-none transition-all ${
+                                        item.current ? 'opacity-60 cursor-not-allowed' : ''
+                                      }`}
                                     />
                                   </div>
 
