@@ -1,8 +1,64 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus, Eye, EyeOff, Trash2, GripVertical, ChevronDown, ChevronUp, CheckSquare, Square, Tag, Briefcase, ListFilter, AlignLeft, Award, FolderGit2, GraduationCap, Languages as LangIcon, Wrench, ArrowUp, ArrowDown, LayoutList, Layers } from 'lucide-react';
 import { useCVStore } from '../../store/useCVStore';
 import { useTranslation } from 'react-i18next';
 import { SectionItem, BulletItem, SectionType, DisplayMode, getEffectiveDisplayMode } from '../../types/cv';
+
+// Sub-component for individual Bullet Item to maintain cursor position & focus
+const BulletItemRow: React.FC<{
+  bullet: BulletItem;
+  bIdx: number;
+  onUpdate: (partial: Partial<BulletItem>) => void;
+  onDelete: () => void;
+}> = ({ bullet, onUpdate, onDelete }) => {
+  const [localText, setLocalText] = useState(bullet.text);
+
+  useEffect(() => {
+    setLocalText(bullet.text);
+  }, [bullet.text]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const val = e.target.value;
+    setLocalText(val);
+    onUpdate({ text: val });
+  };
+
+  return (
+    <div className="flex items-start gap-2 bg-[#0d1322] border border-[#222f47] p-2 rounded-lg">
+      <button
+        type="button"
+        onClick={() => onUpdate({ enabled: !bullet.enabled })}
+        className="mt-1 text-slate-400 hover:text-blue-400 cursor-pointer"
+        title={bullet.enabled ? 'Disable Bullet' : 'Enable Bullet'}
+      >
+        {bullet.enabled ? (
+          <CheckSquare className="w-3.5 h-3.5 text-blue-400" />
+        ) : (
+          <Square className="w-3.5 h-3.5" />
+        )}
+      </button>
+
+      <textarea
+        rows={2}
+        value={localText}
+        onChange={handleChange}
+        placeholder="Describe achievement or responsibility..."
+        className={`flex-1 bg-transparent text-xs text-slate-200 outline-none resize-y leading-relaxed ${
+          !bullet.enabled ? 'line-through opacity-50' : ''
+        }`}
+      />
+
+      <button
+        type="button"
+        onClick={onDelete}
+        className="mt-1 text-slate-500 hover:text-rose-400 cursor-pointer transition-colors"
+        title="Delete Bullet"
+      >
+        <Trash2 className="w-3.5 h-3.5" />
+      </button>
+    </div>
+  );
+};
 
 export const SectionsList: React.FC = () => {
   const { t } = useTranslation();
@@ -25,7 +81,6 @@ export const SectionsList: React.FC = () => {
   const [tagInputs, setTagInputs] = useState<Record<string, string>>({});
   const [isAddingSection, setIsAddingSection] = useState(false);
   const [customTitleInput, setCustomTitleInput] = useState('');
-  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
   if (!activeProfile) return null;
 
@@ -69,29 +124,6 @@ export const SectionsList: React.FC = () => {
     reorderSections(newOrder);
   };
 
-  // HTML5 Drag and Drop Handlers
-  const handleDragStart = (e: React.DragEvent, index: number) => {
-    setDraggedIndex(index);
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/plain', String(index));
-  };
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-  };
-
-  const handleDrop = (e: React.DragEvent, targetIndex: number) => {
-    e.preventDefault();
-    if (draggedIndex === null || draggedIndex === targetIndex) return;
-
-    const newOrder = [...activeProfile.sectionsOrder];
-    const [moved] = newOrder.splice(draggedIndex, 1);
-    newOrder.splice(targetIndex, 0, moved);
-    reorderSections(newOrder);
-    setDraggedIndex(null);
-  };
-
   const handleAddItem = (secId: string, secType: string) => {
     const newItemId = `item-${Date.now()}`;
     let baseItem: Partial<SectionItem> = {
@@ -120,7 +152,7 @@ export const SectionsList: React.FC = () => {
         linkUrl: 'https://github.com',
         tags: ['Python', 'Streamlit', 'PostgreSQL'],
         bulletItems: [
-          { id: `b-${Date.now()}`, text: 'Built scalable internal data platform reducing processing time by 50%.', enabled: true },
+          { id: `b-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`, text: 'Built scalable internal data platform reducing processing time by 50%.', enabled: true },
         ],
       };
     } else if (secType === 'languages') {
@@ -139,6 +171,11 @@ export const SectionsList: React.FC = () => {
       baseItem = {
         title: 'Skill Category',
         tags: ['Python', 'SQL', 'GCP'],
+        bulletItems: [
+          { id: `b-${Date.now()}-1-${Math.random().toString(36).substring(2, 7)}`, text: 'Python', enabled: true },
+          { id: `b-${Date.now()}-2-${Math.random().toString(36).substring(2, 7)}`, text: 'SQL', enabled: true },
+          { id: `b-${Date.now()}-3-${Math.random().toString(36).substring(2, 7)}`, text: 'GCP', enabled: true },
+        ],
       };
     } else {
       baseItem = {
@@ -148,7 +185,7 @@ export const SectionsList: React.FC = () => {
         endDate: 'Present',
         current: true,
         bulletItems: [
-          { id: `b-${Date.now()}`, text: 'Key accomplishment or responsibility using quantifiable metrics.', enabled: true },
+          { id: `b-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`, text: 'Key accomplishment or responsibility using quantifiable metrics.', enabled: true },
         ],
       };
     }
@@ -157,17 +194,24 @@ export const SectionsList: React.FC = () => {
     setExpandedItems((prev) => ({ ...prev, [newItemId]: true }));
   };
 
-  // Bullet Points Helper Mutations
-  const handleUpdateBullet = (secId: string, item: SectionItem, bulletId: string, partial: Partial<BulletItem>) => {
-    const updatedBullets = (item.bulletItems || []).map((b) =>
-      b.id === bulletId ? { ...b, ...partial } : b
-    );
+  // Bullet Points Helper Mutations (Surgically scoped by index & bullet.id)
+  const handleUpdateBullet = (
+    secId: string,
+    item: SectionItem,
+    bulletId: string,
+    targetIdx: number,
+    partial: Partial<BulletItem>
+  ) => {
+    const updatedBullets = (item.bulletItems || []).map((b, idx) => {
+      const isTarget = (b.id && b.id === bulletId) || idx === targetIdx;
+      return isTarget ? { ...b, ...partial } : b;
+    });
     updateSectionItem(secId, item.id, { bulletItems: updatedBullets });
   };
 
   const handleAddBullet = (secId: string, item: SectionItem) => {
     const newBullet: BulletItem = {
-      id: `b-${Date.now()}`,
+      id: `b-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
       text: '',
       enabled: true,
     };
@@ -175,8 +219,11 @@ export const SectionsList: React.FC = () => {
     updateSectionItem(secId, item.id, { bulletItems: updatedBullets });
   };
 
-  const handleDeleteBullet = (secId: string, item: SectionItem, bulletId: string) => {
-    const updatedBullets = (item.bulletItems || []).filter((b) => b.id !== bulletId);
+  const handleDeleteBullet = (secId: string, item: SectionItem, bulletId: string, targetIdx: number) => {
+    const updatedBullets = (item.bulletItems || []).filter((b, idx) => {
+      if (b.id && bulletId) return b.id !== bulletId;
+      return idx !== targetIdx;
+    });
     updateSectionItem(secId, item.id, { bulletItems: updatedBullets });
   };
 
@@ -295,40 +342,32 @@ export const SectionsList: React.FC = () => {
           return (
             <div
               key={sec.id}
-              draggable
-              onDragStart={(e) => handleDragStart(e, index)}
-              onDragOver={handleDragOver}
-              onDrop={(e) => handleDrop(e, index)}
               className={`bg-[#131b2e] border rounded-2xl transition-all overflow-hidden ${
-                draggedIndex === index ? 'opacity-40 border-blue-500' : sec.visible ? 'border-[#222f47]' : 'border-[#222f47]/50 opacity-60'
+                sec.visible ? 'border-[#222f47]' : 'border-[#222f47]/50 opacity-60'
               }`}
             >
               {/* Section Header */}
               <div className="p-4 flex flex-wrap items-center justify-between gap-3 bg-[#131b2e]">
                 <div className="flex items-center gap-2 flex-1 min-w-[220px]">
-                  <div title="Drag to reorder">
-                    <GripVertical className="w-4 h-4 text-slate-500 hover:text-slate-200 cursor-grab active:cursor-grabbing shrink-0" />
-                  </div>
-                  
                   {/* Up / Down Reorder Arrows */}
-                  <div className="flex flex-col gap-0.5 shrink-0">
+                  <div className="flex items-center gap-1 shrink-0 bg-[#0d1322] p-1 rounded-lg border border-[#222f47]">
                     <button
                       type="button"
                       onClick={() => handleMoveSection(index, 'up')}
                       disabled={index === 0}
-                      className="p-0.5 text-slate-500 hover:text-blue-400 disabled:opacity-30 disabled:hover:text-slate-500 cursor-pointer"
-                      title="Move Up"
+                      className="p-1 text-slate-400 hover:text-blue-400 disabled:opacity-20 disabled:hover:text-slate-400 cursor-pointer transition-colors"
+                      title="Move Section Up"
                     >
-                      <ArrowUp className="w-3 h-3" />
+                      <ArrowUp className="w-3.5 h-3.5" />
                     </button>
                     <button
                       type="button"
                       onClick={() => handleMoveSection(index, 'down')}
                       disabled={index === sectionsList.length - 1}
-                      className="p-0.5 text-slate-500 hover:text-blue-400 disabled:opacity-30 disabled:hover:text-slate-500 cursor-pointer"
-                      title="Move Down"
+                      className="p-1 text-slate-400 hover:text-blue-400 disabled:opacity-20 disabled:hover:text-slate-400 cursor-pointer transition-colors"
+                      title="Move Section Down"
                     >
-                      <ArrowDown className="w-3 h-3" />
+                      <ArrowDown className="w-3.5 h-3.5" />
                     </button>
                   </div>
 
@@ -360,7 +399,18 @@ export const SectionsList: React.FC = () => {
                     <button
                       type="button"
                       title="Render Section as Tags"
-                      onClick={() => updateSection(sec.id, { displayMode: 'tags', layout: { ...sec.layout, displayMode: 'tags' } })}
+                      onClick={() => {
+                        const updatedItems = sec.items.map((it) => {
+                          if ((!it.tags || it.tags.length === 0) && it.bulletItems && it.bulletItems.length > 0) {
+                            return {
+                              ...it,
+                              tags: it.bulletItems.map((b) => b.text).filter(Boolean),
+                            };
+                          }
+                          return it;
+                        });
+                        updateSection(sec.id, { displayMode: 'tags', items: updatedItems, layout: { ...sec.layout, displayMode: 'tags' } });
+                      }}
                       className={`px-2 py-0.5 rounded text-[10px] font-semibold flex items-center gap-1 transition-all cursor-pointer ${
                         sectionDisplayMode === 'tags' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
                       }`}
@@ -372,7 +422,22 @@ export const SectionsList: React.FC = () => {
                     <button
                       type="button"
                       title="Render Section as Bullets"
-                      onClick={() => updateSection(sec.id, { displayMode: 'bullets', layout: { ...sec.layout, displayMode: 'bullets' } })}
+                      onClick={() => {
+                        const updatedItems = sec.items.map((it) => {
+                          if ((!it.bulletItems || it.bulletItems.length === 0) && it.tags && it.tags.length > 0) {
+                            return {
+                              ...it,
+                              bulletItems: it.tags.map((tText, tIdx) => ({
+                                id: `b-${Date.now()}-${tIdx}-${Math.random().toString(36).substring(2, 7)}`,
+                                text: tText,
+                                enabled: true,
+                              })),
+                            };
+                          }
+                          return it;
+                        });
+                        updateSection(sec.id, { displayMode: 'bullets', items: updatedItems, layout: { ...sec.layout, displayMode: 'bullets' } });
+                      }}
                       className={`px-2 py-0.5 rounded text-[10px] font-semibold flex items-center gap-1 transition-all cursor-pointer ${
                         sectionDisplayMode === 'bullets' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-slate-200'
                       }`}
@@ -666,39 +731,13 @@ export const SectionsList: React.FC = () => {
 
                                   <div className="space-y-2">
                                     {(item.bulletItems || []).map((bullet, bIdx) => (
-                                      <div key={bullet.id || bIdx} className="flex items-start gap-2 bg-[#0d1322] border border-[#222f47] p-2 rounded-lg">
-                                        <button
-                                          type="button"
-                                          onClick={() => handleUpdateBullet(sec.id, item, bullet.id, { enabled: !bullet.enabled })}
-                                          className="mt-1 text-slate-400 hover:text-blue-400 cursor-pointer"
-                                          title={bullet.enabled ? 'Disable Bullet' : 'Enable Bullet'}
-                                        >
-                                          {bullet.enabled ? (
-                                            <CheckSquare className="w-3.5 h-3.5 text-blue-400" />
-                                          ) : (
-                                            <Square className="w-3.5 h-3.5" />
-                                          )}
-                                        </button>
-
-                                        <textarea
-                                          rows={2}
-                                          value={bullet.text}
-                                          onChange={(e) => handleUpdateBullet(sec.id, item, bullet.id, { text: e.target.value })}
-                                          placeholder="Describe achievement or responsibility..."
-                                          className={`flex-1 bg-transparent text-xs text-slate-200 outline-none resize-y leading-relaxed ${
-                                            !bullet.enabled ? 'line-through opacity-50' : ''
-                                          }`}
-                                        />
-
-                                        <button
-                                          type="button"
-                                          onClick={() => handleDeleteBullet(sec.id, item, bullet.id)}
-                                          className="mt-1 text-slate-500 hover:text-rose-400 cursor-pointer transition-colors"
-                                          title="Delete Bullet"
-                                        >
-                                          <Trash2 className="w-3.5 h-3.5" />
-                                        </button>
-                                      </div>
+                                      <BulletItemRow
+                                        key={bullet.id || `b-idx-${bIdx}`}
+                                        bullet={bullet}
+                                        bIdx={bIdx}
+                                        onUpdate={(partial) => handleUpdateBullet(sec.id, item, bullet.id, bIdx, partial)}
+                                        onDelete={() => handleDeleteBullet(sec.id, item, bullet.id, bIdx)}
+                                      />
                                     ))}
                                   </div>
                                 </div>
