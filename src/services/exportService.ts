@@ -240,6 +240,7 @@ function injectPageTextLayer(
 
 export async function exportResumeToPDF(filename = 'resume.pdf'): Promise<void> {
   console.log('[PDF_EXPORT_LOG] 1. Starting exportResumeToPDF with optimized JPEG compression...');
+  await document.fonts.ready;
   const paperElement = document.querySelector('.a4-paper') as HTMLElement;
   if (!paperElement) {
     alert('Resume canvas not found.');

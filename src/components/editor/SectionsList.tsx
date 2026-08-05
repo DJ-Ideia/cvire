@@ -76,7 +76,7 @@ export const SectionsList: React.FC = () => {
     updateSectionTitle,
   } = useCVStore();
 
-  const [expandedSection, setExpandedSection] = useState<string | null>(null);
+  const [expandedSection, setExpandedSection] = useState<string | null>('none');
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
   const [tagInputs, setTagInputs] = useState<Record<string, string>>({});
   const [isAddingSection, setIsAddingSection] = useState(false);

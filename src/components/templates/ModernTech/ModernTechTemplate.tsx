@@ -64,7 +64,7 @@ export const ModernTechTemplate: React.FC<TemplateProps> = ({ profile, previewRe
       {/* Summary with Optimal Line-Length */}
       {summary && (
         <div className="mb-6 max-w-[650px]">
-          <p className="text-xs text-slate-700 leading-relaxed italic border-l-2 pl-3" style={{ borderColor: `${primaryColor}60` }}>
+          <p className="text-xs text-slate-700 leading-relaxed border-l-2 pl-3" style={{ borderColor: `${primaryColor}60` }}>
             {summary}
           </p>
         </div>
