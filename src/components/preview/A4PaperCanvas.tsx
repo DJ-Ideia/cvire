@@ -15,10 +15,10 @@ export const A4PaperCanvas: React.FC = () => {
   useEffect(() => {
     const updateScale = () => {
       if (!containerRef.current) return;
-      // Measure the actual available width of the container (works in split, full, or any mode)
-      const availableWidth = containerRef.current.clientWidth;
-      // Reserve padding so the paper floats with breathing room (32px each side max)
-      const padding = availableWidth >= 600 ? 64 : 32;
+      // Use offsetWidth to ignore scrollbar appearance/disappearance (prevents trembling loop)
+      const availableWidth = containerRef.current.offsetWidth;
+      // Reserve generous padding so the paper floats with breathing room (120px on desktop)
+      const padding = availableWidth >= 600 ? 120 : 32;
       const maxPaperWidth = availableWidth - padding;
       // Never exceed the user-set zoom level, but always shrink to fit if needed
       const autoScale = Math.min(zoomLevel, maxPaperWidth / 794);
