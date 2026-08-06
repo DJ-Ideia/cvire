@@ -1,0 +1,13 @@
+---
+description: Guia canônico do projeto cvire para o agente
+alwaysApply: true
+---
+
+Siga as instruções em `AGENTS.md` na raiz do repositório.
+
+Regras de domínio sob demanda:
+- `.agents/rules/frontend-templates.md`
+- `.agents/rules/state-storage.md`
+- `.agents/rules/ats-jobmatcher.md`
+
+Para Claude Code no mesmo repo, o ponto de entrada adicional é `CLAUDE.md`.
