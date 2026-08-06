@@ -59,7 +59,7 @@ export const MinimalistCleanTemplate: React.FC<TemplateProps> = ({ profile, prev
       {/* Sections */}
       <div className="space-y-8 flex-1">
         {visibleSections.map((sec) => (
-          <div key={sec.id} className="grid grid-cols-4 gap-4">
+          <div key={sec.id} className="resume-section grid grid-cols-4 gap-4">
             <div className="col-span-1">
               <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider">{sec.title}</h2>
             </div>

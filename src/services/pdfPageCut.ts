@@ -44,14 +44,15 @@ export function findSafeCutY(
   occupied: YInterval[],
   yOffsetPx: number,
   maxSlicePx: number,
-  canvasHeightPx: number
+  canvasHeightPx: number,
+  keepBands: YInterval[] = []
 ): number {
   if (yOffsetPx + maxSlicePx >= canvasHeightPx) {
     return canvasHeightPx - yOffsetPx;
   }
 
   const targetCutY = yOffsetPx + maxSlicePx;
-  const merged = mergeYIntervals(occupied);
+  const merged = mergeYIntervals([...occupied, ...keepBands]);
   const hit = intervalContaining(merged, targetCutY);
 
   let bestCutPx = targetCutY;

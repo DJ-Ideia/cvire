@@ -54,4 +54,41 @@ describe('findSafeCutY', () => {
     assert.notEqual(cutY, 1025, 'must not use main-only gap middle through English');
     assert.equal(cutY, 1010);
   });
+
+  it('pushes cut above item header when gap would orphan it from first bullet', () => {
+    const occupied = [
+      { top: 100, bottom: 900 },
+      { top: 1000, bottom: 1020 },
+      { top: 1030, bottom: 1100 },
+      { top: 1110, bottom: 1200 },
+    ];
+    const keepBands = [{ top: 1000, bottom: 1100 }];
+    const slice = findSafeCutY(occupied, 0, 1025, 2000, keepBands);
+    assert.ok(slice <= 1000, `cutY ${slice} must be at or above header top`);
+    assert.equal(slice, 950);
+  });
+
+  it('pushes cut above section h2 when gap would orphan it from following content', () => {
+    const occupied = [
+      { top: 100, bottom: 880 },
+      { top: 980, bottom: 1000 },
+      { top: 1010, bottom: 1050 },
+    ];
+    const keepBands = [{ top: 980, bottom: 1050 }];
+    const slice = findSafeCutY(occupied, 0, 1005, 2000, keepBands);
+    assert.ok(slice <= 980, `cutY ${slice} must be at or above h2 top`);
+    assert.equal(slice, 930);
+  });
+
+  it('still allows cutting after the first kept bullet', () => {
+    const occupied = [
+      { top: 100, bottom: 900 },
+      { top: 1000, bottom: 1020 },
+      { top: 1030, bottom: 1100 },
+      { top: 1120, bottom: 1300 },
+    ];
+    const keepBands = [{ top: 1000, bottom: 1100 }];
+    const slice = findSafeCutY(occupied, 0, 1150, 2000, keepBands);
+    assert.equal(slice, 1110);
+  });
 });

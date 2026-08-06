@@ -75,7 +75,7 @@ export const ModernTechTemplate: React.FC<TemplateProps> = ({ profile, previewRe
         {/* Main Column (2/3 width) */}
         <div className="col-span-2 space-y-6">
           {mainSections.map((sec) => (
-            <div key={sec.id} className="space-y-3">
+            <div key={sec.id} className="resume-section space-y-3">
               <h2 className="text-sm font-bold uppercase tracking-wider border-b pb-1" style={{ color: primaryColor, borderColor: `${primaryColor}40` }}>
                 {sec.title}
               </h2>
@@ -89,7 +89,7 @@ export const ModernTechTemplate: React.FC<TemplateProps> = ({ profile, previewRe
         {sidebarSections.length > 0 && (
           <div className="col-span-1 space-y-6 border-l pl-5 border-slate-200 h-fit">
             {sidebarSections.map((sec) => (
-              <div key={sec.id} className="space-y-3">
+              <div key={sec.id} className="resume-section space-y-3">
                 <h2 className="text-xs font-bold uppercase tracking-wider border-b pb-1" style={{ color: primaryColor, borderColor: `${primaryColor}40` }}>
                   {sec.title}
                 </h2>

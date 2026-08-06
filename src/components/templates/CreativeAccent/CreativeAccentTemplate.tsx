@@ -43,7 +43,7 @@ export const CreativeAccentTemplate: React.FC<TemplateProps> = ({ profile, previ
 
         <div className="space-y-6">
           {visibleSections.map((sec) => (
-            <div key={sec.id} className="space-y-3">
+            <div key={sec.id} className="resume-section space-y-3">
               <div className="flex items-center gap-2">
                 <div className="w-2.5 h-6 rounded-r" style={{ backgroundColor: primaryColor }} />
                 <h2 className="text-xs font-extrabold uppercase tracking-wider text-slate-900">{sec.title}</h2>

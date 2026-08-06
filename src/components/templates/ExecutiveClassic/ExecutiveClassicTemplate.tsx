@@ -59,7 +59,7 @@ export const ExecutiveClassicTemplate: React.FC<TemplateProps> = ({ profile, pre
       {/* 1-Column Sequential Sections */}
       <div className="space-y-6 flex-1">
         {visibleSections.map((sec) => (
-          <div key={sec.id} className="space-y-3">
+          <div key={sec.id} className="resume-section space-y-3">
             <h2 className="text-xs font-bold uppercase tracking-widest border-b pb-1 text-center" style={{ color: primaryColor, borderColor: primaryColor }}>
               {sec.title}
             </h2>

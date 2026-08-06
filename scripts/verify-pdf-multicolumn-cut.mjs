@@ -64,6 +64,20 @@ function assertPhraseOnSinglePage(extracted, phrase) {
   }
 }
 
+function assertTitleNotOrphaned(extracted, title, companions) {
+  const titleRe = new RegExp(title, 'i');
+  for (let i = 0; i < extracted.pages.length; i += 1) {
+    const page = extracted.pages[i];
+    if (!titleRe.test(page)) continue;
+    const hasCompanion = companions.some((c) => page.includes(c));
+    if (!hasCompanion) {
+      throw new Error(
+        `Orphan title "${title}" on page ${i + 1} without companions [${companions.join(', ')}]`
+      );
+    }
+  }
+}
+
 async function selectTemplate(page, name) {
   const trigger = page.getByRole('button', { name: /Template|Modern Tech|Executive Classic|Minimalist/i }).first();
   if (await trigger.count()) {
@@ -92,7 +106,9 @@ async function main() {
       throw new Error(`Expected multipage ModernTech PDF, got ${modern.numPages} page(s)`);
     }
     assertPhraseOnSinglePage(modern, 'English');
-    console.log(`OK ModernTech: ${modern.numPages} pages, English intact → ${modernPath}`);
+    assertTitleNotOrphaned(modern, 'Languages', ['English', 'Portuguese']);
+    assertTitleNotOrphaned(modern, 'Work Experience', ['Senior Frontend Engineer', 'Frontend Web Developer']);
+    console.log(`OK ModernTech: ${modern.numPages} pages, English intact, no orphan titles → ${modernPath}`);
 
     await selectTemplate(page, 'Executive Classic');
     const classicPath = await exportPdf(page, 'executive-classic-multipage.pdf');

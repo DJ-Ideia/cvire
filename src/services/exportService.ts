@@ -1,6 +1,6 @@
 import html2canvas from 'html2canvas-pro';
 import jsPDF from 'jspdf';
-import { findSafeCutY } from './pdfPageCut';
+import { findSafeCutY, type YInterval } from './pdfPageCut';
 
 // List of CSS color properties to inline as computed rgb() values
 const COLOR_PROPERTIES = [
@@ -46,6 +46,104 @@ function inlineComputedColors(rootElement: HTMLElement): void {
   walk(rootElement);
 }
 
+function elementToYInterval(
+  el: HTMLElement,
+  paperRect: DOMRect,
+  scale: number
+): YInterval {
+  const rect = el.getBoundingClientRect();
+  return {
+    top: Math.round((rect.top - paperRect.top) * scale),
+    bottom: Math.round((rect.bottom - paperRect.top) * scale),
+  };
+}
+
+function firstFollowingContent(root: HTMLElement, after: HTMLElement): HTMLElement | null {
+  const candidates = Array.from(
+    root.querySelectorAll('p, li, .resume-item-header, h3')
+  ) as HTMLElement[];
+
+  for (const candidate of candidates) {
+    if (after.contains(candidate)) {
+      continue;
+    }
+    if (
+      after.compareDocumentPosition(candidate) & Node.DOCUMENT_POSITION_FOLLOWING
+    ) {
+      return candidate;
+    }
+  }
+  return null;
+}
+
+function collectKeepBands(
+  clone: HTMLElement,
+  paperRect: DOMRect,
+  scale: number
+): YInterval[] {
+  const bands: YInterval[] = [];
+
+  const headers = Array.from(
+    clone.querySelectorAll('.resume-item-header')
+  ) as HTMLElement[];
+
+  for (const header of headers) {
+    const item = (header.closest('.resume-item') as HTMLElement | null) || header.parentElement;
+    if (!item) {
+      continue;
+    }
+    const follow = firstFollowingContent(item, header);
+    const headerInterval = elementToYInterval(header, paperRect, scale);
+    if (follow) {
+      const followInterval = elementToYInterval(follow, paperRect, scale);
+      bands.push({
+        top: headerInterval.top,
+        bottom: Math.max(headerInterval.bottom, followInterval.bottom),
+      });
+    } else {
+      bands.push(headerInterval);
+    }
+  }
+
+  const sectionTitles = Array.from(
+    clone.querySelectorAll('.resume-section h2')
+  ) as HTMLElement[];
+
+  for (const title of sectionTitles) {
+    const section = title.closest('.resume-section') as HTMLElement | null;
+    if (!section) {
+      continue;
+    }
+    const follow = firstFollowingContent(section, title);
+    const titleInterval = elementToYInterval(title, paperRect, scale);
+    if (!follow) {
+      bands.push(titleInterval);
+      continue;
+    }
+
+    let bandBottom = elementToYInterval(follow, paperRect, scale).bottom;
+    if (follow.classList.contains('resume-item-header')) {
+      const item = follow.closest('.resume-item') as HTMLElement | null;
+      if (item) {
+        const afterHeader = firstFollowingContent(item, follow);
+        if (afterHeader) {
+          bandBottom = Math.max(
+            bandBottom,
+            elementToYInterval(afterHeader, paperRect, scale).bottom
+          );
+        }
+      }
+    }
+
+    bands.push({
+      top: titleInterval.top,
+      bottom: Math.max(titleInterval.bottom, bandBottom),
+    });
+  }
+
+  return bands;
+}
+
 function findCleanPageCut(
   clone: HTMLElement,
   yOffsetPx: number,
@@ -68,15 +166,12 @@ function findCleanPageCut(
     clone.querySelectorAll('h1, h2, h3, h4, p, li, tr, .resume-item-header')
   ) as HTMLElement[];
 
-  const occupied = blockElements.map((block) => {
-    const rect = block.getBoundingClientRect();
-    return {
-      top: Math.round((rect.top - paperRect.top) * scale),
-      bottom: Math.round((rect.bottom - paperRect.top) * scale),
-    };
-  });
+  const occupied = blockElements.map((block) =>
+    elementToYInterval(block, paperRect, scale)
+  );
+  const keepBands = collectKeepBands(clone, paperRect, scale);
 
-  return findSafeCutY(occupied, yOffsetPx, maxSlicePx, canvasHeightPx);
+  return findSafeCutY(occupied, yOffsetPx, maxSlicePx, canvasHeightPx, keepBands);
 }
 
 interface TextLineFragment {
@@ -271,9 +366,9 @@ export async function exportResumeToPDF(filename = 'resume.pdf'): Promise<void> 
 
     const pdfWidth = 210; // A4 width in mm
     const pdfHeight = 297; // A4 height in mm
-    const topMarginMm = 10; // Top margin in mm
-    const bottomMarginMm = 10; // Bottom margin in mm
-    const printableHeightMm = pdfHeight - topMarginMm - bottomMarginMm; // 277 mm printable height
+    const topMarginMm = 6;
+    const bottomMarginMm = 6;
+    const printableHeightMm = pdfHeight - topMarginMm - bottomMarginMm;
 
     // Use compressed JPEG quality 0.82 to keep PDF size small (< 600KB) while maintaining pristine crispness
     const JPEG_QUALITY = 0.82;

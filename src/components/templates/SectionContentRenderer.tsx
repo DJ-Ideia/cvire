@@ -34,7 +34,7 @@ export const SectionContentRenderer: React.FC<SectionContentRendererProps> = ({
       {items.map((item) => {
         if (displayMode === 'tags') {
           return (
-            <div key={item.id} className="space-y-1">
+            <div key={item.id} className="resume-item space-y-1">
               <div className="resume-item-header">
                 <h3 className={`font-semibold text-slate-900 ${isSidebar ? 'text-xs' : 'text-xs sm:text-sm'}`}>
                   {item.title}
@@ -54,7 +54,7 @@ export const SectionContentRenderer: React.FC<SectionContentRendererProps> = ({
 
         if (displayMode === 'compact') {
           return (
-            <div key={item.id} className="space-y-0.5">
+            <div key={item.id} className="resume-item space-y-0.5">
               <div className="resume-item-header">
                 <div className="flex justify-between items-baseline gap-2">
                   <h3 className={`font-bold text-slate-900 ${isSidebar ? 'text-xs' : 'text-xs sm:text-sm'}`}>
@@ -89,7 +89,7 @@ export const SectionContentRenderer: React.FC<SectionContentRendererProps> = ({
         if (displayMode === 'bullets') {
           const enabledBullets = (item.bulletItems || []).filter((b) => b.enabled);
           return (
-            <div key={item.id} className="space-y-1">
+            <div key={item.id} className="resume-item space-y-1">
               <div className="resume-item-header">
                 <div className="flex justify-between items-baseline gap-2">
                   <h3 className={`font-bold text-slate-900 ${isSidebar ? 'text-xs' : 'text-xs sm:text-sm'}`}>
@@ -134,7 +134,7 @@ export const SectionContentRenderer: React.FC<SectionContentRendererProps> = ({
 
         const enabledBullets = (item.bulletItems || []).filter((b) => b.enabled);
         return (
-          <div key={item.id} className="space-y-1">
+          <div key={item.id} className="resume-item space-y-1">
             <div className="resume-item-header">
               <div className="flex justify-between items-baseline gap-2">
                 <h3 className={`font-bold text-slate-900 ${isSidebar ? 'text-xs' : 'text-xs sm:text-sm'}`}>
