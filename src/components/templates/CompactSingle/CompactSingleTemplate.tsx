@@ -44,7 +44,7 @@ export const CompactSingleTemplate: React.FC<TemplateProps> = ({ profile, previe
       {/* Sections */}
       <div className="space-y-4 flex-1">
         {visibleSections.map((sec) => (
-          <div key={sec.id} className="space-y-2">
+          <div key={sec.id} className="resume-section space-y-2">
             <h2 className="text-[11px] font-bold uppercase tracking-wider border-b pb-0.5" style={{ color: primaryColor, borderColor: primaryColor }}>
               {sec.title}
             </h2>
