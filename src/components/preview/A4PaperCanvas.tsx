@@ -7,25 +7,35 @@ export const A4PaperCanvas: React.FC = () => {
   const { activeProfile } = useCVStore();
   const { zoomLevel } = useUIStore();
   const paperRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [pageBreaks, setPageBreaks] = useState<number[]>([]);
   const [effectiveScale, setEffectiveScale] = useState<number>(zoomLevel);
   const [paperHeight, setPaperHeight] = useState<number>(1123);
 
   useEffect(() => {
-    const handleResize = () => {
-      const screenWidth = window.innerWidth;
-      if (screenWidth < 820) {
-        // Automatically fit A4 paper width to mobile screen (padding 16px each side)
-        const mobileScale = Math.min(zoomLevel, (screenWidth - 32) / 794);
-        setEffectiveScale(mobileScale);
-      } else {
-        setEffectiveScale(zoomLevel);
-      }
+    const updateScale = () => {
+      if (!containerRef.current) return;
+      // Measure the actual available width of the container (works in split, full, or any mode)
+      const availableWidth = containerRef.current.clientWidth;
+      // Reserve padding so the paper floats with breathing room (32px each side max)
+      const padding = availableWidth >= 600 ? 64 : 32;
+      const maxPaperWidth = availableWidth - padding;
+      // Never exceed the user-set zoom level, but always shrink to fit if needed
+      const autoScale = Math.min(zoomLevel, maxPaperWidth / 794);
+      setEffectiveScale(Math.max(0.3, autoScale));
     };
 
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    updateScale();
+
+    const resizeObserver = new ResizeObserver(updateScale);
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+    }
+    window.addEventListener('resize', updateScale);
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener('resize', updateScale);
+    };
   }, [zoomLevel]);
 
   useEffect(() => {
@@ -59,7 +69,7 @@ export const A4PaperCanvas: React.FC = () => {
   const scaledHeight = Math.round(paperHeight * effectiveScale);
 
   return (
-    <div className="flex-1 overflow-x-hidden overflow-y-auto bg-[#090d16] p-2 sm:p-8 flex justify-center items-start min-h-screen">
+    <div ref={containerRef} className="flex-1 overflow-x-hidden overflow-y-auto bg-[#090d16] p-2 sm:p-8 flex justify-center items-start min-h-screen">
       {/* Outer Scaled Container matching exact scaled dimensions */}
       <div
         style={{
