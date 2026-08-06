@@ -1,5 +1,6 @@
 import html2canvas from 'html2canvas-pro';
 import jsPDF from 'jspdf';
+import { findSafeCutY } from './pdfPageCut';
 
 // List of CSS color properties to inline as computed rgb() values
 const COLOR_PROPERTIES = [
@@ -45,9 +46,6 @@ function inlineComputedColors(rootElement: HTMLElement): void {
   walk(rootElement);
 }
 
-/**
- * Find the optimal vertical cut Y coordinate so page breaks don't slice through text lines or headings.
- */
 function findCleanPageCut(
   clone: HTMLElement,
   yOffsetPx: number,
@@ -58,7 +56,6 @@ function findCleanPageCut(
     return canvasHeightPx - yOffsetPx;
   }
 
-  const targetCutY = yOffsetPx + maxSlicePx;
   const paperRect = clone.getBoundingClientRect();
 
   if (!paperRect.height) {
@@ -68,38 +65,18 @@ function findCleanPageCut(
   const scale = canvasHeightPx / clone.offsetHeight;
 
   const blockElements = Array.from(
-    clone.querySelectorAll('h1, h2, h3, h4, p, li, tr, .experience-item, .education-item, .resume-item-header')
+    clone.querySelectorAll('h1, h2, h3, h4, p, li, tr, .resume-item-header')
   ) as HTMLElement[];
 
-  let bestCutPx = targetCutY;
-  let previousBlockBottomPx = 0;
-
-  for (const block of blockElements) {
+  const occupied = blockElements.map((block) => {
     const rect = block.getBoundingClientRect();
-    const blockTopPx = Math.round((rect.top - paperRect.top) * scale);
-    const blockBottomPx = Math.round((rect.bottom - paperRect.top) * scale);
+    return {
+      top: Math.round((rect.top - paperRect.top) * scale),
+      bottom: Math.round((rect.bottom - paperRect.top) * scale),
+    };
+  });
 
-    if (targetCutY > blockTopPx && targetCutY < blockBottomPx) {
-      if (blockTopPx - yOffsetPx > maxSlicePx * 0.65) {
-        // If there's a previous block strictly above this one, cut exactly in the middle of the gap
-        if (previousBlockBottomPx > yOffsetPx && previousBlockBottomPx < blockTopPx) {
-          const gapMiddle = Math.round((previousBlockBottomPx + blockTopPx) / 2);
-          bestCutPx = gapMiddle;
-        } else {
-          // Fallback: Just cut generously above the block (15px clearance)
-          bestCutPx = Math.max(yOffsetPx + 10, blockTopPx - 15);
-        }
-        break;
-      }
-    }
-    
-    // Only track bottom bounds of elements completely above the cut line to act as the "previous block" boundary
-    if (blockBottomPx < targetCutY) {
-      previousBlockBottomPx = Math.max(previousBlockBottomPx, blockBottomPx);
-    }
-  }
-
-  return Math.max(100, bestCutPx - yOffsetPx);
+  return findSafeCutY(occupied, yOffsetPx, maxSlicePx, canvasHeightPx);
 }
 
 interface TextLineFragment {
