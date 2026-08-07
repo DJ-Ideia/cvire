@@ -6,5 +6,6 @@ O guia canônico do projeto foi movido para a **raiz do repositório**:
 
 Claude Code: também [`../CLAUDE.md`](../CLAUDE.md).
 
-Regras de domínio continuam em [`.agents/rules/`](./rules/).
-Skills em [`.agents/skills/`](./skills/).
+Regras de engenharia: [`.agents/rules/`](./rules/).
+Skills de processo: [`.agents/skills/`](./skills/).
+Conteúdo de CV (prompts + saídas): [`../cv-content/`](../cv-content/).

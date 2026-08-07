@@ -2,11 +2,13 @@
 
 ## cvire contract
 
-- **Input:** `CVProfile` JSON (`src/types/cv.ts`) + target language (`pt-BR` / `en-US` or as requested).
+- **Prerequisite:** if the user attached a resume file, complete `cv-content/prompts/cv-intake.md` first.
+- **Input:** `CVProfile` JSON (`src/types/cv.ts` or `cv-content/outputs/json/`) + target language (`pt-BR` / `en-US` or as requested).
 - **Output:** JSON with the **same keys** and structure; technology names unchanged; importable via `importResumesJSON`.
-- **Artifact:** `docs/samples/resumes/<slug>-<lang>.json`.
-- **PDF:** never generate PDF here; import in the app → Export PDF (`exportService`).
-- **Integrity:** follow `.agents/rules/cv-content-integrity.md`.
+- **Artifact:** `cv-content/outputs/json/<slug>-<lang>.json`; optional notes in `cv-content/outputs/md/`.
+- **PDF / DOCX:** never generate PDF/DOCX here; import in the app → Export PDF (`exportService`), optionally store under `cv-content/outputs/pdf/`. Word files (if any) go under `cv-content/outputs/docx/`.
+- **Integrity:** follow `cv-content/rules/content-integrity.md`.
+- **Close:** run `cv-content/prompts/cv-report-board.md` (MD + HTML board) unless the user skips.
 
 ---
 

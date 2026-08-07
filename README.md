@@ -79,6 +79,22 @@ cvire runs entirely in the browser using IndexedDB for local persistent storage.
 
 ---
 
+## Content workflow
+
+Resume **content orchestration** lives under [`cv-content/`](cv-content/), separate from [`.agents/skills/`](.agents/skills/) (engineering agent skills).
+
+1. **Attach a resume** — agents must start with intake ([`cv-intake.md`](cv-content/prompts/cv-intake.md)): translate, adapt to cvire/ATS, start from scratch, or optimize for a job.
+2. **Work prompts** — [`cv-analyzer`](cv-content/prompts/cv-analyzer.md) / [`cv-adapter`](cv-content/prompts/cv-adapter.md) / [`cv-translate`](cv-content/prompts/cv-translate.md)
+3. **Integrity** — [`content-integrity.md`](cv-content/rules/content-integrity.md) (no invented experience or tech)
+4. **Outputs** — JSON [`outputs/json/`](cv-content/outputs/json/), pretty ATS summary [`outputs/md/`](cv-content/outputs/md/), metrics board [`outputs/html/`](cv-content/outputs/html/)
+5. **Closing board** — always generate metrics (before/after %) via [`cv-report-board.md`](cv-content/prompts/cv-report-board.md); preview with `npm run serve:cv-board`
+6. **Import + PDF** — load JSON in the app → Export PDF (`exportService`); optional copy under [`outputs/pdf/`](cv-content/outputs/pdf/)
+7. **DOCX** — [`outputs/docx/`](cv-content/outputs/docx/) reserved for Word files (no in-app generator yet)
+
+See [`cv-content/README.md`](cv-content/README.md) and [`AGENTS.md`](AGENTS.md) for agent-facing detail.
+
+---
+
 ## Installation & Setup
 
 ### Prerequisites

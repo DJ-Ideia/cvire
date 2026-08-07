@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{TITLE}} — CV Board</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --panel: #1a222d;
+      --border: #2a3544;
+      --text: #e7ecf3;
+      --muted: #8b9bb0;
+      --high: #f07178;
+      --mid: #e6b450;
+      --low: #7fd962;
+      --accent: #59c2ff;
+      --bar: #3d5a80;
+      --bar-fill: #59c2ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+      padding: 24px;
+    }
+    h1 { font-size: 1.35rem; margin: 0 0 4px; }
+    .sub { color: var(--muted); font-size: 0.85rem; margin-bottom: 20px; }
+    .grid { display: grid; gap: 16px; }
+    .grid-2 { grid-template-columns: 1fr 1fr; }
+    .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+    @media (max-width: 900px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .card h2 {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      margin: 0 0 12px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { color: var(--muted); font-weight: 600; font-size: 0.75rem; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .dot.high { background: var(--high); }
+    .dot.mid { background: var(--mid); }
+    .dot.low { background: var(--low); }
+    .metric-row { margin-bottom: 10px; }
+    .metric-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      margin-bottom: 4px;
+    }
+    .metric-label span:last-child { color: var(--accent); font-variant-numeric: tabular-nums; }
+    .bar {
+      height: 8px;
+      background: var(--bar);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .bar > i {
+      display: block;
+      height: 100%;
+      background: var(--bar-fill);
+      border-radius: 4px;
+    }
+    .delta { font-size: 0.75rem; color: var(--low); }
+    .delta.neg { color: var(--high); }
+    .delta.flat { color: var(--muted); }
+    ul { margin: 0; padding-left: 1.1rem; font-size: 0.88rem; }
+    li { margin-bottom: 6px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag {
+      background: #243041;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.75rem;
+    }
+    .tag.gap { border-color: var(--mid); color: var(--mid); }
+    .attn-high h2 { color: var(--high); }
+    .attn-mid h2 { color: var(--mid); }
+    .attn-low h2 { color: var(--low); }
+    .legend { font-size: 0.75rem; color: var(--muted); margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h1>{{TITLE}}</h1>
+  <p class="sub">{{SUBTITLE}} · Baseline vs resultado · {{DATE}}</p>
+
+  <div class="card" style="margin-bottom:16px">
+    <h2>Scores (0–100)</h2>
+    <!-- AGENT: replace metric rows; width % = score -->
+    <div class="metric-row">
+      <div class="metric-label"><span>Estrutura ATS</span><span>{{ATS_STRUCTURE}} <span class="delta">{{ATS_STRUCTURE_DELTA}}</span></span></div>
+      <div class="bar"><i style="width:{{ATS_STRUCTURE}}%"></i></div>
+    </div>
+    <div class="metric-row">
+      <div class="metric-label"><span>Clareza / qualidade</span><span>{{CLARITY}} <span class="delta">{{CLARITY_DELTA}}</span></span></div>
+      <div class="bar"><i style="width:{{CLARITY}}%"></i></div>
+    </div>
+    <div class="metric-row">
+      <div class="metric-label"><span>Impacto mensurável</span><span>{{IMPACT}} <span class="delta">{{IMPACT_DELTA}}</span></span></div>
+      <div class="bar"><i style="width:{{IMPACT}}%"></i></div>
+    </div>
+    <div class="metric-row">
+      <div class="metric-label"><span>Profundidade técnica</span><span>{{TECH_DEPTH}} <span class="delta">{{TECH_DEPTH_DELTA}}</span></span></div>
+      <div class="bar"><i style="width:{{TECH_DEPTH}}%"></i></div>
+    </div>
+    <div class="metric-row">
+      <div class="metric-label"><span>Consistência narrativa</span><span>{{NARRATIVE}} <span class="delta">{{NARRATIVE_DELTA}}</span></span></div>
+      <div class="bar"><i style="width:{{NARRATIVE}}%"></i></div>
+    </div>
+    <div class="metric-row">
+      <div class="metric-label"><span>Fit / diferenciais</span><span>{{FIT}} <span class="delta">{{FIT_DELTA}}</span></span></div>
+      <div class="bar"><i style="width:{{FIT}}%"></i></div>
+    </div>
+    <!-- Optional: Keyword match row only if JD present -->
+    <div class="metric-row" data-optional="keyword">
+      <div class="metric-label"><span>Keyword match (vaga)</span><span>{{KEYWORDS}} <span class="delta">{{KEYWORDS_DELTA}}</span></span></div>
+      <div class="bar"><i style="width:{{KEYWORDS}}%"></i></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <h2>Análise priorizada</h2>
+    <table>
+      <thead>
+        <tr><th>Prioridade</th><th>Tema</th><th>Observação</th><th>Ação</th></tr>
+      </thead>
+      <tbody>
+        {{PRIORITY_ROWS}}
+        <!-- example row:
+        <tr>
+          <td><span class="pill"><span class="dot high"></span>Alta</span></td>
+          <td>Impacto mensurável</td>
+          <td>Poucas métricas de negócio</td>
+          <td>Só incluir números reais do histórico</td>
+        </tr>
+        -->
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid grid-3" style="margin-bottom:16px">
+    <div class="card attn-high">
+      <h2>Atenção prioritária</h2>
+      <ul>{{ATTN_HIGH}}</ul>
+    </div>
+    <div class="card attn-mid">
+      <h2>Atenção moderada</h2>
+      <ul>{{ATTN_MID}}</ul>
+    </div>
+    <div class="card attn-low">
+      <h2>Já ok</h2>
+      <ul>{{ATTN_OK}}</ul>
+    </div>
+  </div>
+
+  <div class="grid grid-2" style="margin-bottom:16px">
+    <div class="card">
+      <h2>Pontos fortes atuais</h2>
+      <ul>{{STRENGTHS}}</ul>
+    </div>
+    <div class="card">
+      <h2>Inventário técnico</h2>
+      <div class="tags">{{TECH_TAGS}}</div>
+      <p class="legend">Âmbar = gap consciente (não inventar).</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Linha do tempo</h2>
+    <table>
+      <thead>
+        <tr><th>Período</th><th>Papel</th><th>Duração</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        {{TIMELINE_ROWS}}
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

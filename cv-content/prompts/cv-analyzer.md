@@ -2,11 +2,13 @@
 
 ## cvire contract
 
-- **Input:** job description + resume as `CVProfile` JSON (`src/types/cv.ts`) or text already in the app/repo.
+- **Prerequisite:** if the user attached a resume file, complete `cv-content/prompts/cv-intake.md` first.
+- **Input:** job description + resume as `CVProfile` JSON (`src/types/cv.ts` or `cv-content/outputs/json/`) or text already in the app/repo.
 - **Output:** markdown ATS report only. Do **not** rewrite the CV or emit a new profile JSON.
-- **Persist report:** only if the user asks — `docs/samples/reports/<slug>-analysis.md`.
-- **PDF:** never generate PDF here; user imports JSON in the app and exports via `exportService`.
-- **Integrity:** follow `.agents/rules/cv-content-integrity.md`.
+- **Persist report:** `cv-content/outputs/md/<slug>-analysis.md` (and always close with `cv-report-board.md` → `outputs/md` + `outputs/html`).
+- **JSON / PDF / DOCX:** never fabricate binary exports here. JSON in `cv-content/outputs/json/`. PDF via app `exportService` → optional `outputs/pdf/`. DOCX only if provided → `outputs/docx/`.
+- **Integrity:** follow `cv-content/rules/content-integrity.md`.
+- **Close:** run `cv-content/prompts/cv-report-board.md` unless the user skips.
 
 ---
 

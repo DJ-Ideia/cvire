@@ -2,11 +2,13 @@
 
 ## cvire contract
 
-- **Input:** job description + current `CVProfile` JSON (`src/types/cv.ts`).
+- **Prerequisite:** if the user attached a resume file, complete `cv-content/prompts/cv-intake.md` first.
+- **Input:** job description + current `CVProfile` JSON (`src/types/cv.ts` or `cv-content/outputs/json/`).
 - **Output:** actionable recommendations; if the user asks for a file, also a **new** `CVProfile` JSON using only facts already present (reorder/rewrite, never fabricate).
-- **Artifact:** `docs/samples/resumes/<slug>-adapted.json` when generating a file.
-- **PDF:** never generate PDF here; import the JSON in the app → Export PDF (`exportService`).
-- **Integrity:** follow `.agents/rules/cv-content-integrity.md`.
+- **Artifact:** `cv-content/outputs/json/<slug>-adapted.json` when generating a file; optional pretty summary in `cv-content/outputs/md/`.
+- **PDF / DOCX:** never generate PDF/DOCX here; import JSON in the app → Export PDF (`exportService`), optionally store under `cv-content/outputs/pdf/`. Word files (if any) go under `cv-content/outputs/docx/`.
+- **Integrity:** follow `cv-content/rules/content-integrity.md`.
+- **Close:** run `cv-content/prompts/cv-report-board.md` (MD + HTML board) unless the user skips.
 
 ---
 

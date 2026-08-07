@@ -5,7 +5,10 @@ alwaysApply: true
 
 Siga as instruções em `AGENTS.md` na raiz do repositório.
 
+Conteúdo de CV (prompts + saídas): `cv-content/` (ver `cv-content/README.md`).
+
 Regras de domínio sob demanda:
+- `cv-content/rules/content-integrity.md`
 - `.agents/rules/frontend-templates.md`
 - `.agents/rules/state-storage.md`
 - `.agents/rules/ats-jobmatcher.md`

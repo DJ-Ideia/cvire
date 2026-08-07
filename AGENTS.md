@@ -28,6 +28,7 @@ Ferramentas com harness próprio devem ler também `CLAUDE.md` (Claude) ou `.cur
 | Teste corte PDF | `npm run test:pdf-cut` |
 | Smoke PDF | `npm run smoke:pdf` (app rodando) |
 | Verify PDF cut | `npm run verify:pdf-cut` (app em `CVIRE_URL` ou `5173`) |
+| Servir board HTML | `npm run serve:cv-board` → `http://127.0.0.1:8765/` |
 
 ## Invariantes
 
@@ -38,21 +39,47 @@ Ferramentas com harness próprio devem ler também `CLAUDE.md` (Claude) ou `.cur
 5. **IDs únicos** — novos itens/bullets com ID único (`b-${Date.now()}-…`).
 6. **Causa raiz** — sem `try/catch` vazios nem dados falsos para esconder erro.
 7. **PDF multipágina** — cortes em banda Y livre global (`pdfPageCut` / `findCleanPageCut`); keep-together mínimo para não órfão de `h2` / `.resume-item-header`; não “corrigir” com offsets mágicos.
-8. **Integridade de conteúdo de CV** — zero alucinação; ver [`.agents/rules/cv-content-integrity.md`](.agents/rules/cv-content-integrity.md).
-9. **Build** — antes de dar tarefa por concluída, `npm run build` (ou o teste/smoke relevante) deve passar.
+8. **Integridade de conteúdo de CV** — zero alucinação; ver [`cv-content/rules/content-integrity.md`](cv-content/rules/content-integrity.md).
+9. **Intake ao anexar CV** — se o usuário anexar/apontar um currículo, **sempre** começar por [`cv-content/prompts/cv-intake.md`](cv-content/prompts/cv-intake.md); não pular direto para traduzir/adaptar.
+10. **Board ao fechar** — ao terminar o fluxo, gerar board via [`cv-content/prompts/cv-report-board.md`](cv-content/prompts/cv-report-board.md) (MD + HTML), salvo o usuário pedir para pular.
+11. **Build** — antes de dar tarefa por concluída, `npm run build` (ou o teste/smoke relevante) deve passar.
 
-## Workflows de conteúdo (analisar / adaptar / traduzir)
+## Conteúdo de CV (`cv-content/`)
 
-Quando o usuário pedir análise, adaptação ou tradução de currículo, use os prompts em `.agents/prompts/` — não invente outro fluxo. PDF final sempre pelo export do app.
+Prompts, regras de integridade e artefatos de saída ficam em **[`cv-content/`](cv-content/)** — fora de [`.agents/skills/`](.agents/skills/) (skills de engenharia/processo).
+
+Índice: [`cv-content/README.md`](cv-content/README.md).
+
+### Fluxo obrigatório
+
+1. Anexo de currículo → **intake** ([`cv-intake.md`](cv-content/prompts/cv-intake.md))
+2. Trabalho → analyzer / adapter / translate / novo perfil factual
+3. Fechamento → **board** ([`cv-report-board.md`](cv-content/prompts/cv-report-board.md)) em `outputs/md` + `outputs/html`
+4. Servir HTML → `npm run serve:cv-board`
+5. PDF final → import no app → `exportService` (opcional `outputs/pdf/`)
+
+### Workflows (analisar / adaptar / traduzir)
+
+Use os prompts em `cv-content/prompts/` — não invente outro fluxo.
 
 | Pedido do usuário | Prompt | Entrada | Saída |
 |-------------------|--------|---------|-------|
-| Analisar vs vaga | [`.agents/prompts/cv-analyzer.md`](.agents/prompts/cv-analyzer.md) | JD + `CVProfile` | Relatório MD (não altera o CV) |
-| Adaptar / reescrever | [`.agents/prompts/cv-adapter.md`](.agents/prompts/cv-adapter.md) | JD + `CVProfile` | Recomendações + JSON opcional só com fatos existentes |
-| Traduzir | [`.agents/prompts/cv-translate.md`](.agents/prompts/cv-translate.md) | `CVProfile` + idioma | JSON com as mesmas chaves; techs intactas |
-| PDF final | — (app) | Import JSON → UI | `exportService` / botão Export PDF |
+| Anexou um CV (qualquer objetivo) | [`cv-intake.md`](cv-content/prompts/cv-intake.md) | Arquivo + respostas | Plano confirmado → despacha |
+| Analisar vs vaga | [`cv-analyzer.md`](cv-content/prompts/cv-analyzer.md) | JD + `CVProfile` | Relatório MD (não altera o CV) |
+| Adaptar / reescrever | [`cv-adapter.md`](cv-content/prompts/cv-adapter.md) | JD + `CVProfile` | Recomendações + JSON opcional só com fatos existentes |
+| Traduzir | [`cv-translate.md`](cv-content/prompts/cv-translate.md) | `CVProfile` + idioma | JSON com as mesmas chaves; techs intactas |
+| Board de métricas (fim) | [`cv-report-board.md`](cv-content/prompts/cv-report-board.md) | Antes/depois (+ JD opcional) | `outputs/md/*-board.md` + `outputs/html/*-board.html` |
+| PDF final | — (app) | Import JSON → UI | `exportService` → opcional `outputs/pdf/` |
 
-Samples versionáveis: [`docs/samples/resumes/`](docs/samples/resumes/). Artefato adaptado/traduzido: `docs/samples/resumes/<slug>-….json`. Relatório de análise em disco só se o usuário pedir.
+Saídas versionáveis:
+
+| Tipo | Pasta |
+|------|--------|
+| JSON | [`cv-content/outputs/json/`](cv-content/outputs/json/) |
+| MD | [`cv-content/outputs/md/`](cv-content/outputs/md/) |
+| HTML | [`cv-content/outputs/html/`](cv-content/outputs/html/) |
+| PDF | [`cv-content/outputs/pdf/`](cv-content/outputs/pdf/) |
+| DOCX | [`cv-content/outputs/docx/`](cv-content/outputs/docx/) (reservada; sem gerador no app nesta fase) |
 
 ## Onde está o quê
 
@@ -65,15 +92,16 @@ Samples versionáveis: [`docs/samples/resumes/`](docs/samples/resumes/). Artefat
 | Templates | `src/components/templates/` |
 | Export PDF | `src/services/exportService.ts`, `src/services/pdfPageCut.ts` |
 | Import/export JSON | `src/services/backupService.ts` |
-| Prompts CV (conteúdo) | `.agents/prompts/` |
-| Samples JSON | `docs/samples/resumes/` |
-| Regras de domínio | `.agents/rules/` |
-| Skills do projeto | `.agents/skills/` |
+| Conteúdo CV (prompts + saídas) | `cv-content/` |
+| Prompts CV | `cv-content/prompts/` |
+| Outputs JSON / MD / HTML / PDF / DOCX | `cv-content/outputs/{json,md,html,pdf,docx}/` |
+| Regras de engenharia (UI/estado/ATS app) | `.agents/rules/` |
+| Skills de processo | `.agents/skills/` |
 | Specs / planos | `docs/superpowers/` |
 
 ## Regras de domínio (ler sob demanda)
 
-- [`.agents/rules/cv-content-integrity.md`](.agents/rules/cv-content-integrity.md) — zero alucinação / ATS factual / techs não traduzidas
+- [`cv-content/rules/content-integrity.md`](cv-content/rules/content-integrity.md) — zero alucinação / ATS factual / techs não traduzidas
 - [`.agents/rules/frontend-templates.md`](.agents/rules/frontend-templates.md) — UI, A4, templates, PDF
 - [`.agents/rules/state-storage.md`](.agents/rules/state-storage.md) — Zustand + Dexie
 - [`.agents/rules/ats-jobmatcher.md`](.agents/rules/ats-jobmatcher.md) — ATS e job matcher
@@ -91,4 +119,4 @@ Samples versionáveis: [`docs/samples/resumes/`](docs/samples/resumes/). Artefat
 - **Qualquer agente**: este arquivo (`AGENTS.md`).
 - **Claude Code**: ver também [`CLAUDE.md`](./CLAUDE.md) e opcionalmente `.claude/`.
 - **Cursor**: ver `.cursor/rules/` (aponta para este guia).
-- **Antigravity / skills locais**: `.agents/skills/` e `.agents/rules/`.
+- **Antigravity / skills locais**: `.agents/skills/` e `.agents/rules/` (engenharia); conteúdo de CV em `cv-content/`.

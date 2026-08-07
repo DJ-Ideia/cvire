@@ -13,7 +13,8 @@
     "verify:pdf": "node scripts/verify-pdf-text.mjs",
     "smoke:pdf": "node scripts/smoke-pdf-export.mjs",
     "test:pdf-cut": "tsx --test src/services/pdfPageCut.test.ts",
-    "verify:pdf-cut": "node scripts/verify-pdf-multicolumn-cut.mjs"
+    "verify:pdf-cut": "node scripts/verify-pdf-multicolumn-cut.mjs",
+    "serve:cv-board": "bash cv-content/scripts/serve-board.sh"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
