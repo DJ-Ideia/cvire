@@ -5,8 +5,8 @@
 - **Gatilho:** o usuário anexou ou apontou um currículo (PDF, DOCX, JSON, MD ou texto colado).
 - **Regra hard:** **não** começar a traduzir, adaptar, analisar em profundidade ou criar arquivo até concluir este intake.
 - **Integridade:** `cv-content/rules/content-integrity.md` — só fatos do anexo.
-- **Depois do intake:** despachar para o prompt certo (`cv-translate` / `cv-adapter` / `cv-analyzer` / criação de `CVProfile` factual).
-- **Ao terminar o fluxo:** sempre gerar o board via `cv-content/prompts/cv-report-board.md` (salvo o usuário pedir para pular).
+- **Depois do intake:** despachar para o prompt certo (`cv-translate` / `cv-adapter` / `cv-analyzer` / `cv-report-board` / criação de `CVProfile` factual).
+- **Ao terminar o fluxo:** sempre gerar o board via `cv-content/prompts/cv-report-board.md` (salvo o usuário pedir para pular). Na opção **E**, o board **é** o trabalho — não há etapa de reescrita antes.
 
 ---
 
@@ -18,7 +18,7 @@ Você conduz uma entrevista curta (estilo grill) para alinhar objetivo, idioma, 
 
 # Como perguntar
 
-1. Apresente o **menu de objetivo** de uma vez (opções A–D abaixo).
+1. Apresente o **menu de objetivo** de uma vez (opções A–E abaixo).
 2. Após a escolha, faça **1–2 follow-ups** só do que faltar (idioma, JD, nível, artefatos).
 3. Confirme o plano em 3–5 linhas e só então execute o prompt de trabalho.
 
@@ -38,6 +38,19 @@ O que você quer fazer com este currículo?
 | **B — Adaptar ao modelo cvire** | Schema + regras ATS / integridade; reordenar/reescrever **só** com fatos do anexo | `cv-adapter.md` |
 | **C — Começar do zero** | Novo perfil no padrão do sistema; anexo só como **fonte factual** (não inventar) | montar `CVProfile` + `cv-adapter` se houver vaga |
 | **D — Otimizar para uma vaga** | CV + job description; match e reescritas factuais | pedir JD → `cv-analyzer` e/ou `cv-adapter` |
+| **E — Metrificar / estatísticas** | Scores, gaps e recomendações de melhoria **sem reescrever** o CV; painel HTML + Canvas | `cv-report-board.md` (modo só análise) |
+
+Ao apresentar o menu ao usuário, use a tabela curta (Opção · O que faz):
+
+| Opção | O que faz |
+|-------|-----------|
+| **A — Traduzir** | PT↔EN (ou outro), mantendo techs e fatos |
+| **B — Adaptar ao modelo cvire** | Schema + ATS; reordenar/reescrever só com fatos do anexo |
+| **C — Começar do zero** | Novo perfil no padrão do sistema; PDF só como fonte factual |
+| **D — Otimizar para uma vaga** | Match com JD + reescritas factuais |
+| **E — Metrificar / estatísticas** | Scores, estatísticas e recomendações de melhoria (HTML ou Canvas) |
+
+Peça resposta com a letra (**A/B/C/D/E**). Se já souber, pode juntar: idioma, nível e se tem JD.
 
 ## 2. Idioma
 
@@ -63,11 +76,12 @@ Qual nível devemos respeitar para evitar overclaim?
 
 - Estágio / Junior / Pleno / Sênior / outro
 
-## 5. Se a opção for D (ou B com vaga)
+## 5. Se a opção for D, E com vaga, ou B com vaga
 
-Cole a **job description** completa agora.
+Cole a **job description** completa agora (opcional na **E**).
 
 - Se não tiver JD: seguir com análise/adaptação **geral** ATS, sem score de keyword match de vaga.
+- Na **E** sem JD: board com métricas estruturais/clareza/impacto/tech/narrativa/fit ao nível; KEYWORDS omitido.
 
 ## 6. Confirmação de integridade (implícita)
 

@@ -83,8 +83,8 @@ cvire runs entirely in the browser using IndexedDB for local persistent storage.
 
 Resume **content orchestration** lives under [`cv-content/`](cv-content/), separate from [`.agents/skills/`](.agents/skills/) (engineering agent skills).
 
-1. **Attach a resume** — agents must start with intake ([`cv-intake.md`](cv-content/prompts/cv-intake.md)): translate, adapt to cvire/ATS, start from scratch, or optimize for a job.
-2. **Work prompts** — [`cv-analyzer`](cv-content/prompts/cv-analyzer.md) / [`cv-adapter`](cv-content/prompts/cv-adapter.md) / [`cv-translate`](cv-content/prompts/cv-translate.md)
+1. **Attach a resume** — agents must start with intake ([`cv-intake.md`](cv-content/prompts/cv-intake.md)): translate, adapt to cvire/ATS, start from scratch, optimize for a job, or metrify/statistics (option E → board).
+2. **Work prompts** — [`cv-analyzer`](cv-content/prompts/cv-analyzer.md) / [`cv-adapter`](cv-content/prompts/cv-adapter.md) / [`cv-translate`](cv-content/prompts/cv-translate.md) / [`cv-report-board`](cv-content/prompts/cv-report-board.md) (option E)
 3. **Integrity** — [`content-integrity.md`](cv-content/rules/content-integrity.md) (no invented experience or tech)
 4. **Outputs** — JSON [`outputs/json/`](cv-content/outputs/json/), pretty ATS summary [`outputs/md/`](cv-content/outputs/md/), metrics board [`outputs/html/`](cv-content/outputs/html/)
 5. **Closing board** — overall score + improvement plan via [`cv-report-board.md`](cv-content/prompts/cv-report-board.md); archive prior versions to `outputs/dump/`; **ask HTML vs Canvas and open**; preview with `npm run serve:cv-board`

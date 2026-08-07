@@ -25,7 +25,7 @@ Guia específico do **Claude Code**. O contrato do projeto para qualquer agente 
 | Invariantes + comandos | `AGENTS.md` |
 | Intake (anexou CV) | `cv-content/prompts/cv-intake.md` |
 | Analisar / adaptar / traduzir | `cv-content/prompts/cv-*.md` |
-| Board de métricas | `cv-content/prompts/cv-report-board.md` |
+| Board de métricas (fim ou opção E) | `cv-content/prompts/cv-report-board.md` |
 | Integridade factual | `cv-content/rules/content-integrity.md` |
 | Saídas JSON / MD / HTML / PDF / DOCX | `cv-content/outputs/` |
 | UI / A4 / PDF (engenharia) | `.agents/rules/frontend-templates.md` |

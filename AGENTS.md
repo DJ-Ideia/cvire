@@ -66,10 +66,11 @@ Use os prompts em `cv-content/prompts/` — não invente outro fluxo.
 
 | Pedido do usuário | Prompt | Entrada | Saída |
 |-------------------|--------|---------|-------|
-| Anexou um CV (qualquer objetivo) | [`cv-intake.md`](cv-content/prompts/cv-intake.md) | Arquivo + respostas | Plano confirmado → despacha |
+| Anexou um CV (qualquer objetivo) | [`cv-intake.md`](cv-content/prompts/cv-intake.md) | Arquivo + respostas | Plano confirmado → despacha (A–E) |
 | Analisar vs vaga | [`cv-analyzer.md`](cv-content/prompts/cv-analyzer.md) | JD + `CVProfile` | Relatório MD (não altera o CV) |
 | Adaptar / reescrever | [`cv-adapter.md`](cv-content/prompts/cv-adapter.md) | JD + `CVProfile` | Recomendações + JSON opcional só com fatos existentes |
 | Traduzir | [`cv-translate.md`](cv-content/prompts/cv-translate.md) | `CVProfile` + idioma | JSON com as mesmas chaves; techs intactas |
+| Metrificar / estatísticas (opção E) | [`cv-report-board.md`](cv-content/prompts/cv-report-board.md) | CV (+ JD/nível opcionais) | Board só análise: scores, gaps, plano; HTML + Canvas |
 | Board de métricas (fim) | [`cv-report-board.md`](cv-content/prompts/cv-report-board.md) | Antes/depois (+ JD opcional) | `outputs/md/*-board.md` + `outputs/html/*-board.html` |
 | PDF final | — (app) | Import JSON → UI | `exportService` → opcional `outputs/pdf/` |
 

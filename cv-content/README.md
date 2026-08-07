@@ -23,10 +23,10 @@ Isto é separado de [`.agents/skills/`](../.agents/skills/) (skills de engenhari
 
 ## Fluxo obrigatório
 
-1. **Anexo de currículo** → sempre [`prompts/cv-intake.md`](./prompts/cv-intake.md) (perguntar o que fazer).
-2. Executar o prompt escolhido (`cv-translate` / `cv-adapter` / `cv-analyzer` / novo perfil factual).
+1. **Anexo de currículo** → sempre [`prompts/cv-intake.md`](./prompts/cv-intake.md) (perguntar o que fazer: A–E).
+2. Executar o prompt escolhido (`cv-translate` / `cv-adapter` / `cv-analyzer` / `cv-report-board` na **E** / novo perfil factual).
 3. Grave JSON em `outputs/json/` quando gerar arquivo.
-4. **Fechar** com [`prompts/cv-report-board.md`](./prompts/cv-report-board.md) → arquivar versão antiga se existir → MD + HTML.
+4. **Fechar** com [`prompts/cv-report-board.md`](./prompts/cv-report-board.md) → arquivar versão antiga se existir → MD + HTML (na **E**, este passo já é o entregável).
 5. **Perguntar HTML vs Canvas** e abrir a escolha imediatamente.
 6. Importar JSON no app → Export PDF (`exportService`) → opcional `outputs/pdf/`.
 

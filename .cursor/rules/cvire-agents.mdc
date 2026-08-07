@@ -8,7 +8,7 @@ Siga as instruções em `AGENTS.md` na raiz do repositório.
 Conteúdo de CV (prompts + saídas): `cv-content/` (ver `cv-content/README.md`).
 
 HARD GATE — anexo de currículo:
-Se o usuário anexar ou apontar um currículo (PDF, DOCX, JSON, MD, texto colado ou similar), NÃO comece a traduzir, adaptar, analisar em profundidade nem criar arquivos. Abra imediatamente `cv-content/prompts/cv-intake.md` e pergunte o que ele quer fazer (traduzir | adaptar ao modelo cvire/ATS | começar do zero | otimizar para uma vaga). Só depois do intake execute o prompt correspondente. Ao terminar o fluxo, gere o board com `cv-content/prompts/cv-report-board.md` (salvo pedido para pular).
+Se o usuário anexar ou apontar um currículo (PDF, DOCX, JSON, MD, texto colado ou similar), NÃO comece a traduzir, adaptar, analisar em profundidade nem criar arquivos. Abra imediatamente `cv-content/prompts/cv-intake.md` e pergunte o que ele quer fazer (traduzir | adaptar ao modelo cvire/ATS | começar do zero | otimizar para uma vaga | metrificar/estatísticas). Só depois do intake execute o prompt correspondente. Ao terminar o fluxo, gere o board com `cv-content/prompts/cv-report-board.md` (salvo pedido para pular); na opção E o board é o trabalho principal.
 
 HARD GATE — apresentação do board:
 Depois de gerar o relatório, sempre perguntar se o usuário quer ver em **HTML** ou **Canvas** (MD em `cv-content/outputs/md/`) e abrir imediatamente a opção escolhida (servir + `xdg-open`/`wslview` para HTML; link do `.canvas.tsx` para Canvas). Antes de sobrescrever um board existente, arquivar com `cv-content/scripts/archive-output.sh` → `outputs/dump/`.

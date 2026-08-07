@@ -2,8 +2,9 @@
 
 ## cvire contract
 
-- **Gatilho:** ao concluir adaptar / traduzir / analisar / criar CV a partir de um anexo (ou fluxo pedido pelo usuário).
+- **Gatilho:** ao concluir adaptar / traduzir / analisar / criar CV a partir de um anexo; **ou** intake opção **E** (metrificar / estatísticas — board é o entregável principal); ou fluxo pedido pelo usuário.
 - **Regra hard:** sempre gerar o board, **salvo** o usuário pedir explicitamente para pular.
+- **Modo só análise (opção E):** sem reescrita do CV; scores “depois” = baseline ou N/A; foque em gaps, estatísticas e plano de melhoria. HTML (`outputs/html/`) + MD (`outputs/md/`) + Canvas sob demanda.
 - **Integridade:** `cv-content/rules/content-integrity.md` — scores e gaps sem inventar experiência.
 - **Template HTML:** `cv-content/templates/report-board.html` (preencher placeholders; CSS embutido; sem CDN).
 - **Artefatos atuais (gitignored — conteúdo do usuário):**
