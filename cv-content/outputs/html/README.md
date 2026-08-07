@@ -11,3 +11,7 @@ Servir localmente:
 ```
 
 Abra `http://127.0.0.1:8765/<slug>-board.html`.
+
+Antes de sobrescrever um board, arquive: `./cv-content/scripts/archive-output.sh outputs/html/<slug>-board.html`.
+
+Conteúdo gerado é **gitignored** (exceto este README).

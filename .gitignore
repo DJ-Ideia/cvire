@@ -18,6 +18,23 @@ tmp/
 *.pdf
 *.png
 
+# CV do usuário: anexos, gerados e despejo de versões antigas
+cv-content/inbox/*
+!cv-content/inbox/README.md
+cv-content/outputs/dump/*
+!cv-content/outputs/dump/README.md
+cv-content/outputs/json/*
+!cv-content/outputs/json/README.md
+!cv-content/outputs/json/modelo-curriculo-cvire-ia.json
+cv-content/outputs/md/*
+!cv-content/outputs/md/README.md
+cv-content/outputs/html/*
+!cv-content/outputs/html/README.md
+cv-content/outputs/pdf/*
+!cv-content/outputs/pdf/README.md
+cv-content/outputs/docx/*
+!cv-content/outputs/docx/README.md
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

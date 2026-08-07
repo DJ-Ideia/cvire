@@ -42,7 +42,9 @@ Ferramentas com harness próprio devem ler também `CLAUDE.md` (Claude) ou `.cur
 8. **Integridade de conteúdo de CV** — zero alucinação; ver [`cv-content/rules/content-integrity.md`](cv-content/rules/content-integrity.md).
 9. **Intake ao anexar CV** — se o usuário anexar/apontar um currículo, **sempre** começar por [`cv-content/prompts/cv-intake.md`](cv-content/prompts/cv-intake.md); não pular direto para traduzir/adaptar.
 10. **Board ao fechar** — ao terminar o fluxo, gerar board via [`cv-content/prompts/cv-report-board.md`](cv-content/prompts/cv-report-board.md) (MD + HTML), salvo o usuário pedir para pular.
-11. **Build** — antes de dar tarefa por concluída, `npm run build` (ou o teste/smoke relevante) deve passar.
+11. **Apresentação do board** — após gerar, **sempre perguntar** se o usuário quer ver em **HTML** ou **Canvas** (MD em `outputs/md/`) e **abrir imediatamente** a opção escolhida.
+12. **Despejo ao regenerar** — antes de sobrescrever board/artefato, arquivar com [`cv-content/scripts/archive-output.sh`](cv-content/scripts/archive-output.sh) → `outputs/dump/` (gitignored). Currículos anexados (`inbox/`) e gerados do usuário em `outputs/` também são gitignored.
+13. **Build** — antes de dar tarefa por concluída, `npm run build` (ou o teste/smoke relevante) deve passar.
 
 ## Conteúdo de CV (`cv-content/`)
 
@@ -54,8 +56,8 @@ Prompts, regras de integridade e artefatos de saída ficam em **[`cv-content/`](
 
 1. Anexo de currículo → **intake** ([`cv-intake.md`](cv-content/prompts/cv-intake.md))
 2. Trabalho → analyzer / adapter / translate / novo perfil factual
-3. Fechamento → **board** ([`cv-report-board.md`](cv-content/prompts/cv-report-board.md)) em `outputs/md` + `outputs/html`
-4. Servir HTML → `npm run serve:cv-board`
+3. Fechamento → **board** ([`cv-report-board.md`](cv-content/prompts/cv-report-board.md)) em `outputs/md` + `outputs/html` (arquivar versão antiga em `outputs/dump/` se existir)
+4. **Perguntar HTML vs Canvas** e abrir a escolha na hora
 5. PDF final → import no app → `exportService` (opcional `outputs/pdf/`)
 
 ### Workflows (analisar / adaptar / traduzir)

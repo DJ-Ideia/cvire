@@ -6,7 +6,7 @@ Guia específico do **Claude Code**. O contrato do projeto para qualquer agente 
 
 - Skills e fluxos repetíveis do repo: `.agents/skills/` (brainstorming, TDD, debugging, writing-plans, harness-architect, etc.).
 - Regras de área de engenharia: `.agents/rules/`.
-- Conteúdo de CV: `cv-content/` — **intake** (`cv-intake.md`) ao anexar arquivo; trabalho; **board** (`cv-report-board.md`) ao fechar; saídas em `cv-content/outputs/`.
+- Conteúdo de CV: `cv-content/` — **intake** (`cv-intake.md`) ao anexar arquivo; trabalho; **board** (`cv-report-board.md`) ao fechar; **perguntar HTML vs Canvas e abrir**; arquivar versões antigas em `outputs/dump/`; saídas do usuário são gitignored.
 - Regras Claude com glob (se existirem): `.claude/rules/`.
 - Specs e planos: `docs/superpowers/`.
 

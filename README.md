@@ -87,7 +87,7 @@ Resume **content orchestration** lives under [`cv-content/`](cv-content/), separ
 2. **Work prompts** — [`cv-analyzer`](cv-content/prompts/cv-analyzer.md) / [`cv-adapter`](cv-content/prompts/cv-adapter.md) / [`cv-translate`](cv-content/prompts/cv-translate.md)
 3. **Integrity** — [`content-integrity.md`](cv-content/rules/content-integrity.md) (no invented experience or tech)
 4. **Outputs** — JSON [`outputs/json/`](cv-content/outputs/json/), pretty ATS summary [`outputs/md/`](cv-content/outputs/md/), metrics board [`outputs/html/`](cv-content/outputs/html/)
-5. **Closing board** — always generate metrics (before/after %) via [`cv-report-board.md`](cv-content/prompts/cv-report-board.md); preview with `npm run serve:cv-board`
+5. **Closing board** — overall score + improvement plan via [`cv-report-board.md`](cv-content/prompts/cv-report-board.md); archive prior versions to `outputs/dump/`; **ask HTML vs Canvas and open**; preview with `npm run serve:cv-board`
 6. **Import + PDF** — load JSON in the app → Export PDF (`exportService`); optional copy under [`outputs/pdf/`](cv-content/outputs/pdf/)
 7. **DOCX** — [`outputs/docx/`](cv-content/outputs/docx/) reserved for Word files (no in-app generator yet)
 
