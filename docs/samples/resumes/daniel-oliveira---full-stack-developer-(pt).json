@@ -1,0 +1,477 @@
+[
+  {
+    "id": "daniel-oliveira-pt-2026",
+    "title": "Daniel Oliveira - Desenvolvedor Full Stack (PT)",
+    "language": "pt-BR",
+    "isFavorite": true,
+    "isArchived": false,
+    "createdAt": 1785807600000,
+    "updatedAt": 1785807600000,
+    "templateId": "modern-tech",
+    "personal": {
+      "fullName": "Daniel Oliveira",
+      "jobTitle": "Desenvolvedor Full Stack",
+      "email": "danieldandez@gmail.com",
+      "phone": "+55 79 99999-3999",
+      "location": "Aracaju, SE, Brasil",
+      "linkedinUrl": "https://www.linkedin.com/in/tatiwel/",
+      "portfolioUrl": "",
+      "photoFormat": "hidden",
+      "githubUrl": "https://github.com/Tatiwel"
+    },
+    "summary": "Desenvolvedor Full Stack com formação em Ciência da Computação (UNIT) e experiência prática na construção de aplicações web e integração de soluções modernas de Inteligência Artificial. Especializado em ecossistemas React, Node.js, TypeScript e Python (FastAPI), com atuação em APIs RESTful, interfaces responsivas e ambientes locais com Docker. Domino orquestração e gestão de agentes de IA em projetos (MCP, Context7, skills, Quality Gates e RTK para qualidade de contexto e redução de tokens de CLI), além de desenvolvimento assistido por IA (Cursor, Antigravity). Complemento a atuação técnica com visão econômico-analítica, unindo tecnologia, finanças e IA em análises e projetos na interseção desses domínios.",
+    "sectionsOrder": [
+      "experience",
+      "skills",
+      "projects",
+      "education",
+      "certifications",
+      "languages"
+    ],
+    "sections": {
+      "experience": {
+        "id": "experience",
+        "type": "experience",
+        "title": "Experiência Profissional",
+        "column": "main",
+        "visible": true,
+        "items": [
+          {
+            "id": "exp-1",
+            "title": "Estagiário de Desenvolvimento de Software",
+            "subtitle": "Pawkeepr",
+            "location": "Aracaju, SE, Brasil",
+            "startDate": "Abr 2025",
+            "endDate": "Jul 2025",
+            "current": false,
+            "bulletItems": [
+              {
+                "id": "b-1-1",
+                "text": "Participei, em equipe, do ciclo de desenvolvimento do aplicativo Dr Keepr (gestão de pets) até a publicação na Google Play Store, atuando da implementação às etapas de lançamento.",
+                "enabled": true,
+                "isMetricHighlighted": true
+              },
+              {
+                "id": "b-1-2",
+                "text": "Contribuí com a implementação de 9 telas funcionais em React, TypeScript e Tailwind CSS, com interfaces responsivas e componentização voltada à manutenibilidade.",
+                "enabled": true,
+                "isMetricHighlighted": true
+              },
+              {
+                "id": "b-1-3",
+                "text": "Colaborei na configuração do ambiente local com Docker e no uso de tipagem estática em TypeScript para apoiar o onboarding e reduzir regressões no frontend.",
+                "enabled": true,
+                "isMetricHighlighted": false
+              }
+            ]
+          },
+          {
+            "id": "exp-2",
+            "title": "Estagiário de Desenvolvimento de Software",
+            "subtitle": "Conform.ia",
+            "location": "Aracaju, SE, Brasil",
+            "startDate": "Fev 2025",
+            "endDate": "Abr 2025",
+            "current": false,
+            "bulletItems": [
+              {
+                "id": "b-2-1",
+                "text": "Colaborei no desenvolvimento de APIs RESTful assíncronas em Python com FastAPI, Pydantic e Tortoise ORM, incluindo fluxos de criação de contratos/causas e gestão de status (ativo, arquivado, finalizado), com leve ganho de responsividade nesses fluxos.",
+                "enabled": true,
+                "isMetricHighlighted": false
+              },
+              {
+                "id": "b-2-2",
+                "text": "Atuei com a equipe na camada BFF em PHP para orquestração de rotas, uploads e consumo de endpoints, e na correção de bugs em relatórios de posse contratual e alterações cadastrais que afetavam a integridade dos dados.",
+                "enabled": true,
+                "isMetricHighlighted": true
+              },
+              {
+                "id": "b-2-3",
+                "text": "Contribuí com interfaces web responsivas em HTML5, Tailwind CSS e JavaScript, com operações CRUD e gestão de estado, utilizando Docker no ambiente local de desenvolvimento.",
+                "enabled": true,
+                "isMetricHighlighted": false
+              }
+            ]
+          },
+          {
+            "id": "exp-3",
+            "title": "Desenvolvedor Full Stack",
+            "subtitle": "Raiotech Tecnologia Ltda.",
+            "location": "Aracaju, SE, Brasil",
+            "startDate": "Jan 2023",
+            "endDate": "Set 2023",
+            "current": false,
+            "bulletItems": [
+              {
+                "id": "b-3-1",
+                "text": "Participei da integração da WhatsApp API à plataforma de e-commerce, contribuindo para um novo canal de comunicação com consumidores e um módulo gerencial com gatilhos de conversão no funil de vendas.",
+                "enabled": true,
+                "isMetricHighlighted": true
+              },
+              {
+                "id": "b-3-2",
+                "text": "Colaborei na migração do gerenciamento de pacotes de npm para Bun, acelerando a instalação de dependências no desenvolvimento (benchmarks públicos do Bun apontam até ~25× vs npm em cenários de install).",
+                "enabled": true,
+                "isMetricHighlighted": true
+              },
+              {
+                "id": "b-3-3",
+                "text": "Contribuí com a equipe na refatoração da interface, com navegação mais limpa e CTAs claros para reduzir atrito de uso, em ambiente local com Docker e stack Node.js + React.",
+                "enabled": true,
+                "isMetricHighlighted": false
+              }
+            ]
+          },
+          {
+            "id": "exp-4",
+            "title": "Assistente Administrativo / Suporte de TI (Meio período)",
+            "subtitle": "PS Parafusos e Segurança",
+            "location": "Aracaju, SE, Brasil",
+            "startDate": "Dez 2019",
+            "endDate": "Presente",
+            "current": true,
+            "bulletItems": [
+              {
+                "id": "b-4-1",
+                "text": "Em regime de meio período, mantenho a infraestrutura de TI do escritório (1 servidor, 21 PCs e 4 impressoras em ambiente Windows), cobrindo rede, hardware e continuidade das operações diárias.",
+                "enabled": true,
+                "isMetricHighlighted": true
+              },
+              {
+                "id": "b-4-2",
+                "text": "Apoio a organização de documentos e rotinas das áreas administrativa, financeira e de RH, otimizando o controle de informações internas e processos interdepartamentais.",
+                "enabled": true,
+                "isMetricHighlighted": false
+              }
+            ]
+          }
+        ]
+      },
+      "skills": {
+        "id": "skills",
+        "type": "skills",
+        "title": "Habilidades Técnicas",
+        "column": "sidebar",
+        "visible": true,
+        "items": [
+          {
+            "id": "sk-1",
+            "title": "Linguagens de Programação",
+            "bulletItems": [
+              {
+                "text": "JavaScript",
+                "enabled": true
+              },
+              {
+                "text": "TypeScript",
+                "enabled": true
+              },
+              {
+                "text": "Python",
+                "enabled": true
+              },
+              {
+                "text": "C# (.NET)",
+                "enabled": true
+              },
+              {
+                "text": "Java",
+                "enabled": true
+              },
+              {
+                "text": "PHP",
+                "enabled": true
+              },
+              {
+                "text": "HTML5 & CSS3",
+                "enabled": true
+              }
+            ]
+          },
+          {
+            "id": "sk-2",
+            "title": "Frameworks e Bibliotecas",
+            "bulletItems": [
+              {
+                "text": "React",
+                "enabled": true
+              },
+              {
+                "text": "Next.js",
+                "enabled": true
+              },
+              {
+                "text": "Node.js",
+                "enabled": true
+              },
+              {
+                "text": "FastAPI",
+                "enabled": true
+              },
+              {
+                "text": "Vite",
+                "enabled": true
+              },
+              {
+                "text": "Electron",
+                "enabled": true
+              },
+              {
+                "text": "Tailwind CSS",
+                "enabled": true
+              },
+              {
+                "text": "Pydantic & Tortoise ORM",
+                "enabled": true
+              }
+            ]
+          },
+          {
+            "id": "sk-3",
+            "title": "Inteligência Artificial & Agentes",
+            "bulletItems": [
+              {
+                "text": "Orquestração de Agentes Autônomos",
+                "enabled": true
+              },
+              {
+                "text": "Integração de LLMs",
+                "enabled": true
+              },
+              {
+                "text": "Model Context Protocol (MCP)",
+                "enabled": true
+              },
+              {
+                "text": "Context7 & Skills",
+                "enabled": true
+              },
+              {
+                "text": "RTK (Rust Token Killer)",
+                "enabled": true
+              },
+              {
+                "text": "Otimização de Janelas de Contexto",
+                "enabled": true
+              },
+              {
+                "text": "Quality Gates para IA",
+                "enabled": true
+              },
+              {
+                "text": "Cursor & Antigravity",
+                "enabled": true
+              }
+            ]
+          },
+          {
+            "id": "sk-4",
+            "title": "Ferramentas e Arquitetura",
+            "bulletItems": [
+              {
+                "text": "APIs RESTful & BFF",
+                "enabled": true
+              },
+              {
+                "text": "Docker",
+                "enabled": true
+              },
+              {
+                "text": "Bun",
+                "enabled": true
+              },
+              {
+                "text": "Playwright (E2E)",
+                "enabled": true
+              },
+              {
+                "text": "Git & GitHub",
+                "enabled": true
+              },
+              {
+                "text": "Comunicação Interprocessos (IPC)",
+                "enabled": true
+              },
+              {
+                "text": "Visual Studio Code",
+                "enabled": true
+              },
+              {
+                "text": "Redes e Infraestrutura Windows",
+                "enabled": true
+              }
+            ]
+          }
+        ],
+        "displayMode": "bullets"
+      },
+      "projects": {
+        "id": "projects",
+        "type": "projects",
+        "title": "Projetos em Destaque",
+        "column": "main",
+        "visible": true,
+        "items": [
+          {
+            "id": "p-0",
+            "title": "cvire — Resume Builder ATS",
+            "subtitle": "React 19 • TypeScript • Vite • Tailwind • Dexie/IndexedDB",
+            "bulletItems": [
+              {
+                "id": "bp-0-1",
+                "text": "Co-desenvolvi o cvire com a equipe fundadora: builder de currículos offline-first em React 19, TypeScript e Vite, com persistência local (Dexie/IndexedDB), motor ATS ponderado, paginação A4 precisa e templates customizáveis.",
+                "enabled": true,
+                "isMetricHighlighted": true
+              },
+              {
+                "id": "bp-0-2",
+                "text": "Co-implementei diagnóstico/lint de currículo, match com job description (TF-IDF) e integração opcional de IA (Gemini) com armazenamento de chaves via Web Crypto (AES-GCM).",
+                "enabled": true,
+                "isMetricHighlighted": false
+              }
+            ],
+            "tags": [
+              "React",
+              "TypeScript",
+              "Vite",
+              "Tailwind",
+              "Dexie",
+              "ATS",
+              "IndexedDB"
+            ],
+            "linkUrl": "https://github.com/djlabz/cvire"
+          },
+          {
+            "id": "p-2",
+            "title": "Electron Multi-Window (Projeto de TCC)",
+            "subtitle": "Electron • React • TypeScript • Vite",
+            "bulletItems": [
+              {
+                "id": "bp-2-1",
+                "text": "Participei do desenvolvimento de aplicação desktop para sincronização de múltiplas janelas simultâneas utilizando Electron, React, TypeScript e Vite, com comunicação interprocessos (IPC) em tempo real.",
+                "enabled": true,
+                "isMetricHighlighted": true
+              }
+            ],
+            "tags": [
+              "Electron",
+              "React",
+              "TypeScript",
+              "Vite",
+              "IPC"
+            ],
+            "linkUrl": "https://github.com/Tatiwel/electron-multi-window"
+          },
+          {
+            "id": "p-3",
+            "title": "Chatbot para Pesquisa Científica",
+            "subtitle": "PHP • Web • Chatbot",
+            "bulletItems": [
+              {
+                "id": "bp-3-1",
+                "text": "Colaborei na interface web e na estrutura de backend de suporte em PHP para um chatbot voltado à pesquisa acadêmica, apoiando a busca por artigos científicos.",
+                "enabled": true
+              }
+            ],
+            "tags": [
+              "PHP",
+              "Chatbot",
+              "Web"
+            ]
+          },
+          {
+            "id": "p-4",
+            "title": "Análise Econômica & Finanças",
+            "subtitle": "Estudos contínuos • Tech × Economia • IA",
+            "bulletItems": [
+              {
+                "id": "bp-4-1",
+                "text": "Estudos contínuos em finanças e análise econômica (autodidata), com foco em indicadores macroeconômicos, mercados e modelagem de negócios. Aplico ferramentas de IA para apoiar análises e projetos na interseção tecnologia–economia.",
+                "enabled": true,
+                "isMetricHighlighted": false
+              }
+            ],
+            "tags": [
+              "Finanças",
+              "Análise Econômica",
+              "IA"
+            ]
+          }
+        ]
+      },
+      "education": {
+        "id": "education",
+        "type": "education",
+        "title": "Educação",
+        "column": "main",
+        "visible": true,
+        "items": [
+          {
+            "id": "edu-1",
+            "title": "Bacharelado em Ciência da Computação",
+            "subtitle": "Universidade Tiradentes (UNIT)",
+            "location": "Aracaju, SE, Brasil",
+            "startDate": "Jan 2019",
+            "endDate": "Dez 2025",
+            "bulletItems": []
+          }
+        ],
+        "displayMode": "compact"
+      },
+      "certifications": {
+        "id": "certifications",
+        "type": "certifications",
+        "title": "Certificações",
+        "column": "main",
+        "visible": true,
+        "items": [
+          {
+            "id": "cert-1",
+            "title": "Web API ASP.NET Core Essentials",
+            "subtitle": "Udemy",
+            "bulletItems": []
+          }
+        ]
+      },
+      "languages": {
+        "id": "languages",
+        "type": "languages",
+        "title": "Idiomas",
+        "column": "sidebar",
+        "visible": true,
+        "items": [
+          {
+            "id": "lang-1",
+            "title": "Português",
+            "subtitle": "Nativo",
+            "bulletItems": []
+          },
+          {
+            "id": "lang-2",
+            "title": "Inglês",
+            "subtitle": "CEFR B2 (Intermediário Superior / Proficiência Profissional)",
+            "bulletItems": []
+          }
+        ]
+      }
+    },
+    "theme": {
+      "primaryColor": "#2563eb",
+      "accentColor": "#3b82f6",
+      "textColor": "#1e293b",
+      "backgroundColor": "#ffffff",
+      "fontFamily": "Inter",
+      "fontSizeScale": "md",
+      "lineHeight": 1.45,
+      "columnGap": 24,
+      "sectionSpacing": "normal",
+      "pageMargins": "normal",
+      "borderRadius": 8,
+      "headerStyle": "classic",
+      "dividerStyle": "solid",
+      "bulletStyle": "disc",
+      "textAlignment": "left"
+    }
+  }
+]

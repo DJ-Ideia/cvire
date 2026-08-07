@@ -1,0 +1,477 @@
+[
+  {
+    "id": "daniel-oliveira-en-2026",
+    "title": "Daniel Oliveira - Full Stack Developer (EN)",
+    "language": "en-US",
+    "isFavorite": true,
+    "isArchived": false,
+    "createdAt": 1785807600000,
+    "updatedAt": 1785807600000,
+    "templateId": "modern-tech",
+    "personal": {
+      "fullName": "Daniel Oliveira",
+      "jobTitle": "Full Stack Developer",
+      "email": "danieldandez@gmail.com",
+      "phone": "+55 79 99999-3999",
+      "location": "Aracaju, SE, Brazil",
+      "linkedinUrl": "https://www.linkedin.com/in/tatiwel/",
+      "portfolioUrl": "",
+      "photoFormat": "hidden",
+      "githubUrl": "https://github.com/Tatiwel"
+    },
+    "summary": "Full Stack Developer with a Bachelor's degree in Computer Science (UNIT) and hands-on experience building web applications and integrating modern Artificial Intelligence solutions. Specialized in React, Node.js, TypeScript, and Python (FastAPI) ecosystems, with work on RESTful APIs, responsive interfaces, and local Docker environments. Skilled at orchestrating and managing AI agents across projects (MCP, Context7, skills, Quality Gates, and RTK for context quality and CLI token reduction), plus AI-assisted development (Cursor, Antigravity). I complement the technical work with an economic-analytical lens, connecting technology, finance, and AI in analyses and projects at that intersection.",
+    "sectionsOrder": [
+      "experience",
+      "skills",
+      "projects",
+      "education",
+      "certifications",
+      "languages"
+    ],
+    "sections": {
+      "experience": {
+        "id": "experience",
+        "type": "experience",
+        "title": "Professional Experience",
+        "column": "main",
+        "visible": true,
+        "items": [
+          {
+            "id": "exp-1",
+            "title": "Software Development Intern",
+            "subtitle": "Pawkeepr",
+            "location": "Aracaju, SE, Brazil",
+            "startDate": "Apr 2025",
+            "endDate": "Jul 2025",
+            "current": false,
+            "bulletItems": [
+              {
+                "id": "b-1-1",
+                "text": "Participated as part of the team in the development cycle of the Dr Keepr app (pet management) through publication on the Google Play Store, contributing from implementation through launch.",
+                "enabled": true,
+                "isMetricHighlighted": true
+              },
+              {
+                "id": "b-1-2",
+                "text": "Contributed to the implementation of 9 functional screens in React, TypeScript, and Tailwind CSS, with responsive interfaces and componentization focused on maintainability.",
+                "enabled": true,
+                "isMetricHighlighted": true
+              },
+              {
+                "id": "b-1-3",
+                "text": "Collaborated on setting up the local Docker environment and using static typing in TypeScript to support onboarding and reduce frontend regressions.",
+                "enabled": true,
+                "isMetricHighlighted": false
+              }
+            ]
+          },
+          {
+            "id": "exp-2",
+            "title": "Software Development Intern",
+            "subtitle": "Conform.ia",
+            "location": "Aracaju, SE, Brazil",
+            "startDate": "Feb 2025",
+            "endDate": "Apr 2025",
+            "current": false,
+            "bulletItems": [
+              {
+                "id": "b-2-1",
+                "text": "Collaborated on developing asynchronous RESTful APIs in Python with FastAPI, Pydantic, and Tortoise ORM, including contract/case creation flows and status management (active, archived, finished), with a slight responsiveness gain in those flows.",
+                "enabled": true,
+                "isMetricHighlighted": false
+              },
+              {
+                "id": "b-2-2",
+                "text": "Worked with the team on the PHP BFF layer for route orchestration, uploads, and endpoint consumption, and on fixing bugs in contractual possession reports and cadastral data changes that affected data integrity.",
+                "enabled": true,
+                "isMetricHighlighted": true
+              },
+              {
+                "id": "b-2-3",
+                "text": "Contributed responsive web interfaces in HTML5, Tailwind CSS, and JavaScript, with CRUD operations and state management, using Docker in the local development environment.",
+                "enabled": true,
+                "isMetricHighlighted": false
+              }
+            ]
+          },
+          {
+            "id": "exp-3",
+            "title": "Full Stack Developer",
+            "subtitle": "Raiotech Tecnologia Ltda.",
+            "location": "Aracaju, SE, Brazil",
+            "startDate": "Jan 2023",
+            "endDate": "Sep 2023",
+            "current": false,
+            "bulletItems": [
+              {
+                "id": "b-3-1",
+                "text": "Participated in integrating the WhatsApp API into the e-commerce platform, contributing to a new consumer communication channel and a management module with conversion triggers in the sales funnel.",
+                "enabled": true,
+                "isMetricHighlighted": true
+              },
+              {
+                "id": "b-3-2",
+                "text": "Collaborated on migrating package management from npm to Bun, speeding up dependency installs in development (public Bun benchmarks report up to ~25× vs npm for install scenarios).",
+                "enabled": true,
+                "isMetricHighlighted": true
+              },
+              {
+                "id": "b-3-3",
+                "text": "Contributed with the team to UI refactoring, with cleaner navigation and clear CTAs to reduce friction, in a local Docker environment with a Node.js + React stack.",
+                "enabled": true,
+                "isMetricHighlighted": false
+              }
+            ]
+          },
+          {
+            "id": "exp-4",
+            "title": "Administrative Assistant / IT Support (Part-time)",
+            "subtitle": "PS Parafusos e Segurança",
+            "location": "Aracaju, SE, Brazil",
+            "startDate": "Dec 2019",
+            "endDate": "Present",
+            "current": true,
+            "bulletItems": [
+              {
+                "id": "b-4-1",
+                "text": "In a part-time role, I maintain office IT infrastructure (1 server, 21 PCs, and 4 printers on Windows), covering networking, hardware, and day-to-day operational continuity.",
+                "enabled": true,
+                "isMetricHighlighted": true
+              },
+              {
+                "id": "b-4-2",
+                "text": "Support document organization and routines across administrative, finance, and HR areas, improving internal information control and cross-department processes.",
+                "enabled": true,
+                "isMetricHighlighted": false
+              }
+            ]
+          }
+        ]
+      },
+      "skills": {
+        "id": "skills",
+        "type": "skills",
+        "title": "Technical Skills",
+        "column": "sidebar",
+        "visible": true,
+        "items": [
+          {
+            "id": "sk-1",
+            "title": "Programming Languages",
+            "bulletItems": [
+              {
+                "text": "JavaScript",
+                "enabled": true
+              },
+              {
+                "text": "TypeScript",
+                "enabled": true
+              },
+              {
+                "text": "Python",
+                "enabled": true
+              },
+              {
+                "text": "C# (.NET)",
+                "enabled": true
+              },
+              {
+                "text": "Java",
+                "enabled": true
+              },
+              {
+                "text": "PHP",
+                "enabled": true
+              },
+              {
+                "text": "HTML5 & CSS3",
+                "enabled": true
+              }
+            ]
+          },
+          {
+            "id": "sk-2",
+            "title": "Frameworks & Libraries",
+            "bulletItems": [
+              {
+                "text": "React",
+                "enabled": true
+              },
+              {
+                "text": "Next.js",
+                "enabled": true
+              },
+              {
+                "text": "Node.js",
+                "enabled": true
+              },
+              {
+                "text": "FastAPI",
+                "enabled": true
+              },
+              {
+                "text": "Vite",
+                "enabled": true
+              },
+              {
+                "text": "Electron",
+                "enabled": true
+              },
+              {
+                "text": "Tailwind CSS",
+                "enabled": true
+              },
+              {
+                "text": "Pydantic & Tortoise ORM",
+                "enabled": true
+              }
+            ]
+          },
+          {
+            "id": "sk-3",
+            "title": "Artificial Intelligence & Agents",
+            "bulletItems": [
+              {
+                "text": "Autonomous Agent Orchestration",
+                "enabled": true
+              },
+              {
+                "text": "LLM Integration",
+                "enabled": true
+              },
+              {
+                "text": "Model Context Protocol (MCP)",
+                "enabled": true
+              },
+              {
+                "text": "Context7 & Skills",
+                "enabled": true
+              },
+              {
+                "text": "RTK (Rust Token Killer)",
+                "enabled": true
+              },
+              {
+                "text": "Context Window Optimization",
+                "enabled": true
+              },
+              {
+                "text": "Quality Gates for AI",
+                "enabled": true
+              },
+              {
+                "text": "Cursor & Antigravity",
+                "enabled": true
+              }
+            ]
+          },
+          {
+            "id": "sk-4",
+            "title": "Tools & Architecture",
+            "bulletItems": [
+              {
+                "text": "RESTful APIs & BFF",
+                "enabled": true
+              },
+              {
+                "text": "Docker",
+                "enabled": true
+              },
+              {
+                "text": "Bun",
+                "enabled": true
+              },
+              {
+                "text": "Playwright (E2E)",
+                "enabled": true
+              },
+              {
+                "text": "Git & GitHub",
+                "enabled": true
+              },
+              {
+                "text": "Inter-Process Communication (IPC)",
+                "enabled": true
+              },
+              {
+                "text": "Visual Studio Code",
+                "enabled": true
+              },
+              {
+                "text": "Windows Networking & Infrastructure",
+                "enabled": true
+              }
+            ]
+          }
+        ],
+        "displayMode": "bullets"
+      },
+      "projects": {
+        "id": "projects",
+        "type": "projects",
+        "title": "Featured Projects",
+        "column": "main",
+        "visible": true,
+        "items": [
+          {
+            "id": "p-0",
+            "title": "cvire — ATS Resume Builder",
+            "subtitle": "React 19 • TypeScript • Vite • Tailwind • Dexie/IndexedDB",
+            "bulletItems": [
+              {
+                "id": "bp-0-1",
+                "text": "Co-developed cvire with the founding team: an offline-first resume builder in React 19, TypeScript, and Vite, with local persistence (Dexie/IndexedDB), a weighted ATS engine, precise A4 pagination, and customizable templates.",
+                "enabled": true,
+                "isMetricHighlighted": true
+              },
+              {
+                "id": "bp-0-2",
+                "text": "Co-implemented resume lint/diagnostics, job-description matching (TF-IDF), and optional AI integration (Gemini) with key storage via Web Crypto (AES-GCM).",
+                "enabled": true,
+                "isMetricHighlighted": false
+              }
+            ],
+            "tags": [
+              "React",
+              "TypeScript",
+              "Vite",
+              "Tailwind",
+              "Dexie",
+              "ATS",
+              "IndexedDB"
+            ],
+            "linkUrl": "https://github.com/djlabz/cvire"
+          },
+          {
+            "id": "p-2",
+            "title": "Electron Multi-Window (Capstone Project)",
+            "subtitle": "Electron • React • TypeScript • Vite",
+            "bulletItems": [
+              {
+                "id": "bp-2-1",
+                "text": "Participated in developing a desktop application for synchronizing multiple simultaneous windows using Electron, React, TypeScript, and Vite, with real-time Inter-Process Communication (IPC).",
+                "enabled": true,
+                "isMetricHighlighted": true
+              }
+            ],
+            "tags": [
+              "Electron",
+              "React",
+              "TypeScript",
+              "Vite",
+              "IPC"
+            ],
+            "linkUrl": "https://github.com/Tatiwel/electron-multi-window"
+          },
+          {
+            "id": "p-3",
+            "title": "Scientific Research Chatbot",
+            "subtitle": "PHP • Web • Chatbot",
+            "bulletItems": [
+              {
+                "id": "bp-3-1",
+                "text": "Collaborated on the web interface and PHP backend support structure for a chatbot aimed at academic research, supporting scientific paper lookup.",
+                "enabled": true
+              }
+            ],
+            "tags": [
+              "PHP",
+              "Chatbot",
+              "Web"
+            ]
+          },
+          {
+            "id": "p-4",
+            "title": "Economic Analysis & Finance",
+            "subtitle": "Continuous learning • Tech × Economics • AI",
+            "bulletItems": [
+              {
+                "id": "bp-4-1",
+                "text": "Ongoing self-directed study in finance and economic analysis, focused on macroeconomic indicators, markets, and business modeling. I apply AI tools to support analyses and projects at the technology–economics intersection.",
+                "enabled": true,
+                "isMetricHighlighted": false
+              }
+            ],
+            "tags": [
+              "Finance",
+              "Economic Analysis",
+              "AI"
+            ]
+          }
+        ]
+      },
+      "education": {
+        "id": "education",
+        "type": "education",
+        "title": "Education",
+        "column": "main",
+        "visible": true,
+        "items": [
+          {
+            "id": "edu-1",
+            "title": "Bachelor of Science in Computer Science",
+            "subtitle": "Universidade Tiradentes (UNIT)",
+            "location": "Aracaju, SE, Brazil",
+            "startDate": "Jan 2019",
+            "endDate": "Dec 2025",
+            "bulletItems": []
+          }
+        ],
+        "displayMode": "compact"
+      },
+      "certifications": {
+        "id": "certifications",
+        "type": "certifications",
+        "title": "Certifications",
+        "column": "main",
+        "visible": true,
+        "items": [
+          {
+            "id": "cert-1",
+            "title": "Web API ASP.NET Core Essentials",
+            "subtitle": "Udemy",
+            "bulletItems": []
+          }
+        ]
+      },
+      "languages": {
+        "id": "languages",
+        "type": "languages",
+        "title": "Languages",
+        "column": "sidebar",
+        "visible": true,
+        "items": [
+          {
+            "id": "lang-1",
+            "title": "Portuguese",
+            "subtitle": "Native",
+            "bulletItems": []
+          },
+          {
+            "id": "lang-2",
+            "title": "English",
+            "subtitle": "CEFR B2 (Upper Intermediate / Professional Working Proficiency)",
+            "bulletItems": []
+          }
+        ]
+      }
+    },
+    "theme": {
+      "primaryColor": "#2563eb",
+      "accentColor": "#3b82f6",
+      "textColor": "#1e293b",
+      "backgroundColor": "#ffffff",
+      "fontFamily": "Inter",
+      "fontSizeScale": "md",
+      "lineHeight": 1.45,
+      "columnGap": 24,
+      "sectionSpacing": "normal",
+      "pageMargins": "normal",
+      "borderRadius": 8,
+      "headerStyle": "classic",
+      "dividerStyle": "solid",
+      "bulletStyle": "disc",
+      "textAlignment": "left"
+    }
+  }
+]

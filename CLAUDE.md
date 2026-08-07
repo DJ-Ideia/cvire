@@ -6,6 +6,7 @@ Guia específico do **Claude Code**. O contrato do projeto para qualquer agente 
 
 - Skills e fluxos repetíveis do repo: `.agents/skills/` (brainstorming, TDD, debugging, writing-plans, harness-architect, etc.).
 - Regras de área (carregar sob demanda): `.agents/rules/`.
+- Workflows analisar/adaptar/traduzir CV: tabela em `AGENTS.md` + prompts em `.agents/prompts/` (integridade: `.agents/rules/cv-content-integrity.md`).
 - Regras Claude com glob (se existirem): `.claude/rules/`.
 - Specs e planos: `docs/superpowers/`.
 
@@ -20,6 +21,8 @@ Guia específico do **Claude Code**. O contrato do projeto para qualquer agente 
 | Precisa de… | Arquivo |
 |-------------|---------|
 | Invariantes + comandos | `AGENTS.md` |
+| Analisar / adaptar / traduzir CV | `.agents/prompts/cv-*.md` |
+| Integridade factual do CV | `.agents/rules/cv-content-integrity.md` |
 | UI / A4 / PDF | `.agents/rules/frontend-templates.md` |
 | Zustand / Dexie | `.agents/rules/state-storage.md` |
 | ATS / job match | `.agents/rules/ats-jobmatcher.md` |

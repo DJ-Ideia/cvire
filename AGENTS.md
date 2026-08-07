@@ -38,7 +38,21 @@ Ferramentas com harness próprio devem ler também `CLAUDE.md` (Claude) ou `.cur
 5. **IDs únicos** — novos itens/bullets com ID único (`b-${Date.now()}-…`).
 6. **Causa raiz** — sem `try/catch` vazios nem dados falsos para esconder erro.
 7. **PDF multipágina** — cortes em banda Y livre global (`pdfPageCut` / `findCleanPageCut`); keep-together mínimo para não órfão de `h2` / `.resume-item-header`; não “corrigir” com offsets mágicos.
-8. **Build** — antes de dar tarefa por concluída, `npm run build` (ou o teste/smoke relevante) deve passar.
+8. **Integridade de conteúdo de CV** — zero alucinação; ver [`.agents/rules/cv-content-integrity.md`](.agents/rules/cv-content-integrity.md).
+9. **Build** — antes de dar tarefa por concluída, `npm run build` (ou o teste/smoke relevante) deve passar.
+
+## Workflows de conteúdo (analisar / adaptar / traduzir)
+
+Quando o usuário pedir análise, adaptação ou tradução de currículo, use os prompts em `.agents/prompts/` — não invente outro fluxo. PDF final sempre pelo export do app.
+
+| Pedido do usuário | Prompt | Entrada | Saída |
+|-------------------|--------|---------|-------|
+| Analisar vs vaga | [`.agents/prompts/cv-analyzer.md`](.agents/prompts/cv-analyzer.md) | JD + `CVProfile` | Relatório MD (não altera o CV) |
+| Adaptar / reescrever | [`.agents/prompts/cv-adapter.md`](.agents/prompts/cv-adapter.md) | JD + `CVProfile` | Recomendações + JSON opcional só com fatos existentes |
+| Traduzir | [`.agents/prompts/cv-translate.md`](.agents/prompts/cv-translate.md) | `CVProfile` + idioma | JSON com as mesmas chaves; techs intactas |
+| PDF final | — (app) | Import JSON → UI | `exportService` / botão Export PDF |
+
+Samples versionáveis: [`docs/samples/resumes/`](docs/samples/resumes/). Artefato adaptado/traduzido: `docs/samples/resumes/<slug>-….json`. Relatório de análise em disco só se o usuário pedir.
 
 ## Onde está o quê
 
@@ -50,12 +64,16 @@ Ferramentas com harness próprio devem ler também `CLAUDE.md` (Claude) ou `.cur
 | Persistência | Dexie + serviços em `src/services/` |
 | Templates | `src/components/templates/` |
 | Export PDF | `src/services/exportService.ts`, `src/services/pdfPageCut.ts` |
+| Import/export JSON | `src/services/backupService.ts` |
+| Prompts CV (conteúdo) | `.agents/prompts/` |
+| Samples JSON | `docs/samples/resumes/` |
 | Regras de domínio | `.agents/rules/` |
 | Skills do projeto | `.agents/skills/` |
 | Specs / planos | `docs/superpowers/` |
 
 ## Regras de domínio (ler sob demanda)
 
+- [`.agents/rules/cv-content-integrity.md`](.agents/rules/cv-content-integrity.md) — zero alucinação / ATS factual / techs não traduzidas
 - [`.agents/rules/frontend-templates.md`](.agents/rules/frontend-templates.md) — UI, A4, templates, PDF
 - [`.agents/rules/state-storage.md`](.agents/rules/state-storage.md) — Zustand + Dexie
 - [`.agents/rules/ats-jobmatcher.md`](.agents/rules/ats-jobmatcher.md) — ATS e job matcher
