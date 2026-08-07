@@ -84,16 +84,28 @@ Não invente métricas de negócio que não existam no CV.
 
 ---
 
+# PDF vetorizado ATS (obrigatório ao analisar PDF)
+
+No fluxo do cvire, o site importa o **JSON** (`CVProfile`) e o `exportService` gera PDF com raster visual + **camada de texto vetorial invisível** (jsPDF, ordem de leitura column-aware). Mistura de seções na extração só é problema se essa vetorização estiver ausente ou mal feita.
+
+1. **Verificar o arquivo** (producer jsPDF / text layer invisível `3 Tr` / Helvetica overlay + imagens de página).
+2. **Informar fora** do plano de gaps, em status explícito: `PDF ATS vetorizado: SIM | NÃO` (+ evidência curta).
+3. **Não** listar “layout em colunas / parse mistura seções” como prioridade se o PDF já estiver no modelo vetorizado ATS do cvire.
+4. Se `NÃO` vetorizado: aí sim apontar risco de parse e recomendar import JSON → export no app.
+
+---
+
 # Seções obrigatórias
 
 1. **Score geral** — antes · depois · Δ · melhora %  
 2. **Scores por métrica** — barras/valores + Δ  
-3. **Tabela priorizada** — Prioridade · Tema · Observação · Ação  
-4. **Plano de melhoria** — 3–6 itens elaborados  
-5. **Atenção prioritária / Moderada / Já ok**  
-6. **Pontos fortes atuais**  
-7. **Inventário técnico**  
-8. **Linha do tempo**  
+3. **Status PDF ATS** — `SIM | NÃO` (fora da tabela de gaps; ver seção acima)  
+4. **Tabela priorizada** — Prioridade · Tema · Observação · Ação  
+5. **Plano de melhoria** — 3–6 itens elaborados  
+6. **Atenção prioritária / Moderada / Já ok**  
+7. **Pontos fortes atuais**  
+8. **Inventário técnico**  
+9. **Linha do tempo**  
 
 ---
 
